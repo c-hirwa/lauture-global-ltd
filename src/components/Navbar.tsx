@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Mail, Phone } from "lucide-react";
 
 const navLinks = [
   { label: "Home", path: "/" },
   { label: "About", path: "/about" },
   { label: "Services", path: "/services" },
-  { label: "Founders", path: "/founders" },
   { label: "Contact", path: "/contact" },
 ];
 
@@ -23,21 +22,32 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop */}
-        <div className="hidden md:flex items-center gap-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`text-sm font-medium transition-colors hover:text-accent ${
-                location.pathname === link.path ? "text-accent" : "text-primary-foreground/80"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-          <Button variant="gold" size="sm" asChild>
-            <Link to="/contact">Get Started</Link>
-          </Button>
+        <div className="hidden md:flex items-center gap-8">
+          <div className="flex items-center gap-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`text-sm font-medium transition-colors hover:text-accent ${
+                  location.pathname === link.path ? "text-accent" : "text-primary-foreground/80"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+          <div className="flex items-center gap-3">
+            <Button variant="sky" size="sm" asChild>
+              <a href="mailto:info@latureglobal.com">
+                <Mail size={16} /> Email Us
+              </a>
+            </Button>
+            <Button variant="outline-light" size="sm" asChild>
+              <a href="tel:+250792866210">
+                <Phone size={16} /> Phone
+              </a>
+            </Button>
+          </div>
         </div>
 
         {/* Mobile toggle */}
@@ -61,9 +71,16 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
-          <div className="px-6 pt-2">
-            <Button variant="gold" size="sm" className="w-full" asChild>
-              <Link to="/contact" onClick={() => setOpen(false)}>Get Started</Link>
+          <div className="px-6 pt-2 flex flex-col gap-2">
+            <Button variant="sky" size="sm" className="w-full" asChild>
+              <a href="mailto:info@latureglobal.com" onClick={() => setOpen(false)}>
+                <Mail size={16} /> Email Us
+              </a>
+            </Button>
+            <Button variant="outline-light" size="sm" className="w-full" asChild>
+              <a href="tel:+250792866210" onClick={() => setOpen(false)}>
+                <Phone size={16} /> Phone
+              </a>
             </Button>
           </div>
         </div>
