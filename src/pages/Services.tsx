@@ -3,10 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Home, Plane, Globe, Shield, Building, Map, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import SectionBlend from "@/components/SectionBlend";
-import { motion } from "framer-motion";
-
-const LIGHT = "hsl(var(--background))";
 
 const services = [
   { icon: Home, title: "Residential Relocation", desc: "From finding the perfect home to settling in, we handle every detail of your move to Rwanda. Our team scouts properties, negotiates leases, and ensures a smooth transition." },
@@ -21,48 +17,38 @@ const Services = () => (
   <>
     <Navbar />
     <main className="pt-16">
-      <section className="relative bg-primary py-28 overflow-hidden grain">
-        <div className="container text-center relative z-10">
+      <section className="bg-primary py-20">
+        <div className="container text-center">
           <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Our Services</p>
-          <h1 className="font-heading text-4xl md:text-5xl font-semibold text-primary-foreground mb-4">What We Do</h1>
+          <h1 className="font-heading text-4xl md:text-5xl font-bold text-primary-foreground mb-4">What We Do</h1>
           <p className="text-primary-foreground/70 max-w-2xl mx-auto">
             Comprehensive relocation and vacation consulting services tailored to your unique needs.
           </p>
         </div>
-        <SectionBlend from="hsl(var(--primary))" to={LIGHT} direction="tr" height={180} />
       </section>
 
-      <section className="relative py-28 bg-background overflow-hidden">
+      <section className="py-20">
         <div className="container grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((s, idx) => (
-            <motion.div
-              key={s.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="bg-card rounded-2xl p-8 border border-border shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-elevated)] hover:-translate-y-1 transition-all duration-500"
-            >
-              <div className="w-14 h-14 rounded-xl bg-secondary/15 flex items-center justify-center mb-5">
+          {services.map((s) => (
+            <div key={s.title} className="bg-card rounded-lg p-8 border border-border shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-elevated)] transition-shadow">
+              <div className="w-14 h-14 rounded-lg bg-secondary/15 flex items-center justify-center mb-5">
                 <s.icon className="text-secondary" size={28} />
               </div>
               <h3 className="font-heading font-semibold text-xl mb-3">{s.title}</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">{s.desc}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
-        <SectionBlend from={LIGHT} to="hsl(var(--primary))" direction="tl" height={180} />
       </section>
 
-      <section className="relative bg-primary py-24 overflow-hidden grain">
-        <div className="container text-center relative z-10">
-          <h2 className="font-heading text-3xl md:text-4xl font-semibold text-primary-foreground mb-4">Need a <span className="text-gradient-gold italic">Custom Solution?</span></h2>
+      <section className="bg-primary py-16">
+        <div className="container text-center">
+          <h2 className="font-heading text-3xl font-bold text-primary-foreground mb-4">Need a Custom Solution?</h2>
           <p className="text-primary-foreground/70 max-w-lg mx-auto mb-8">Every journey is unique. Let's discuss a personalized plan that fits your goals.</p>
-          <Button variant="gold" size="lg" asChild className="px-8">
+          <Button variant="gold" size="lg" asChild>
             <Link to="/contact">Contact Us <ArrowRight size={18} /></Link>
           </Button>
         </div>
-        <SectionBlend from="hsl(var(--primary))" to={LIGHT} direction="tr" height={180} />
       </section>
     </main>
     <Footer />
