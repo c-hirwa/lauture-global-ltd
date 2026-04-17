@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import heroSlide1 from "@/assets/hero-slide-1.jpg";
 import heroSlide2 from "@/assets/hero-slide-2.jpg";
 import aboutExpo from "@/assets/about-expo.jpg";
@@ -14,6 +14,7 @@ import serviceConsultation from "@/assets/service-consultation.jpg";
 import serviceExplore from "@/assets/service-explore.jpg";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Pricing from "@/components/Pricing";
 
 const slides = [
   {
