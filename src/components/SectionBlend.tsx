@@ -1,60 +1,57 @@
 import { CSSProperties } from "react";
 
 type Props = {
-  /** HSL color string (without 'hsl()') of the section ABOVE, e.g. "var(--background)" or "226 65% 10%" */
+  /** Tailwind/CSS color value for the section ABOVE (e.g. "hsl(var(--background))") */
   from: string;
-  /** HSL color string of the section BELOW */
+  /** Color of the section BELOW */
   to: string;
-  /** Diagonal direction. Default 'tr' = high on right, low on left (cuts up to the right) */
+  /** Diagonal direction. tr = seam tilts up to the right, tl = up to the left, flat = horizontal */
   direction?: "tr" | "tl" | "flat";
-  /** Height of the blend zone in px. Default 160 */
+  /** Position: 'bottom' (sits at bottom of upper section) or 'top' (sits at top of lower section) */
+  position?: "bottom" | "top";
+  /** Height of the blend zone in px. Default 180 */
   height?: number;
-  /** Extra blur in px applied to the gradient seam. Default 24 */
-  blur?: number;
   className?: string;
 };
 
 /**
- * Soft, blurred diagonal gradient blend between two sections.
- * Place at the very bottom of the upper section (with the parent set to position: relative, overflow: hidden).
- * No hard clip-path lines — the seam is a diffused gradient that fades the upper color into the lower color.
+ * Ultra-soft diagonal gradient blend between two sections.
+ * No hard lines — uses a wide multi-stop linear gradient so the seam reads as a subtle, diffused fade.
+ * Parent must be position:relative and overflow:hidden.
  */
 const SectionBlend = ({
   from,
   to,
   direction = "tr",
-  height = 160,
-  blur = 24,
+  position = "bottom",
+  height = 180,
   className = "",
 }: Props) => {
-  // Diagonal angle: tr = 200deg (top-left high → bottom-right low blends downward-right)
-  // We want the blend to look like a soft diagonal line.
-  const angle = direction === "tr" ? 200 : direction === "tl" ? 160 : 180;
+  // Angles tuned for a gentle ~6° diagonal across full width.
+  const angle = direction === "tr" ? 186 : direction === "tl" ? 174 : 180;
 
-  const fromHsl = from.startsWith("var") || from.includes("hsl") ? from : `hsl(${from})`;
-  const toHsl = to.startsWith("var") || to.includes("hsl") ? to : `hsl(${to})`;
-  const fromTrans = from.startsWith("var") || from.includes("hsl") ? `${from.replace(")", " / 0)")}` : `hsl(${from} / 0)`;
+  // Transparent version of `from` — supports hsl(var(--x)) by appending ' / 0'
+  const toTransparent = (c: string) => {
+    if (c.includes("hsl(") && c.includes(")")) {
+      // hsl(var(--background)) -> hsl(var(--background) / 0)
+      return c.replace(/\)\s*$/, " / 0)");
+    }
+    return "transparent";
+  };
 
   const style: CSSProperties = {
     height: `${height}px`,
-    background: `linear-gradient(${angle}deg, ${fromHsl} 0%, ${fromHsl} 30%, ${toHsl} 70%, ${toHsl} 100%)`,
-    filter: `blur(${blur}px)`,
-    transform: "translateZ(0)",
+    background: `linear-gradient(${angle}deg, ${toTransparent(from)} 0%, ${from} 18%, ${from} 38%, ${to} 62%, ${to} 100%)`,
   };
+
+  const posClass = position === "bottom" ? "-bottom-px" : "-top-px";
 
   return (
     <div
       aria-hidden
-      className={`pointer-events-none absolute left-0 right-0 -bottom-px z-10 ${className}`}
-      style={{
-        // Outer wrapper expands a bit so the blur doesn't get clipped at edges.
-        marginLeft: "-5%",
-        marginRight: "-5%",
-        width: "110%",
-      }}
-    >
-      <div style={style} />
-    </div>
+      className={`pointer-events-none absolute inset-x-0 ${posClass} z-10 ${className}`}
+      style={style}
+    />
   );
 };
 
