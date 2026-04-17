@@ -1,10 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import heroSlide1 from "@/assets/hero-slide-1.jpg";
-import heroSlide2 from "@/assets/hero-slide-2.jpg";
 import aboutExpo from "@/assets/about-expo.jpg";
 import ctaKigali from "@/assets/cta-kigali.jpg";
 import serviceVacation from "@/assets/service-vacation.jpg";
@@ -16,19 +14,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Pricing from "@/components/Pricing";
 
-const slides = [
-  {
-    image: heroSlide1,
-    headline: "Explore the Land of A Thousand Hills or Make Rwanda Your New Home!",
-    subtext: "Expert guidance for your relocation or vacation to Africa's safest, most vibrant destination.",
-  },
-  {
-    image: heroSlide2,
-    headline: "Your Trusted Partner for a Seamless Transition to Rwanda",
-    subtext: "From vacation planning to full relocation — we handle every detail so you don't have to.",
-  },
-];
-
 const services = [
   { image: serviceVacation, title: "Personalized Vacation Packages and Relocation Plans" },
   { image: serviceMoving, title: "Moving abroad made easier than ever" },
@@ -39,50 +24,35 @@ const services = [
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.15, duration: 0.6 } }),
+  visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } }),
+};
+
+const slideFromLeft = {
+  hidden: { opacity: 0, x: -60 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
 };
 
 const Index = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  }, []);
-
-  useEffect(() => {
-    const timer = setInterval(nextSlide, 6000);
-    return () => clearInterval(timer);
-  }, [nextSlide]);
-
   return (
     <>
       <Navbar />
       <main>
-        {/* Hero Slider */}
-        <section className="relative min-h-screen flex items-center overflow-hidden">
-          {slides.map((slide, idx) => (
-            <div
-              key={idx}
-              className={`absolute inset-0 transition-opacity duration-[1500ms] ${
-                idx === currentSlide ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              <img
-                src={slide.image}
-                alt={slide.headline}
-                className={`w-full h-full object-cover ${idx === currentSlide ? "ken-burns" : ""}`}
-                width={1920}
-                height={1080}
-                {...(idx === 0 ? {} : { loading: "lazy" as const })}
-              />
-            </div>
-          ))}
-          {/* Layered overlays for depth */}
+        {/* HERO */}
+        <section className="relative min-h-screen flex items-center overflow-hidden grain">
+          <div className="absolute inset-0">
+            <img
+              src={heroSlide1}
+              alt="Land of a Thousand Hills"
+              className="w-full h-full object-cover ken-burns"
+              width={1920}
+              height={1080}
+            />
+          </div>
           <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/70 to-primary/40" />
           <div className="absolute inset-0 bg-gradient-to-t from-background/30 via-transparent to-transparent" />
 
           <div className="container relative z-10 py-32">
-            <motion.div initial="hidden" animate="visible" key={currentSlide} className="max-w-3xl">
+            <motion.div initial="hidden" animate="visible" className="max-w-3xl">
               <motion.div
                 variants={fadeUp}
                 custom={0}
@@ -96,45 +66,26 @@ const Index = () => {
               <motion.h1
                 variants={fadeUp}
                 custom={1}
-                className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold text-primary-foreground leading-[1.05] mb-6 tracking-tight"
+                className="font-heading text-5xl md:text-6xl lg:text-7xl font-semibold text-primary-foreground leading-[1.05] mb-6 tracking-tight"
               >
-                {slides[currentSlide].headline.split(" ").slice(0, -3).join(" ")}{" "}
-                <span className="text-gradient-gold">
-                  {slides[currentSlide].headline.split(" ").slice(-3).join(" ")}
-                </span>
+                Explore the Land of A Thousand Hills or{" "}
+                <span className="text-gradient-gold italic">Make Rwanda Your New Home!</span>
               </motion.h1>
               <motion.p
                 variants={fadeUp}
                 custom={2}
                 className="text-primary-foreground/85 text-lg md:text-xl mb-10 leading-relaxed max-w-2xl"
               >
-                {slides[currentSlide].subtext}
+                Expert guidance for your relocation or vacation to Africa's safest, most vibrant destination.
               </motion.p>
-              <motion.div variants={fadeUp} custom={3} className="flex flex-wrap gap-4">
-                <Button variant="gold" size="lg" asChild className="gold-glow">
+              <motion.div variants={fadeUp} custom={3}>
+                <Button variant="gold" size="lg" asChild className="px-8">
                   <Link to="/services">
                     Explore Our Services <ArrowRight size={18} />
                   </Link>
                 </Button>
-                <Button variant="outline-light" size="lg" asChild>
-                  <Link to="/contact">Book a Consultation</Link>
-                </Button>
               </motion.div>
             </motion.div>
-          </div>
-
-          {/* Slide indicators */}
-          <div className="absolute bottom-10 left-8 z-20 flex gap-2">
-            {slides.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentSlide(idx)}
-                className={`h-1 rounded-full transition-all duration-500 ${
-                  idx === currentSlide ? "bg-accent w-12" : "bg-primary-foreground/40 w-6 hover:bg-primary-foreground/70"
-                }`}
-                aria-label={`Go to slide ${idx + 1}`}
-              />
-            ))}
           </div>
 
           {/* Scroll hint */}
@@ -144,14 +95,14 @@ const Index = () => {
           </div>
         </section>
 
-        {/* About Snapshot */}
-        <section className="bg-background py-24 relative overflow-hidden">
+        {/* ABOUT — diagonal cut top */}
+        <section className="bg-background py-32 md:py-40 relative overflow-hidden -mt-20 clip-diagonal-both-tl z-10">
           <div className="container grid md:grid-cols-2 gap-16 items-center">
             <motion.div
-              initial={{ opacity: 0, x: -40 }}
+              initial={{ opacity: 0, x: -60 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               className="relative"
             >
               <div className="absolute -top-6 -left-6 w-32 h-32 bg-accent/20 rounded-full blur-3xl" />
@@ -170,16 +121,16 @@ const Index = () => {
               </div>
             </motion.div>
             <motion.div
-              initial={{ opacity: 0, x: 40 }}
+              initial={{ opacity: 0, x: 60 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             >
               <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
                 About Us
               </span>
-              <h2 className="font-heading text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
-                Expert Coaching and Assistance in <span className="text-gradient-gold">Rwanda</span>
+              <h2 className="font-heading text-4xl md:text-5xl font-semibold text-foreground mb-6 leading-tight">
+                Expert Coaching and Assistance in <span className="text-gradient-gold italic">Rwanda</span>
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 Lauture Global LTD is a trusted partner for seamless exploration, investment, and relocation to Kigali, Rwanda. Specializing in consultation, coaching, and tailored assistance, the company delivers personalized strategies designed to ensure a smooth and efficient transition.
@@ -194,22 +145,22 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Services Overview */}
-        <section className="relative py-24 overflow-hidden" style={{ background: "hsl(226 65% 10%)" }}>
+        {/* SERVICES — dark, diagonal opposite */}
+        <section className="relative py-32 md:py-40 overflow-hidden grain -mt-20 clip-diagonal-both-tr z-20" style={{ background: "hsl(226 65% 10%)" }}>
           <div className="absolute inset-0 opacity-50" style={{ background: "var(--gradient-radial)" }} />
           <div className="container relative z-10">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center max-w-3xl mx-auto mb-16"
+              variants={slideFromLeft}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              className="max-w-3xl mb-16"
             >
               <span className="inline-block px-4 py-1.5 rounded-full bg-accent/15 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
                 What We Offer
               </span>
-              <h2 className="font-heading text-4xl md:text-5xl font-bold text-primary-foreground mb-4 leading-tight">
-                Complete guidance for your <span className="text-gradient-gold">journey in Rwanda</span>
+              <h2 className="font-heading text-4xl md:text-5xl font-semibold text-primary-foreground mb-4 leading-tight">
+                Complete guidance for your <span className="text-gradient-gold italic">journey in Rwanda</span>
               </h2>
               <p className="text-secondary leading-relaxed">
                 Experience exceptional opportunities with Lauture Global LTD — your trusted partner for discovering its dynamic landscape or relocating to Rwanda.
@@ -219,17 +170,17 @@ const Index = () => {
               {services.map((s, idx) => (
                 <motion.div
                   key={s.title}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: idx * 0.1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.6, delay: idx * 0.12, ease: [0.22, 1, 0.36, 1] }}
                   className="group relative rounded-2xl overflow-hidden glass hover:border-accent/50 transition-all duration-500 hover:-translate-y-2"
                 >
                   <div className="h-52 overflow-hidden relative">
                     <img
                       src={s.image}
                       alt={s.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       loading="lazy"
                       width={640}
                       height={512}
@@ -238,26 +189,28 @@ const Index = () => {
                   </div>
                   <div className="p-6">
                     <div className="w-12 h-0.5 bg-accent mb-4 group-hover:w-20 transition-all duration-500" />
-                    <h3 className="font-heading font-semibold text-primary-foreground text-lg leading-snug">
+                    <h3 className="font-heading font-semibold text-primary-foreground text-xl leading-snug">
                       {s.title}
                     </h3>
                   </div>
                 </motion.div>
               ))}
             </div>
-            <div className="text-center mt-12">
-              <Button variant="gold" size="lg" asChild className="gold-glow">
+            <div className="text-center mt-16">
+              <Button variant="gold" size="lg" asChild className="px-8">
                 <Link to="/services">View Our Packages <ArrowRight size={18} /></Link>
               </Button>
             </div>
           </div>
         </section>
 
-        {/* Pricing */}
-        <Pricing />
+        {/* PRICING — light, diagonal cut */}
+        <div className="-mt-20 relative z-30 clip-diagonal-both-tl bg-background pt-20">
+          <Pricing />
+        </div>
 
-        {/* CTA Banner */}
-        <section className="relative py-32 overflow-hidden">
+        {/* CTA BANNER — dark with diagonal */}
+        <section className="relative py-32 md:py-40 overflow-hidden grain -mt-20 clip-diagonal-both-tr z-40">
           <img
             src={ctaKigali}
             alt="Kigali skyline at night"
@@ -268,19 +221,19 @@ const Index = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/60" />
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             className="container relative z-10 text-center max-w-3xl mx-auto"
           >
-            <h2 className="font-heading text-4xl md:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
-              Unlock Your Next <span className="text-gradient-gold">Journey</span> in Rwanda
+            <h2 className="font-heading text-4xl md:text-6xl font-semibold text-primary-foreground mb-6 leading-tight">
+              Unlock Your Next <span className="text-gradient-gold italic">Journey</span> in Rwanda
             </h2>
             <p className="text-primary-foreground/85 mb-10 leading-relaxed text-lg">
               Discover Rwanda on your terms — whether you're seeking an unforgettable vacation or planning a seamless relocation. With Lauture Global LTD, our expert team guides you every step of the way.
             </p>
-            <Button variant="gold" size="lg" asChild className="gold-glow">
+            <Button variant="gold" size="lg" asChild className="px-8">
               <Link to="/contact">Start Your Journey <ArrowRight size={18} /></Link>
             </Button>
           </motion.div>

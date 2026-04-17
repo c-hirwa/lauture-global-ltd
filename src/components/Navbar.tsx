@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Mail, Phone } from "lucide-react";
@@ -12,12 +12,26 @@ const navLinks = [
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-md border-b border-primary-foreground/10">
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? "bg-primary/70 backdrop-blur-xl border-b border-accent/20 shadow-lg"
+          : "bg-primary/95 border-b border-primary-foreground/10"
+      }`}
+    >
       <div className="container flex items-center justify-between h-16">
-        <Link to="/" className="font-heading text-xl font-bold text-primary-foreground tracking-wide">
+        <Link to="/" className="font-heading text-2xl font-bold text-primary-foreground tracking-wide">
           Lauture<span className="text-accent">Global</span>
         </Link>
 
