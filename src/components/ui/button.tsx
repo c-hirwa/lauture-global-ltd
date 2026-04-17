@@ -18,6 +18,7 @@ const buttonVariants = cva(
         gold: "bg-accent text-accent-foreground font-semibold hover:bg-accent/90 shadow-md",
         sky: "bg-secondary text-secondary-foreground font-semibold hover:bg-secondary/80 shadow-md",
         "outline-light": "border border-primary-foreground text-primary-foreground bg-transparent hover:bg-primary-foreground/10",
+        "outline-gold": "border-2 border-accent text-accent bg-transparent font-semibold hover:bg-accent hover:text-accent-foreground transition-all",
       },
       size: {
         default: "h-10 px-4 py-2",
