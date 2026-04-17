@@ -6,6 +6,9 @@ import { MapPin, Mail, Phone, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SectionBlend from "@/components/SectionBlend";
+
+const LIGHT = "hsl(var(--background))";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -21,17 +24,18 @@ const Contact = () => {
     <>
       <Navbar />
       <main className="pt-16">
-        <section className="bg-primary py-20">
-          <div className="container text-center">
+        <section className="relative bg-primary py-28 overflow-hidden grain">
+          <div className="container text-center relative z-10">
             <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Get In Touch</p>
-            <h1 className="font-heading text-4xl md:text-5xl font-bold text-primary-foreground mb-4">Contact Us</h1>
+            <h1 className="font-heading text-4xl md:text-5xl font-semibold text-primary-foreground mb-4">Contact <span className="text-gradient-gold italic">Us</span></h1>
             <p className="text-primary-foreground/70 max-w-2xl mx-auto">
               Ready to start your journey? Reach out and let's make it happen.
             </p>
           </div>
+          <SectionBlend from="hsl(var(--primary))" to={LIGHT} direction="tr" height={180} />
         </section>
 
-        <section className="py-20">
+        <section className="relative py-28 bg-background overflow-hidden">
           <div className="container grid md:grid-cols-5 gap-12 max-w-5xl mx-auto">
             {/* Info */}
             <div className="md:col-span-2 space-y-8">

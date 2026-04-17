@@ -13,6 +13,7 @@ import serviceExplore from "@/assets/service-explore.jpg";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Pricing from "@/components/Pricing";
+import SectionBlend from "@/components/SectionBlend";
 
 const services = [
   { image: serviceVacation, title: "Personalized Vacation Packages and Relocation Plans" },
@@ -31,6 +32,10 @@ const slideFromLeft = {
   hidden: { opacity: 0, x: -60 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
 };
+
+// Shared dark navy used across dark sections so blends match exactly.
+const DARK = "hsl(226 65% 10%)";
+const LIGHT = "hsl(var(--background))";
 
 const Index = () => {
   return (
@@ -93,10 +98,13 @@ const Index = () => {
             <span className="w-12 h-px bg-primary-foreground/40" />
             Scroll
           </div>
+
+          {/* Hero -> About: blend dark hero into light bg */}
+          <SectionBlend from="hsl(226 65% 18%)" to={LIGHT} direction="tr" height={200} />
         </section>
 
-        {/* ABOUT — diagonal cut top */}
-        <section className="bg-background py-32 md:py-40 relative overflow-hidden -mt-20 clip-diagonal-both-tl z-10">
+        {/* ABOUT — light */}
+        <section className="bg-background py-32 md:py-40 relative overflow-hidden">
           <div className="container grid md:grid-cols-2 gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, x: -60 }}
@@ -143,10 +151,13 @@ const Index = () => {
               </Button>
             </motion.div>
           </div>
+
+          {/* About -> Services: light to dark, opposite diagonal */}
+          <SectionBlend from={LIGHT} to={DARK} direction="tl" height={200} />
         </section>
 
-        {/* SERVICES — dark, diagonal opposite */}
-        <section className="relative py-32 md:py-40 overflow-hidden grain -mt-20 clip-diagonal-both-tr z-20" style={{ background: "hsl(226 65% 10%)" }}>
+        {/* SERVICES — dark */}
+        <section className="relative py-32 md:py-40 overflow-hidden grain" style={{ background: DARK }}>
           <div className="absolute inset-0 opacity-50" style={{ background: "var(--gradient-radial)" }} />
           <div className="container relative z-10">
             <motion.div
@@ -202,15 +213,20 @@ const Index = () => {
               </Button>
             </div>
           </div>
+
+          {/* Services -> Pricing: dark to light, soft (this is the seam the user loves) */}
+          <SectionBlend from={DARK} to={LIGHT} direction="tr" height={220} />
         </section>
 
-        {/* PRICING — light, diagonal cut */}
-        <div className="-mt-20 relative z-30 clip-diagonal-both-tl bg-background pt-20">
+        {/* PRICING — light */}
+        <div className="relative bg-background overflow-hidden">
           <Pricing />
+          {/* Pricing -> CTA: light to dark */}
+          <SectionBlend from={LIGHT} to={DARK} direction="tl" height={200} />
         </div>
 
-        {/* CTA BANNER — dark with diagonal */}
-        <section className="relative py-32 md:py-40 overflow-hidden grain -mt-20 clip-diagonal-both-tr z-40">
+        {/* CTA BANNER — dark */}
+        <section className="relative py-32 md:py-40 overflow-hidden grain" style={{ background: DARK }}>
           <img
             src={ctaKigali}
             alt="Kigali skyline at night"
@@ -237,6 +253,9 @@ const Index = () => {
               <Link to="/contact">Start Your Journey <ArrowRight size={18} /></Link>
             </Button>
           </motion.div>
+
+          {/* CTA -> Footer: dark to light */}
+          <SectionBlend from={DARK} to={LIGHT} direction="tr" height={180} />
         </section>
       </main>
       <Footer />
