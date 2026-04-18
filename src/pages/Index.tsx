@@ -39,7 +39,7 @@ const Index = () => {
       <Navbar />
       <main>
         {/* HERO */}
-        <section className="relative min-h-screen flex items-center overflow-hidden grain">
+        <section className="relative min-h-screen flex items-center overflow-hidden grain clip-pentagon-bottom">
           <div className="absolute inset-0">
             <img
               src={heroSlide1}
@@ -97,7 +97,7 @@ const Index = () => {
         </section>
 
         {/* ABOUT — diagonal cut top */}
-        <section className="bg-background py-32 md:py-40 relative overflow-hidden -mt-20 clip-diagonal-both-tl z-10">
+        <section className="bg-background py-32 md:py-40 relative overflow-hidden fade-to-dark">
           <div className="container grid md:grid-cols-2 gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, x: -60 }}
@@ -147,7 +147,7 @@ const Index = () => {
         </section>
 
         {/* SERVICES — dark, diagonal opposite */}
-        <section className="relative py-32 md:py-40 overflow-hidden grain -mt-20 clip-diagonal-both-tr z-20" style={{ background: "hsl(226 65% 10%)" }}>
+        <section className="relative py-32 md:py-40 overflow-hidden grain" style={{ background: "hsl(226 65% 10%)" }}>
           <div className="absolute inset-0 opacity-50" style={{ background: "var(--gradient-radial)" }} />
           <div className="container relative z-10">
             <motion.div
@@ -206,7 +206,7 @@ const Index = () => {
         </section>
 
         {/* CTA BANNER — dark with diagonal */}
-        <section className="relative py-32 md:py-40 overflow-hidden grain -mt-20 clip-diagonal-both-tr z-40">
+        <section className="relative py-32 md:py-40 overflow-hidden grain">
           <img
             src={ctaKigali}
             alt="Kigali skyline at night"
