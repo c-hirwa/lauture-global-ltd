@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -47,7 +47,7 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    --font-heading: 'Cormorant Garamond', serif;
+    --font-heading: 'Caladea', serif;
     --font-body: 'DM Sans', sans-serif;
 
     --gradient-hero: linear-gradient(135deg, hsl(226 65% 18%) 0%, hsl(226 65% 32%) 50%, hsl(226 75% 42%) 100%);
