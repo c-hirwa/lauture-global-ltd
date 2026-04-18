@@ -10,9 +10,9 @@ import serviceMoving from "@/assets/service-moving.jpg";
 import serviceIntegration from "@/assets/service-integration.jpg";
 import serviceConsultation from "@/assets/service-consultation.jpg";
 import serviceExplore from "@/assets/service-explore.jpg";
+import serviceInvestment from "@/assets/service-investment.jpg";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Pricing from "@/components/Pricing";
 
 const services = [
   { image: serviceVacation, title: "Personalized Vacation Packages and Relocation Plans" },
@@ -20,6 +20,7 @@ const services = [
   { image: serviceIntegration, title: "Local Integration Support" },
   { image: serviceConsultation, title: "Tailored Settlement Consultation, Coaching and Assistance" },
   { image: serviceExplore, title: "Exploring this beautiful country" },
+  { image: serviceInvestment, title: "Investment & Business Opportunities", desc: "Guide clients through Rwanda's growing investment landscape, from real estate to business ventures, with expert local insight." },
 ];
 
 const fadeUp = {
@@ -203,11 +204,6 @@ const Index = () => {
             </div>
           </div>
         </section>
-
-        {/* PRICING — light, diagonal cut */}
-        <div className="-mt-20 relative z-30 clip-diagonal-both-tl bg-background pt-20">
-          <Pricing />
-        </div>
 
         {/* CTA BANNER — dark with diagonal */}
         <section className="relative py-32 md:py-40 overflow-hidden grain -mt-20 clip-diagonal-both-tr z-40">

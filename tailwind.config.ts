@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['Cormorant Garamond', 'serif'],
+        heading: ['Caladea', 'serif'],
         body: ['DM Sans', 'sans-serif'],
       },
       colors: {
