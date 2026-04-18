@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Home, Plane, Globe, Shield, Building, Map, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Pricing from "@/components/Pricing";
 
 const services = [
   { icon: Home, title: "Residential Relocation", desc: "From finding the perfect home to settling in, we handle every detail of your move to Rwanda. Our team scouts properties, negotiates leases, and ensures a smooth transition." },
