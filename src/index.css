@@ -156,6 +156,57 @@
     clip-path: polygon(0 0, 100% 80px, 100% 100%, 0 calc(100% - 80px));
   }
 
+  /* Pentagon/shield bottom — bold geometric signature for hero */
+  .clip-pentagon-bottom {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 90px), 50% 100%, 0 calc(100% - 90px));
+  }
+
+  /* Smooth gradient fades between sections */
+  .fade-to-dark::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 140px;
+    background: linear-gradient(to bottom, transparent, hsl(226 65% 10%));
+    pointer-events: none;
+    z-index: 5;
+  }
+  .fade-from-dark::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 140px;
+    background: linear-gradient(to top, transparent, hsl(226 65% 10%));
+    pointer-events: none;
+    z-index: 5;
+  }
+  .fade-to-light::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 140px;
+    background: linear-gradient(to bottom, transparent, hsl(var(--background)));
+    pointer-events: none;
+    z-index: 5;
+  }
+  .fade-from-light::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 140px;
+    background: linear-gradient(to top, transparent, hsl(var(--background)));
+    pointer-events: none;
+    z-index: 5;
+  }
+
   /* Subtle grain texture for dark sections */
   .grain::before {
     content: '';
