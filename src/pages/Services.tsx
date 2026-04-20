@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Home, Plane, Globe, Shield, Building, Map, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Pricing from "@/components/Pricing";
 
 const services = [
   { icon: Home, title: "Residential Relocation", desc: "From finding the perfect home to settling in, we handle every detail of your move to Rwanda. Our team scouts properties, negotiates leases, and ensures a smooth transition." },
@@ -41,9 +43,19 @@ const Services = () => (
         </div>
       </section>
 
-      <section className="bg-primary py-16">
-        <div className="container text-center">
-          <h2 className="font-heading text-3xl font-bold text-primary-foreground mb-4">Need a Custom Solution?</h2>
+      <Pricing />
+
+      <section className="bg-primary py-16 relative overflow-hidden grain">
+        <div className="container text-center relative z-10">
+          <motion.h2
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="font-heading text-3xl font-bold text-primary-foreground mb-4"
+          >
+            Need a Custom Solution?
+          </motion.h2>
           <p className="text-primary-foreground/70 max-w-lg mx-auto mb-8">Every journey is unique. Let's discuss a personalized plan that fits your goals.</p>
           <Button variant="gold" size="lg" asChild>
             <Link to="/contact">Contact Us <ArrowRight size={18} /></Link>
