@@ -61,7 +61,7 @@ const Index = () => {
               >
                 <Sparkles size={14} className="text-accent" />
                 <span className="text-primary-foreground text-xs font-medium tracking-widest uppercase">
-                  Premium Relocation Experts
+                  Premium Exploration & Relocation Experts
                 </span>
               </motion.div>
               <motion.h1
