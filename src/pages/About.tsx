@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Target, Eye, Heart } from "lucide-react";
-import aboutImg from "@/assets/about-team.jpg";
+import aboutImg from "@/assets/about-team.jpeg";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
