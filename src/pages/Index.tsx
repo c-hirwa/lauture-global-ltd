@@ -96,8 +96,8 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ABOUT — diagonal cut top */}
-        <section className="bg-background py-32 md:py-40 relative overflow-hidden fade-to-dark">
+        {/* ABOUT */}
+        <section className="bg-background py-32 md:py-40 relative overflow-hidden">
           <div className="container grid md:grid-cols-2 gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, x: -60 }}
@@ -106,8 +106,6 @@ const Index = () => {
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               className="relative"
             >
-              <div className="absolute -top-6 -left-6 w-32 h-32 bg-accent/20 rounded-full blur-3xl" />
-              <div className="absolute -bottom-6 -right-6 w-40 h-40 bg-primary/20 rounded-full blur-3xl" />
               <img
                 src={aboutExpo}
                 alt="Visit Rwanda expo"
@@ -116,10 +114,6 @@ const Index = () => {
                 width={800}
                 height={600}
               />
-              <div className="absolute -bottom-6 -right-6 bg-accent text-accent-foreground rounded-xl px-6 py-4 shadow-xl">
-                <div className="font-heading text-3xl font-bold">10+</div>
-                <div className="text-xs uppercase tracking-wider font-medium">Years Experience</div>
-              </div>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 60 }}
