@@ -34,7 +34,7 @@ const Founders = () => (
   <>
     <Navbar />
     <main className="pt-16">
-      <section className="bg-primary py-28 relative fade-to-light">
+      <section className="bg-primary py-28 relative">
         <div className="container text-center relative z-10">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
