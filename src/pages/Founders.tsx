@@ -2,9 +2,9 @@ import { Linkedin, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import marieImg from "@/assets/founder-marie.jpg";
-import jorisImg from "@/assets/founder-joris.jpg";
-import vladimirImg from "@/assets/founder-vladimir.jpg";
+import marieImg from "@/assets/founder-marie.png";
+import jorisImg from "@/assets/founder-joris.png";
+import vladimirImg from "@/assets/founder-vladimir.jpeg";
 
 const founders = [
   {
