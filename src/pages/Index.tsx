@@ -13,6 +13,7 @@ import serviceExplore from "@/assets/service-explore.jpg";
 import serviceInvestment from "@/assets/service-investment.jpg";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import GuidesSection from "@/components/GuidesSection";
 
 const services = [
   { image: serviceVacation, title: "Personalized Vacation Packages and Relocation Plans" },
@@ -198,6 +199,9 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        {/* GUIDES PREVIEW */}
+        <GuidesSection />
 
         {/* CTA BANNER — dark with diagonal */}
         <section className="relative py-32 md:py-40 overflow-hidden grain">
