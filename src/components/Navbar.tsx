@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Mail, Phone } from "lucide-react";
+import logo from "@/assets/logo-lauture.png";
 
 const navLinks = [
   { label: "Home", path: "/" },
   { label: "About", path: "/about" },
   { label: "Services", path: "/services" },
+  { label: "Resources", path: "/resources" },
   { label: "Contact", path: "/contact" },
 ];
 
@@ -31,8 +33,14 @@ const Navbar = () => {
       }`}
     >
       <div className="container flex items-center justify-between h-16">
-        <Link to="/" className="font-heading text-2xl font-bold text-primary-foreground tracking-wide">
-          Lauture<span className="text-accent">Global</span>
+        <Link to="/" className="flex items-center" aria-label="Lauture Global — home">
+          <img
+            src={logo}
+            alt="Lauture Global"
+            className="h-10 md:h-12 w-auto object-contain"
+            width={1584}
+            height={672}
+          />
         </Link>
 
         {/* Desktop */}
