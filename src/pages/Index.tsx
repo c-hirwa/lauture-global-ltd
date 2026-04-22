@@ -70,7 +70,7 @@ const Index = () => {
                 custom={1}
                 className="font-heading text-5xl md:text-6xl lg:text-7xl font-semibold text-primary-foreground leading-[1.05] mb-6 tracking-tight"
               >
-                Explore the Land of A Thousand Hills or{" "}
+                Explore the Land of a Thousand Hills or{" "}
                 <span className="text-gradient-gold italic">Make Rwanda Your New Home!</span>
               </motion.h1>
               <motion.p
