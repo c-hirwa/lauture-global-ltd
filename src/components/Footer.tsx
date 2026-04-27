@@ -66,11 +66,11 @@ const Footer = () => (
           </li>
           <li>
             <a
-              href="mailto:info@latureglobal.com"
+              href="mailto:info@lautureglobal.com"
               className="flex gap-3 text-foreground/80 hover:text-accent transition-colors"
             >
               <Mail size={18} className="flex-shrink-0 text-accent" />
-              info@latureglobal.com
+              info@lautureglobal.com
             </a>
           </li>
           <li>

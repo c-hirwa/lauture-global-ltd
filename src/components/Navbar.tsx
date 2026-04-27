@@ -60,7 +60,7 @@ const Navbar = () => {
           </div>
           <div className="flex items-center gap-3">
             <Button variant="sky" size="sm" asChild>
-              <a href="mailto:info@latureglobal.com">
+              <a href="mailto:info@lautureglobal.com">
                 <Mail size={16} /> Email Us
               </a>
             </Button>
@@ -95,7 +95,7 @@ const Navbar = () => {
           ))}
           <div className="px-6 pt-2 flex flex-col gap-2">
             <Button variant="sky" size="sm" className="w-full" asChild>
-              <a href="mailto:info@latureglobal.com" onClick={() => setOpen(false)}>
+              <a href="mailto:info@lautureglobal.com" onClick={() => setOpen(false)}>
                 <Mail size={16} /> Email Us
               </a>
             </Button>
