@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin } from "lucide-react";
 
 const services = [
-  "Basic Guidance and Assistance",
-  "Comprehensive Strategy and Assistance",
+  "Basic Guidance",
+  "Comprehensive Strategy & Assistance",
   "Full Premium Service",
 ];
 

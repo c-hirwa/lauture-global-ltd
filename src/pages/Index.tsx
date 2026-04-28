@@ -16,7 +16,7 @@ import Footer from "@/components/Footer";
 import GuidesSection from "@/components/GuidesSection";
 
 const services = [
-  { image: serviceVacation, title: "Personalized Vacation Packages and Relocation Plans" },
+  { image: serviceVacation, title: "Personalized Vacation Packages and Exploration Plans" },
   { image: serviceMoving, title: "Moving abroad made easier than ever" },
   { image: serviceIntegration, title: "Local Integration Support" },
   { image: serviceConsultation, title: "Tailored Settlement Consultation, Coaching and Assistance" },
@@ -78,7 +78,7 @@ const Index = () => {
                 custom={2}
                 className="text-primary-foreground/85 text-lg md:text-xl mb-10 leading-relaxed max-w-2xl"
               >
-                Expert guidance for your relocation or vacation to Africa's safest, most vibrant destination.
+                Expert guidance for your exploration or relocation to Africa's safest, most vibrant destination.
               </motion.p>
               <motion.div variants={fadeUp} custom={3}>
                 <Button variant="gold" size="lg" asChild className="px-8">
@@ -225,7 +225,7 @@ const Index = () => {
               Unlock Your Next <span className="text-gradient-gold italic">Journey</span> in Rwanda
             </h2>
             <p className="text-primary-foreground/85 mb-10 leading-relaxed text-lg">
-              Discover Rwanda on your terms — whether you're seeking an unforgettable vacation or planning a seamless relocation. With Lauture Global LTD, our expert team guides you every step of the way.
+              Discover Rwanda on your terms — whether you're seeking an unforgettable exploration or planning a seamless relocation. With Lauture Global LTD, our expert team guides you every step of the way.
             </p>
             <Button variant="gold" size="lg" asChild className="px-8">
               <Link to="/contact">Start Your Journey <ArrowRight size={18} /></Link>
