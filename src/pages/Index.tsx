@@ -78,7 +78,7 @@ const Index = () => {
                 custom={2}
                 className="text-primary-foreground/85 text-lg md:text-xl mb-10 leading-relaxed max-w-2xl"
               >
-                Expert guidance for your relocation or vacation to Africa's safest, most vibrant destination.
+                Expert guidance for your exploration or relocation to Africa's safest, most vibrant destination.
               </motion.p>
               <motion.div variants={fadeUp} custom={3}>
                 <Button variant="gold" size="lg" asChild className="px-8">
