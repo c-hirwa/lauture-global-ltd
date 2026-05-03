@@ -35,7 +35,7 @@ const Navbar = () => {
       <div className="container flex items-center justify-between h-16">
         <Link
           to="/"
-          className="flex items-center rounded-xl bg-primary-foreground/95 px-3 py-1.5 shadow-md ring-1 ring-accent/30 hover:ring-accent/60 transition-all"
+          className="flex items-center transition-opacity hover:opacity-80"
           aria-label="Lauture Global — home"
         >
           <img
