@@ -37,6 +37,11 @@ const GuideModal = ({ guide, open, onOpenChange }: GuideModalProps) => {
             </div>
           ))}
         </div>
+        <div className="mt-6 rounded-xl bg-accent/10 border border-accent/30 p-5">
+          <p className="text-sm text-foreground leading-relaxed italic">
+            Contact us to gain access to our detailed comprehensive guides, personalized coaching, and dedicated assistance tailored to support your journey.
+          </p>
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -40,7 +40,7 @@ const Contact = () => {
                 <ul className="space-y-4 text-sm">
                   <li className="flex items-start gap-3">
                     <MapPin size={18} className="text-accent mt-0.5 shrink-0" />
-                    <span className="text-muted-foreground">KG 123 Street, Kigali, Rwanda</span>
+                    <span className="text-muted-foreground">KG 17 Avenue, Remera Corner Building, Suite 201, Kigali, Rwanda</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <Mail size={18} className="text-accent mt-0.5 shrink-0" />
@@ -48,7 +48,7 @@ const Contact = () => {
                   </li>
                   <li className="flex items-start gap-3">
                     <Phone size={18} className="text-accent mt-0.5 shrink-0" />
-                    <span className="text-muted-foreground">+250 788 000 000</span>
+                    <span className="text-muted-foreground">+250 792 866 210</span>
                   </li>
                 </ul>
               </div>

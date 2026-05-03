@@ -33,11 +33,15 @@ const Navbar = () => {
       }`}
     >
       <div className="container flex items-center justify-between h-16">
-        <Link to="/" className="flex items-center" aria-label="Lauture Global — home">
+        <Link
+          to="/"
+          className="flex items-center rounded-xl bg-primary-foreground/95 px-3 py-1.5 shadow-md ring-1 ring-accent/30 hover:ring-accent/60 transition-all"
+          aria-label="Lauture Global — home"
+        >
           <img
             src={logo}
             alt="Lauture Global"
-            className="h-10 md:h-12 w-auto object-contain"
+            className="h-8 md:h-10 w-auto object-contain drop-shadow-sm"
             width={1584}
             height={672}
           />

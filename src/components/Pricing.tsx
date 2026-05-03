@@ -7,7 +7,7 @@ import PackageModal, { PackageData } from "./PackageModal";
 const packages: (PackageData & { tagline: string; popular: boolean; variant: "outline-gold" | "gold"; features: string[] })[] = [
   {
     id: "basic",
-    title: "Basic Relocation Guidance",
+    title: "Basic Guidance",
     subtitle: "Clarity-focused consultation for a confident and strategic move to Rwanda",
     tagline: "Entry-level strategy package",
     price: 500,
@@ -32,9 +32,9 @@ const packages: (PackageData & { tagline: string; popular: boolean; variant: "ou
   },
   {
     id: "comprehensive",
-    title: "Comprehensive Strategy",
+    title: "Comprehensive Strategy & Assistance",
     subtitle: "Advanced relocation planning with personalized strategy and ongoing advisory",
-    tagline: "Most chosen by professionals",
+    tagline: "Most chosen by our clients",
     price: 1200,
     ctaLabel: "Get Started — $1,200",
     variant: "gold",
@@ -57,9 +57,9 @@ const packages: (PackageData & { tagline: string; popular: boolean; variant: "ou
   },
   {
     id: "premium",
-    title: "Full-Service Coaching",
-    subtitle: "End-to-end relocation, execution support, and full integration experience",
-    tagline: "Consultation, Coaching and Assistance",
+    title: "Full Premium Service",
+    subtitle: "Coaching & Concierge — end-to-end relocation, execution support, and full integration experience",
+    tagline: "Coaching & Concierge",
     price: 2000,
     ctaLabel: "Relocate with Full Support — $2,000",
     variant: "outline-gold",
@@ -129,8 +129,8 @@ const Pricing = () => {
               }`}
             >
               {pkg.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 gold-glow">
-                  <Sparkles size={14} /> Most Popular
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 gold-glow whitespace-nowrap">
+                  <Sparkles size={14} /> Most chosen by our clients
                 </div>
               )}
               <div className="mb-6">
