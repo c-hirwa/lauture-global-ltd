@@ -12,21 +12,21 @@ const founders = [
     role: "Founder & CEO",
     image: marieImg,
     bio: "The visionary behind Lauture Global LTD, Marie Vianie leads the firm's strategic direction with a deep commitment to connecting global citizens with Rwanda's extraordinary opportunities. Her leadership shapes every relocation journey we craft.",
-    email: "marie@lautureglobal.com",
+    email: "marievianie.lauture@gmail.com",
   },
   {
     name: "Joris Lauture",
     role: "Executive Board Advisor — Sales, Marketing & Operations",
     image: jorisImg,
     bio: "Joris brings sharp commercial insight and operational excellence to Lauture Global. He oversees client experience, partnerships, and the seamless execution of every package, ensuring world-class service from first contact to full integration.",
-    email: "joris@lautureglobal.com",
+    email: "lauturejoris@gmail.com",
   },
   {
     name: "Vladimir Jean-Baptiste",
     role: "Executive Board Advisor — Chief Financial Officer",
     image: vladimirImg,
     bio: "Vladimir leads the firm's financial strategy and investment advisory with decades of cross-border financial expertise. He guides clients through Rwanda's investment landscape with clarity, rigor, and long-term vision.",
-    email: "vladimir@lautureglobal.com",
+    email: "Vladimirgse1334@gmail.com",
   },
 ];
 
