@@ -1,4 +1,4 @@
-import { Linkedin, Mail } from "lucide-react";
+import { Facebook, Linkedin, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -104,6 +104,13 @@ const Founders = () => (
                     className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-primary transition-colors"
                   >
                     <Linkedin size={18} />
+                  </a>
+                  <a
+                    href="#"
+                    aria-label={`${f.name} on Facebook`}
+                    className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-primary transition-colors"
+                  >
+                    <Facebook size={18} />
                   </a>
                 </div>
               </div>
