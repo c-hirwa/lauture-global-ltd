@@ -13,6 +13,8 @@ const founders = [
     image: marieImg,
     bio: "The visionary behind Lauture Global LTD, Marie Vianie leads the firm's strategic direction with a deep commitment to connecting global citizens with Rwanda's extraordinary opportunities. Her leadership shapes every relocation journey we craft.",
     email: "marievianie.lauture@gmail.com",
+    linkedin: "https://www.linkedin.com/",
+    facebook: "https://www.facebook.com/",
   },
   {
     name: "Joris Lauture",
@@ -20,6 +22,8 @@ const founders = [
     image: jorisImg,
     bio: "Joris brings sharp commercial insight and operational excellence to Lauture Global. He oversees client experience, partnerships, and the seamless execution of every package, ensuring world-class service from first contact to full integration.",
     email: "lauturejoris@gmail.com",
+    linkedin: "https://www.linkedin.com/",
+    facebook: "https://www.facebook.com/",
   },
   {
     name: "Vladimir Jean-Baptiste",
@@ -27,6 +31,8 @@ const founders = [
     image: vladimirImg,
     bio: "Vladimir leads the firm's financial strategy and investment advisory with decades of cross-border financial expertise. He guides clients through Rwanda's investment landscape with clarity, rigor, and long-term vision.",
     email: "Vladimirgse1334@gmail.com",
+    linkedin: "https://www.linkedin.com/",
+    facebook: "https://www.facebook.com/",
   },
 ];
 
@@ -99,14 +105,18 @@ const Founders = () => (
                     <Mail size={18} />
                   </a>
                   <a
-                    href="#"
+                    href={f.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label={`${f.name} on LinkedIn`}
                     className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-primary transition-colors"
                   >
                     <Linkedin size={18} />
                   </a>
                   <a
-                    href="#"
+                    href={f.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label={`${f.name} on Facebook`}
                     className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-primary transition-colors"
                   >
