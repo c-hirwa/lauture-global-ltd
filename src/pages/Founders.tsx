@@ -2,7 +2,7 @@ import { Facebook, Linkedin, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import marieImg from "@/assets/founder-marie.png";
+import marieImg from "@/assets/founder-marie.jpeg";
 import jorisImg from "@/assets/founder-joris.png";
 import vladimirImg from "@/assets/founder-vladimir.jpeg";
 
