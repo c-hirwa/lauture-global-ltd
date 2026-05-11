@@ -161,4 +161,262 @@ export const guides: Guide[] = [
       },
     ],
   },
+  {
+    slug: "about-rwanda",
+    icon: MapPin,
+    title: "About Rwanda — Country Overview",
+    tagline: "Land of a Thousand Hills at a glance",
+    intro:
+      "Rwanda is a small, landlocked East African nation known for its dramatic mountain landscapes, remarkable post-genocide transformation, and reputation as one of Africa's safest, cleanest, and most forward-looking countries.",
+    sections: [
+      {
+        heading: "Geography & population",
+        body: "Rwanda covers 26,338 km² and is home to roughly 13.8 million people, making it Africa's most densely populated mainland country. It borders Uganda, Tanzania, Burundi, and the DRC. The capital, Kigali, sits in the center of the country at around 1,567m elevation.",
+      },
+      {
+        heading: "Government & stability",
+        body: "Rwanda is a presidential republic led by President Paul Kagame. The country is widely recognized for its strong governance, low corruption (consistently top-ranked in Africa by Transparency International), and long-term Vision 2050 development strategy.",
+      },
+      {
+        heading: "Economy",
+        body: "GDP is around USD 14 billion with sustained 7–8% annual growth. Key sectors include services, tourism, ICT, agriculture (coffee, tea), construction, and mining. Rwanda is positioning itself as a regional hub for finance, conferences (MICE), and innovation.",
+      },
+      {
+        heading: "Why people are moving here",
+        body: "Safety, ease of doing business (World Bank top 2 in Africa), modern infrastructure, English as an official language, fast internet, visa-on-arrival for most nationalities, and a government that actively welcomes investors and skilled professionals.",
+      },
+    ],
+  },
+  {
+    slug: "rdb",
+    icon: Landmark,
+    title: "Rwanda Development Board (RDB)",
+    tagline: "The one-stop shop for investors and businesses",
+    intro:
+      "The Rwanda Development Board (RDB) is the government agency responsible for fast-tracking investment, tourism, business registration, and economic development. For anyone moving to Rwanda for business, RDB is your first and most important institutional contact.",
+    sections: [
+      {
+        heading: "What RDB does",
+        body: "RDB consolidates the functions of nine former agencies into one — investment promotion, company registration, work permits, tourism & conservation, special economic zones, and skills development. It is the single point of contact for serious investors.",
+      },
+      {
+        heading: "Investment incentives",
+        body: "Registered investors can access: 0% corporate income tax for international company HQs, 15% preferential rate for priority sectors (energy, manufacturing, ICT, tourism), VAT exemptions on capital equipment, and accelerated depreciation. Minimum investment thresholds apply.",
+      },
+      {
+        heading: "Company registration",
+        body: "Online registration via businessprocedures.rdb.rw takes 6 hours to 2 business days, costs nothing for the basic certificate, and includes your TIN and social security registration in a single application.",
+      },
+      {
+        heading: "Work permits & residency",
+        body: "RDB partners with the Directorate General of Immigration & Emigration to issue investor visas, work permits (Class A–H), and residency. Investors meeting RDB thresholds qualify for renewable 5-year permits.",
+      },
+      {
+        heading: "Useful links",
+        body: "Official site: rdb.rw • Business registration: businessprocedures.rdb.rw • Visit Rwanda (tourism arm): visitrwanda.com • Irembo (government e-services): irembo.gov.rw",
+      },
+    ],
+  },
+  {
+    slug: "visa-immigration",
+    icon: Plane,
+    title: "Visa & Immigration Guide",
+    tagline: "Entry, residency, and work permits",
+    intro:
+      "Rwanda has one of Africa's most open visa regimes. Most travelers can enter visa-free or get a visa on arrival, and pathways to residency are clear and well-documented.",
+    sections: [
+      {
+        heading: "Visa on arrival",
+        body: "Citizens of all countries can obtain a 30-day tourist visa on arrival at Kigali International Airport for USD 50. Citizens of the African Union, Commonwealth, and Francophonie countries enter visa-free for up to 30 or 90 days.",
+      },
+      {
+        heading: "East Africa Tourist Visa",
+        body: "A USD 100 multiple-entry visa valid 90 days across Rwanda, Kenya, and Uganda. Ideal if you plan regional travel. Apply online via irembo.gov.rw before travel.",
+      },
+      {
+        heading: "Work & residency permits",
+        body: "Class T (work permit) requires a sponsoring employer or registered company. Class G (investor) is available to those investing USD 250,000+. Class H (retiree) and Class I (digital nomad / remote worker) options also exist. Permits run 1–5 years and are renewable.",
+      },
+      {
+        heading: "Required documents",
+        body: "Valid passport (6+ months), yellow fever certificate, criminal record check (apostilled), academic/professional certificates, and a sponsor letter or RDB investment certificate where applicable.",
+      },
+      {
+        heading: "Processing times",
+        body: "Most permits are issued within 10 working days through Irembo. Lauture Global handles the full application end-to-end as part of our exploration and relocation packages.",
+      },
+    ],
+  },
+  {
+    slug: "healthcare",
+    icon: HeartPulse,
+    title: "Healthcare in Rwanda",
+    tagline: "Hospitals, insurance, and what to expect",
+    intro:
+      "Rwanda has one of Africa's most respected universal healthcare systems, with rapidly improving private facilities in Kigali serving expats and medical tourists.",
+    sections: [
+      {
+        heading: "Top hospitals & clinics",
+        body: "King Faisal Hospital (Kigali's flagship referral hospital), Rwanda Military Hospital, Legacy Clinics, Polyclinic du Plateau, and Baho International Hospital are the go-to facilities for expats. Most have English-speaking staff.",
+      },
+      {
+        heading: "Health insurance",
+        body: "Locals use Mutuelle de Santé (community-based, ~USD 8/year) or RSSB. Expats typically maintain international cover (Allianz, Cigna, AXA, IMG) for full evacuation and overseas treatment options. Local private insurance (Radiant, Sanlam, Britam) is also available.",
+      },
+      {
+        heading: "Pharmacies & medication",
+        body: "Pharmacies are widespread — Pharmacie Conseil and Pharmacie Continentale have multiple locations. Most common medications are available; bring a 3-month supply and prescription for anything specialized.",
+      },
+      {
+        heading: "Vaccinations & health prep",
+        body: "Yellow fever certificate is required for entry. Recommended: Hepatitis A & B, typhoid, rabies, and meningitis. Malaria prophylaxis is advised in lowland areas; Kigali itself is low-risk.",
+      },
+      {
+        heading: "Emergencies",
+        body: "Dial 912 for ambulance services. SOS International and AMREF Flying Doctors offer medical evacuation cover — strongly recommended for expats.",
+      },
+    ],
+  },
+  {
+    slug: "education",
+    icon: GraduationCap,
+    title: "Education & Schools",
+    tagline: "International schools and universities",
+    intro:
+      "Rwanda offers excellent international schooling options in Kigali, with British, American, French, and IB curricula available. Higher education and professional training are also rapidly expanding.",
+    sections: [
+      {
+        heading: "International schools",
+        body: "Green Hills Academy (IB, K–12), International School of Kigali (American curriculum), Kigali International Community School (Christian, US curriculum), École Belge de Kigali (Belgian/French), and Riviera High School (Cambridge IGCSE/A-Levels).",
+      },
+      {
+        heading: "Tuition expectations",
+        body: "International school tuition ranges from USD 8,000 to USD 25,000 per year depending on grade and curriculum. Most schools have waitlists — apply 3–6 months in advance.",
+      },
+      {
+        heading: "Universities & higher ed",
+        body: "University of Rwanda (largest public), African Leadership University, Carnegie Mellon University Africa (Kigali campus), University of Global Health Equity, and Adventist University of Central Africa.",
+      },
+      {
+        heading: "Languages of instruction",
+        body: "English is the primary language of instruction across most schools and universities since 2008. French and Kinyarwanda are also widely taught.",
+      },
+    ],
+  },
+  {
+    slug: "housing",
+    icon: Home,
+    title: "Housing & Real Estate",
+    tagline: "Where to live in Kigali and what it costs",
+    intro:
+      "Kigali offers a wide range of housing — from modern apartments to spacious villas — across distinct neighborhoods. The market is competitive but transparent and reasonably priced by global standards.",
+    sections: [
+      {
+        heading: "Top expat neighborhoods",
+        body: "Kacyiru (diplomatic area, modern), Nyarutarama (upscale, lake views, golf course), Kimihurura (central, lively, restaurants), Gacuriro (family-friendly, gated estates), and Rebero (hilltop villas, panoramic views).",
+      },
+      {
+        heading: "Rental costs",
+        body: "Furnished 2-bed apartment in a prime area: USD 1,200–2,500/month. Family villa with garden: USD 2,500–6,000/month. Most leases are 1 year, paid quarterly or annually in advance, in USD or RWF.",
+      },
+      {
+        heading: "Buying property",
+        body: "Foreigners can own land via leasehold (typically 99 years) and freely own buildings. Property prices in prime Kigali range from USD 1,200–2,500/m². Yields on rental property average 8–12%.",
+      },
+      {
+        heading: "Utilities & internet",
+        body: "Electricity (REG) ~USD 0.20/kWh, water (WASAC) is inexpensive. Fiber internet (Liquid, MTN, Canal Box) starts at USD 40/month for 50 Mbps. Backup power is recommended; outages are rare but possible.",
+      },
+      {
+        heading: "Finding a home",
+        body: "Major portals: Imali.biz, House.rw, and Property24 Rwanda. Trusted agencies handle most quality listings. Lauture Global pre-vets neighborhoods, agents, and contracts for our clients.",
+      },
+    ],
+  },
+  {
+    slug: "transportation",
+    icon: Bus,
+    title: "Getting Around",
+    tagline: "Transport, driving, and connectivity",
+    intro:
+      "Kigali is one of the easiest African capitals to navigate — clean, safe roads, organized traffic, and reliable ride-hailing apps make daily life simple.",
+    sections: [
+      {
+        heading: "Ride-hailing & taxis",
+        body: "Yego Cabs, Move (by Volkswagen Rwanda), and motorcycle apps SafeMotos and YegoMoto dominate. Standard car ride across town: USD 3–7. Moto rides: USD 1–3. All trackable, metered, and cashless.",
+      },
+      {
+        heading: "Driving in Rwanda",
+        body: "Rwanda drives on the right. Roads are well-maintained and traffic is orderly. Foreign licenses are valid for 6 months; after that, convert to a Rwandan license through Irembo. Used cars and SUVs are widely available; Land Cruisers and RAV4s dominate.",
+      },
+      {
+        heading: "Public transport",
+        body: "Kigali Bus Services and RFTC operate clean, cashless city buses (tap card system). Kigali International Airport connects to 25+ destinations across Africa, Europe, and Asia, primarily via national carrier RwandAir.",
+      },
+      {
+        heading: "Inter-city & regional",
+        body: "Comfortable coach lines (Volcano, Ritco, Horizon Express) run between Kigali and all provincial cities. Cross-border buses link to Kampala, Bujumbura, Goma, and Dar es Salaam.",
+      },
+    ],
+  },
+  {
+    slug: "tourism",
+    icon: Mountain,
+    title: "Tourism & Things to Do",
+    tagline: "Gorillas, lakes, and unforgettable landscapes",
+    intro:
+      "Rwanda is a world-class tourism destination — best known for mountain gorilla trekking, but offering lakes, savannah safari, cultural villages, and one of Africa's most exciting culinary scenes.",
+    sections: [
+      {
+        heading: "Volcanoes National Park",
+        body: "Home to roughly a third of the world's remaining mountain gorillas. Trekking permits cost USD 1,500 per person. The park also offers golden monkey treks and the Dian Fossey hike.",
+      },
+      {
+        heading: "Akagera National Park",
+        body: "Rwanda's Big Five savannah park in the east — lions, rhinos, elephants, leopards, and buffalo. Self-drive and guided safaris available; lodges range from budget to ultra-luxury (Magashi).",
+      },
+      {
+        heading: "Nyungwe Forest",
+        body: "Ancient rainforest in the southwest with chimpanzee tracking, a thrilling canopy walkway, and 13 primate species. Pair with a stay at One&Only Nyungwe House.",
+      },
+      {
+        heading: "Lake Kivu",
+        body: "One of Africa's Great Lakes — bilharzia-free, hippo- and crocodile-free swimming. Lakeside towns Rubavu (Gisenyi), Karongi (Kibuye), and Rusizi (Cyangugu) offer beach hotels, kayaking, and the Congo Nile Trail.",
+      },
+      {
+        heading: "Kigali itself",
+        body: "Visit the Kigali Genocide Memorial (essential and moving), Inema Arts Center, Kimironko Market, Caplaki craft village, and the rooftop bars of Kimihurura. Don't miss a Saturday morning Umuganda or coffee at Question Coffee.",
+      },
+    ],
+  },
+  {
+    slug: "safety",
+    icon: ShieldCheck,
+    title: "Safety & Daily Life",
+    tagline: "Why Rwanda is one of Africa's safest countries",
+    intro:
+      "Rwanda consistently ranks among the safest countries in Africa and globally — comfortable for solo travelers, women, and night walks more than most major Western capitals.",
+    sections: [
+      {
+        heading: "Crime levels",
+        body: "Violent crime is extremely rare. Petty theft exists in markets and crowded areas but is uncommon. Police presence is visible, professional, and helpful. Emergency number: 112.",
+      },
+      {
+        heading: "Cleanliness & order",
+        body: "Plastic bags are banned nationwide. Streets are immaculate thanks to Umuganda (monthly community service). Littering carries fines.",
+      },
+      {
+        heading: "Women & solo travelers",
+        body: "Rwanda is widely considered Africa's most comfortable country for solo female travelers. Walking after dark in Kigali is generally safe; standard precautions still apply.",
+      },
+      {
+        heading: "LGBTQ+ context",
+        body: "Same-sex relations are legal in Rwanda (one of few African countries). Public displays of affection (any orientation) are uncommon. Discretion is the norm.",
+      },
+      {
+        heading: "Health & environment",
+        body: "Tap water is generally not for drinking — bottled or filtered is standard. Altitude (Kigali 1,567m) may cause mild fatigue the first few days. UV is strong year-round.",
+      },
+    ],
+  },
 ];
