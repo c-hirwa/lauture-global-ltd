@@ -1,4 +1,4 @@
-import { Briefcase, Users, Globe2, Wallet, Package } from "lucide-react";
+import { Briefcase, Users, Globe2, Wallet, Package, MapPin, Plane, HeartPulse, GraduationCap, Home, Bus, Mountain, ShieldCheck, Landmark } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 export interface Guide {
