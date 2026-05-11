@@ -13,7 +13,7 @@ const founders = [
     image: marieImg,
     bio: "The visionary behind Lauture Global LTD, Marie Vianie leads the firm's strategic direction with a deep commitment to connecting global citizens with Rwanda's extraordinary opportunities. Her leadership shapes every relocation journey we craft.",
     email: "marievianie.lauture@gmail.com",
-    linkedin: "https://www.linkedin.com/",
+    linkedin: "https://www.linkedin.com/in/marie-vianie-lauture-lundi-0a9485143/",
     facebook: "https://www.facebook.com/",
   },
   {
@@ -22,7 +22,7 @@ const founders = [
     image: jorisImg,
     bio: "Joris brings sharp commercial insight and operational excellence to Lauture Global. He oversees client experience, partnerships, and the seamless execution of every package, ensuring world-class service from first contact to full integration.",
     email: "lauturejoris@gmail.com",
-    linkedin: "https://www.linkedin.com/",
+    linkedin: "https://www.linkedin.com/in/joris-lauture-5089a2178/",
     facebook: "https://www.facebook.com/",
   },
   {
@@ -31,7 +31,7 @@ const founders = [
     image: vladimirImg,
     bio: "Vladimir leads the firm's financial strategy and investment advisory with decades of cross-border financial expertise. He guides clients through Rwanda's investment landscape with clarity, rigor, and long-term vision.",
     email: "Vladimirgse1334@gmail.com",
-    linkedin: "https://www.linkedin.com/",
+    linkedin: "https://www.linkedin.com/in/",
     facebook: "https://www.facebook.com/",
   },
 ];
