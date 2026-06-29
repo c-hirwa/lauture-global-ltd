@@ -3,6 +3,7 @@ import { Target, Eye, Heart } from "lucide-react";
 import aboutImg from "@/assets/about-team.jpeg";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PartnersSection from "@/components/PartnersSection";
 
 const values = [
   { icon: Target, title: "Excellence", desc: "We deliver premium, detail-oriented services that exceed expectations." },
@@ -106,6 +107,8 @@ const About = () => (
           </div>
         </div>
       </section>
+
+      <PartnersSection />
     </main>
     <Footer />
   </>
