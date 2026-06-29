@@ -106,6 +106,8 @@ const About = () => (
           </div>
         </div>
       </section>
+
+      <PartnersSection />
     </main>
     <Footer />
   </>
