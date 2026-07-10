@@ -77,4 +77,40 @@ describe("PackageModal intake flow", () => {
     );
     expect(window.open).toHaveBeenCalled();
   });
+
+  it("falls back to a simpler payload when the table is missing columns", async () => {
+    insertMock
+      .mockResolvedValueOnce({ error: { message: "Could not find the 'package_price' column" } })
+      .mockResolvedValueOnce({ error: null });
+
+    const pkg: PackageData = {
+      id: "basic",
+      title: "Basic Guidance",
+      subtitle: "Test package",
+      price: 500,
+      objective: "Test objective",
+      whatYouGet: [],
+      forWho: [],
+      outcome: [],
+      ctaLabel: "Start",
+    };
+
+    render(<PackageModal pkg={pkg} open={true} onOpenChange={() => {}} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /start/i }));
+    fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: "Ada Lovelace" } });
+    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: "ada@example.com" } });
+    fireEvent.change(screen.getByLabelText(/phone/i), { target: { value: "+250780000000" } });
+    fireEvent.change(screen.getByLabelText(/country you are relocating from/i), { target: { value: "Kenya" } });
+    fireEvent.click(screen.getByRole("button", { name: /continue/i }));
+    fireEvent.click(screen.getByRole("radio", { name: /solo/i }));
+    fireEvent.click(screen.getByRole("radio", { name: /relocation/i }));
+    fireEvent.click(screen.getByRole("radio", { name: /urban city life/i }));
+    fireEvent.click(screen.getByRole("radio", { name: /within 3 months/i }));
+    fireEvent.click(screen.getByRole("button", { name: /continue/i }));
+    fireEvent.click(screen.getByRole("button", { name: /proceed to payment/i }));
+
+    await waitFor(() => expect(insertMock).toHaveBeenCalledTimes(2));
+    expect(window.open).toHaveBeenCalled();
+  });
 });

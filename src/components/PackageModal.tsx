@@ -45,35 +45,83 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
-    const payload = {
-      full_name: form.fullName,
-      email: form.email,
-      phone: form.phone,
-      country: form.country,
-      travelers: form.travelers,
-      purpose: form.purpose,
-      lifestyle: form.lifestyle,
-      timeline: form.timeline,
-      package_title: pkg.title,
-      package_price: pkg.price,
-      status: "pending_payment",
-      created_at: new Date().toISOString(),
-    };
+    const payloadAttempts = [
+      {
+        full_name: form.fullName,
+        email: form.email,
+        phone: form.phone,
+        country: form.country,
+        travelers: form.travelers,
+        purpose: form.purpose,
+        lifestyle: form.lifestyle,
+        timeline: form.timeline,
+        package_title: pkg.title,
+        package_price: pkg.price,
+        status: "pending_payment",
+        created_at: new Date().toISOString(),
+      },
+      {
+        full_name: form.fullName,
+        email: form.email,
+        phone: form.phone,
+        country: form.country,
+        travelers: form.travelers,
+        purpose: form.purpose,
+        lifestyle: form.lifestyle,
+        timeline: form.timeline,
+        package_title: pkg.title,
+        status: "pending_payment",
+        created_at: new Date().toISOString(),
+      },
+      {
+        full_name: form.fullName,
+        email: form.email,
+        phone: form.phone,
+        country: form.country,
+        travelers: form.travelers,
+        purpose: form.purpose,
+        lifestyle: form.lifestyle,
+        timeline: form.timeline,
+        package_title: pkg.title,
+        created_at: new Date().toISOString(),
+      },
+      {
+        full_name: form.fullName,
+        email: form.email,
+        phone: form.phone,
+        country: form.country,
+        travelers: form.travelers,
+        purpose: form.purpose,
+        lifestyle: form.lifestyle,
+        timeline: form.timeline,
+      },
+    ];
 
-    const { error } = await supabase.from("clients").insert([payload]);
+    try {
+      let lastError: Error | null = null;
 
-    if (error) {
-      console.error(error);
+      for (const payload of payloadAttempts) {
+        const { error } = await supabase.from("clients").insert([payload]);
+
+        if (!error) {
+          toast.success("Your details have been saved. Redirecting to checkout.");
+          const checkoutUrl = import.meta.env.VITE_STRIPE_CHECKOUT_URL || "https://checkout.stripe.com/pay";
+          window.open(checkoutUrl, "_blank", "noopener,noreferrer");
+          close(false);
+          return;
+        }
+
+        lastError = error as Error;
+        if (!error.message?.includes("column")) {
+          break;
+        }
+      }
+
+      console.error(lastError);
       toast.error("We could not save your intake request. Please try again.");
+    } finally {
       setIsSubmitting(false);
-      return;
     }
-
-    toast.success("Your details have been saved. Redirecting to checkout.");
-    const checkoutUrl = import.meta.env.VITE_STRIPE_CHECKOUT_URL || "https://checkout.stripe.com/pay";
-    window.open(checkoutUrl, "_blank", "noopener,noreferrer");
-    close(false);
-    setIsSubmitting(false);
   };
 
   const stepNum = step === "form1" ? 1 : step === "form2" ? 2 : step === "form3" ? 3 : 0;
