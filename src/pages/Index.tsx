@@ -14,6 +14,8 @@ import serviceInvestment from "@/assets/service-investment.jpg";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GuidesSection from "@/components/GuidesSection";
+import PartnersSection from "@/components/PartnersSection";
+
 
 const services = [
   { image: serviceVacation, title: "Personalized Vacation Packages and Exploration Plans" },
