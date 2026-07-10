@@ -202,6 +202,9 @@ const Index = () => {
           </div>
         </section>
 
+        {/* PARTNERS */}
+        <PartnersSection />
+
         {/* GUIDES PREVIEW */}
         <GuidesSection />
 
