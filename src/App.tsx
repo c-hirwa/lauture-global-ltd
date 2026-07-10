@@ -10,6 +10,7 @@ import Services from "./pages/Services.tsx";
 import Resources from "./pages/Resources.tsx";
 import Founders from "./pages/Founders.tsx";
 import Contact from "./pages/Contact.tsx";
+import Partners from "./pages/Partners.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
