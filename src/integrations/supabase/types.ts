@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      bookings: {
+        Row: {
+          attendee_email: string | null
+          attendee_name: string | null
+          booking_uid: string | null
+          created_at: string
+          end_time: string | null
+          event_type: string | null
+          id: string
+          package_id: string | null
+          package_title: string | null
+          raw: Json | null
+          start_time: string | null
+          status: string | null
+        }
+        Insert: {
+          attendee_email?: string | null
+          attendee_name?: string | null
+          booking_uid?: string | null
+          created_at?: string
+          end_time?: string | null
+          event_type?: string | null
+          id?: string
+          package_id?: string | null
+          package_title?: string | null
+          raw?: Json | null
+          start_time?: string | null
+          status?: string | null
+        }
+        Update: {
+          attendee_email?: string | null
+          attendee_name?: string | null
+          booking_uid?: string | null
+          created_at?: string
+          end_time?: string | null
+          event_type?: string | null
+          id?: string
+          package_id?: string | null
+          package_title?: string | null
+          raw?: Json | null
+          start_time?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           children_count: number | null
