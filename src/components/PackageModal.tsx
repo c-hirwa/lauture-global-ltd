@@ -7,7 +7,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ArrowRight, ArrowLeft, Sparkles } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/lib/supabase";
 
 export type PackageData = {
   id: string;
@@ -31,7 +30,6 @@ interface Props {
 
 const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
   const [step, setStep] = useState<Step>("details");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     fullName: "", email: "", phone: "", country: "",
     travelers: "", purpose: "", lifestyle: "", timeline: "",
@@ -41,88 +39,6 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
 
   const reset = () => { setStep("details"); setForm({ fullName: "", email: "", phone: "", country: "", travelers: "", purpose: "", lifestyle: "", timeline: "" }); };
   const close = (o: boolean) => { if (!o) reset(); onOpenChange(o); };
-
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
-
-    const payloadAttempts = [
-      {
-        full_name: form.fullName,
-        email: form.email,
-        phone: form.phone,
-        country: form.country,
-        travelers: form.travelers,
-        purpose: form.purpose,
-        lifestyle: form.lifestyle,
-        timeline: form.timeline,
-        package_title: pkg.title,
-        package_price: pkg.price,
-        status: "pending_payment",
-        created_at: new Date().toISOString(),
-      },
-      {
-        full_name: form.fullName,
-        email: form.email,
-        phone: form.phone,
-        country: form.country,
-        travelers: form.travelers,
-        purpose: form.purpose,
-        lifestyle: form.lifestyle,
-        timeline: form.timeline,
-        package_title: pkg.title,
-        status: "pending_payment",
-        created_at: new Date().toISOString(),
-      },
-      {
-        full_name: form.fullName,
-        email: form.email,
-        phone: form.phone,
-        country: form.country,
-        travelers: form.travelers,
-        purpose: form.purpose,
-        lifestyle: form.lifestyle,
-        timeline: form.timeline,
-        package_title: pkg.title,
-        created_at: new Date().toISOString(),
-      },
-      {
-        full_name: form.fullName,
-        email: form.email,
-        phone: form.phone,
-        country: form.country,
-        travelers: form.travelers,
-        purpose: form.purpose,
-        lifestyle: form.lifestyle,
-        timeline: form.timeline,
-      },
-    ];
-
-    try {
-      let lastError: Error | null = null;
-
-      for (const payload of payloadAttempts) {
-        const { error } = await supabase.from("clients").insert([payload]);
-
-        if (!error) {
-          toast.success("Your details have been saved. Redirecting to checkout.");
-          const checkoutUrl = import.meta.env.VITE_STRIPE_CHECKOUT_URL || "https://checkout.stripe.com/pay";
-          window.open(checkoutUrl, "_blank", "noopener,noreferrer");
-          close(false);
-          return;
-        }
-
-        lastError = error as Error;
-        if (!error.message?.includes("column")) {
-          break;
-        }
-      }
-
-      console.error(lastError);
-      toast.error("We could not save your intake request. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const stepNum = step === "form1" ? 1 : step === "form2" ? 2 : step === "form3" ? 3 : 0;
 
@@ -186,22 +102,15 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
           {stepNum > 0 && (
             <motion.div key="form" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.4 }} className="p-8 md:p-10">
               {/* Progress */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.25em] text-primary-foreground/60 mb-2">
-                  <span>Step 1</span>
-                  <span>Step 2</span>
-                  <span>Step 3</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  {[1, 2, 3].map((n) => (
-                    <div key={n} className="flex-1 flex items-center gap-2">
-                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold transition-all ${stepNum >= n ? "bg-accent text-accent-foreground" : "bg-primary-foreground/10 text-primary-foreground/50"}`}>
-                        {stepNum > n ? <Check size={14} /> : n}
-                      </div>
-                      {n < 3 && <div className={`flex-1 h-0.5 ${stepNum > n ? "bg-accent" : "bg-primary-foreground/10"}`} />}
+              <div className="flex items-center gap-2 mb-6">
+                {[1, 2, 3].map((n) => (
+                  <div key={n} className="flex-1 flex items-center gap-2">
+                    <div className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold transition-all ${stepNum >= n ? "bg-accent text-accent-foreground" : "bg-primary-foreground/10 text-primary-foreground/50"}`}>
+                      {stepNum > n ? <Check size={14} /> : n}
                     </div>
-                  ))}
-                </div>
+                    {n < 3 && <div className={`flex-1 h-0.5 ${stepNum > n ? "bg-accent" : "bg-primary-foreground/10"}`} />}
+                  </div>
+                ))}
               </div>
 
               <h2 className="font-heading text-2xl md:text-3xl font-bold mb-1">
@@ -252,8 +161,8 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
                   </div>
                   <div className="flex justify-between">
                     <Button variant="outline-light" onClick={() => setStep("form2")}><ArrowLeft size={16} /> Back</Button>
-                    <Button variant="gold" size="lg" onClick={handleSubmit} disabled={isSubmitting}>
-                      {isSubmitting ? "Saving..." : "Proceed to Payment"} <ArrowRight size={18} />
+                    <Button variant="gold" size="lg" onClick={() => { toast.success("Request received! Payment integration coming soon."); close(false); }}>
+                      Proceed to Payment <ArrowRight size={18} />
                     </Button>
                   </div>
                 </div>
@@ -266,22 +175,17 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
   );
 };
 
-const FieldInput = ({ label, value, onChange, type = "text" }: { label: string; value: string; onChange: (v: string) => void; type?: string }) => {
-  const inputId = label.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-
-  return (
-    <div>
-      <Label htmlFor={inputId} className="text-primary-foreground/80 text-xs uppercase tracking-wider mb-1.5 block">{label}</Label>
-      <Input
-        id={inputId}
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="bg-primary-foreground/5 border-primary-foreground/15 text-primary-foreground focus-visible:border-sky-400 focus-visible:ring-sky-400/20"
-      />
-    </div>
-  );
-};
+const FieldInput = ({ label, value, onChange, type = "text" }: { label: string; value: string; onChange: (v: string) => void; type?: string }) => (
+  <div>
+    <Label className="text-primary-foreground/80 text-xs uppercase tracking-wider mb-1.5 block">{label}</Label>
+    <Input
+      type={type}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="bg-primary-foreground/5 border-primary-foreground/15 text-primary-foreground focus-visible:ring-secondary focus-visible:border-secondary"
+    />
+  </div>
+);
 
 const FieldRadio = ({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: string[] }) => (
   <div>
