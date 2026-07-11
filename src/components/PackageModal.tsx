@@ -5,8 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, ArrowRight, ArrowLeft, Sparkles } from "lucide-react";
+import { Check, ArrowRight, ArrowLeft, Sparkles, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/lib/supabase";
 
 export type PackageData = {
   id: string;
@@ -28,19 +29,69 @@ interface Props {
   onOpenChange: (o: boolean) => void;
 }
 
+const initialForm = {
+  fullName: "",
+  email: "",
+  phone: "",
+  country: "",
+  travelers: "",
+  childrenCount: "",
+  purpose: "",
+  lifestyle: "",
+  timeline: "",
+};
+
 const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
   const [step, setStep] = useState<Step>("details");
-  const [form, setForm] = useState({
-    fullName: "", email: "", phone: "", country: "",
-    travelers: "", purpose: "", lifestyle: "", timeline: "",
-  });
+  const [form, setForm] = useState(initialForm);
+  const [submitting, setSubmitting] = useState(false);
 
   if (!pkg) return null;
 
-  const reset = () => { setStep("details"); setForm({ fullName: "", email: "", phone: "", country: "", travelers: "", purpose: "", lifestyle: "", timeline: "" }); };
-  const close = (o: boolean) => { if (!o) reset(); onOpenChange(o); };
+  const reset = () => {
+    setStep("details");
+    setForm(initialForm);
+    setSubmitting(false);
+  };
+  const close = (o: boolean) => {
+    if (!o) reset();
+    onOpenChange(o);
+  };
 
   const stepNum = step === "form1" ? 1 : step === "form2" ? 2 : step === "form3" ? 3 : 0;
+
+  const handleSubmit = async () => {
+    if (!pkg) return;
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.from("clients").insert({
+        full_name: form.fullName,
+        email: form.email,
+        phone: form.phone || null,
+        country_from: form.country || null,
+        travelers: form.travelers || null,
+        children_count:
+          form.travelers === "Family" && form.childrenCount
+            ? parseInt(form.childrenCount, 10) || null
+            : null,
+        purpose: form.purpose || null,
+        lifestyle: form.lifestyle || null,
+        timeline: form.timeline || null,
+        package_id: pkg.id,
+        package_title: pkg.title,
+        package_price: pkg.price,
+      });
+      if (error) throw error;
+      toast.success("Details saved! Redirecting to payment...");
+      // Stripe checkout hook — to be wired once products are created
+      setTimeout(() => close(false), 1200);
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err?.message || "Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={close}>
@@ -101,16 +152,29 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
 
           {stepNum > 0 && (
             <motion.div key="form" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.4 }} className="p-8 md:p-10">
-              {/* Progress */}
-              <div className="flex items-center gap-2 mb-6">
-                {[1, 2, 3].map((n) => (
-                  <div key={n} className="flex-1 flex items-center gap-2">
-                    <div className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold transition-all ${stepNum >= n ? "bg-accent text-accent-foreground" : "bg-primary-foreground/10 text-primary-foreground/50"}`}>
-                      {stepNum > n ? <Check size={14} /> : n}
+              {/* Step indicator + gold progress bar */}
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  {[1, 2, 3].map((n) => (
+                    <div key={n} className="flex-1 flex items-center gap-2">
+                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold transition-all ${stepNum >= n ? "bg-accent text-accent-foreground" : "bg-primary-foreground/10 text-primary-foreground/50"}`}>
+                        {stepNum > n ? <Check size={14} /> : n}
+                      </div>
+                      {n < 3 && <div className={`flex-1 h-0.5 ${stepNum > n ? "bg-accent" : "bg-primary-foreground/10"}`} />}
                     </div>
-                    {n < 3 && <div className={`flex-1 h-0.5 ${stepNum > n ? "bg-accent" : "bg-primary-foreground/10"}`} />}
-                  </div>
-                ))}
+                  ))}
+                </div>
+                <div className="h-1.5 w-full rounded-full bg-primary-foreground/10 overflow-hidden">
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-accent/70 via-accent to-accent/70"
+                    initial={false}
+                    animate={{ width: `${(stepNum / 3) * 100}%` }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
+                  />
+                </div>
+                <p className="text-[11px] uppercase tracking-widest text-primary-foreground/50 mt-2">
+                  Step {stepNum} of 3
+                </p>
               </div>
 
               <h2 className="font-heading text-2xl md:text-3xl font-bold mb-1">
@@ -135,7 +199,20 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
 
               {step === "form2" && (
                 <div className="space-y-5">
-                  <FieldRadio label="Number of people relocating" value={form.travelers} onChange={(v) => setForm({ ...form, travelers: v })} options={["Solo", "Couple", "Family with children"]} />
+                  <FieldRadio
+                    label="Number of people relocating"
+                    value={form.travelers}
+                    onChange={(v) => setForm({ ...form, travelers: v, childrenCount: v === "Family" ? form.childrenCount : "" })}
+                    options={["Solo", "Couple", "Family"]}
+                  />
+                  {form.travelers === "Family" && (
+                    <FieldInput
+                      label="How many children?"
+                      type="number"
+                      value={form.childrenCount}
+                      onChange={(v) => setForm({ ...form, childrenCount: v })}
+                    />
+                  )}
                   <FieldRadio label="Primary purpose" value={form.purpose} onChange={(v) => setForm({ ...form, purpose: v })} options={["Vacation", "Relocation", "Investment", "Exploring options"]} />
                   <FieldRadio label="Preferred lifestyle" value={form.lifestyle} onChange={(v) => setForm({ ...form, lifestyle: v })} options={["Urban city life", "Quiet suburban", "Nature and outdoors", "Mixed"]} />
                   <FieldRadio label="Approximate timeline" value={form.timeline} onChange={(v) => setForm({ ...form, timeline: v })} options={["Within 3 months", "3–6 months", "6–12 months", "Just exploring"]} />
@@ -154,15 +231,26 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
                     <SummaryRow label="Email" value={form.email} />
                     <SummaryRow label="Phone" value={form.phone} />
                     <SummaryRow label="From" value={form.country} />
-                    <SummaryRow label="Travelers" value={form.travelers} />
+                    <SummaryRow
+                      label="Travelers"
+                      value={
+                        form.travelers === "Family" && form.childrenCount
+                          ? `Family (${form.childrenCount} ${parseInt(form.childrenCount) === 1 ? "child" : "children"})`
+                          : form.travelers
+                      }
+                    />
                     <SummaryRow label="Purpose" value={form.purpose} />
                     <SummaryRow label="Lifestyle" value={form.lifestyle} />
                     <SummaryRow label="Timeline" value={form.timeline} />
                   </div>
                   <div className="flex justify-between">
-                    <Button variant="outline-light" onClick={() => setStep("form2")}><ArrowLeft size={16} /> Back</Button>
-                    <Button variant="gold" size="lg" onClick={() => { toast.success("Request received! Payment integration coming soon."); close(false); }}>
-                      Proceed to Payment <ArrowRight size={18} />
+                    <Button variant="outline-light" onClick={() => setStep("form2")} disabled={submitting}><ArrowLeft size={16} /> Back</Button>
+                    <Button variant="gold" size="lg" onClick={handleSubmit} disabled={submitting}>
+                      {submitting ? (
+                        <>Saving <Loader2 size={18} className="animate-spin" /></>
+                      ) : (
+                        <>Proceed to Payment <ArrowRight size={18} /></>
+                      )}
                     </Button>
                   </div>
                 </div>
@@ -182,7 +270,7 @@ const FieldInput = ({ label, value, onChange, type = "text" }: { label: string; 
       type={type}
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="bg-primary-foreground/5 border-primary-foreground/15 text-primary-foreground focus-visible:ring-secondary focus-visible:border-secondary"
+      className="bg-primary-foreground/5 border-primary-foreground/15 text-primary-foreground focus-visible:ring-sky-400 focus-visible:border-sky-400"
     />
   </div>
 );
