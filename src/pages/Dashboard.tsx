@@ -20,15 +20,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import logo from "@/assets/logo-lauture.png";
-
-const STAGES = [
-  { key: "enquiry_received", label: "Enquiry Received" },
-  { key: "consultation_booked", label: "Consultation Booked" },
-  { key: "strategy_in_progress", label: "Strategy In Progress" },
-  { key: "documents_submitted", label: "Documents Submitted" },
-  { key: "ready_to_relocate", label: "Ready to Relocate" },
-  { key: "settled_in_rwanda", label: "Settled in Rwanda" },
-];
+import { JOURNEY_STAGES as STAGES, prettyStatus } from "@/lib/constants";
 
 type Client = {
   id: string;
@@ -363,9 +355,6 @@ const Dashboard = () => {
     </div>
   );
 };
-
-const prettyStatus = (s?: string | null) =>
-  !s ? "—" : s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
 const upcomingCount = (bs: Booking[]) =>
   bs.filter((b) => b.start_time && new Date(b.start_time).getTime() > Date.now()).length;

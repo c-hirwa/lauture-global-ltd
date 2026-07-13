@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Pricing from "@/components/Pricing";
-import CalBooking from "@/components/CalBooking";
+import CalBooking, { DISCOVERY_CAL_LINK } from "@/components/CalBooking";
 
 const services = [
   { icon: Home, title: "Residential Relocation", desc: "From finding the perfect home to settling in, we handle every detail of your move to Rwanda. Our team scouts properties, negotiates leases, and ensures a smooth transition." },
@@ -56,8 +56,8 @@ const Services = () => (
             </p>
           </div>
           <CalBooking
-            calLink="lauture-global/discovery-call"
-            eventType="discovery-call"
+            calLink={DISCOVERY_CAL_LINK.link}
+            eventType={DISCOVERY_CAL_LINK.eventType}
             theme="light"
           />
         </div>

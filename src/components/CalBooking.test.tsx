@@ -8,7 +8,9 @@ describe("normalizeCalLink", () => {
     );
   });
 
-  it("keeps a slug-like cal link unchanged", () => {
-    expect(normalizeCalLink("lauture-global/discovery-call")).toBe("lauture-global/discovery-call");
+  it("strips cal.com host prefixes from slug-like links", () => {
+    expect(normalizeCalLink("cal.com/lauture-global/discovery-call")).toBe(
+      "lauture-global/discovery-call",
+    );
   });
 });

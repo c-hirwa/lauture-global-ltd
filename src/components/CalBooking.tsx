@@ -4,6 +4,12 @@ import { CheckCircle2, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 
+/** Cal.com public origin (booking pages). Override with VITE_CAL_ORIGIN for EU etc. */
+export const CAL_ORIGIN = import.meta.env.VITE_CAL_ORIGIN ?? "https://cal.com";
+/** Embed script host — must match your Cal.com account region. */
+export const CAL_EMBED_JS_URL =
+  import.meta.env.VITE_CAL_EMBED_JS_URL ?? "https://app.cal.com/embed/embed.js";
+
 interface Props {
   calLink: string;
   packageId?: string;
@@ -15,9 +21,6 @@ interface Props {
 /**
  * Embeds a Cal.com booking widget and persists successful bookings
  * to the Supabase `bookings` table.
- *
- * Update the `calLink` values in the parent config to your real
- * Cal.com event-type slugs (e.g. "your-handle/basic-guidance").
  */
 export const normalizeCalLink = (link: string) => {
   if (!link) return "";
@@ -25,22 +28,29 @@ export const normalizeCalLink = (link: string) => {
     const url = new URL(link);
     return url.pathname.replace(/^\//, "").replace(/\/$/, "");
   } catch {
-    return link.replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/$/, "");
+    return link
+      .replace(/^https?:\/\//, "")
+      .replace(/^www\./, "")
+      .replace(/^(cal\.com|app\.cal\.com|app\.cal\.eu)\//, "")
+      .replace(/\/$/, "");
   }
 };
+
+const calBookingUrl = (slug: string) => `${CAL_ORIGIN}/${slug}`;
 
 const CalBooking = ({ calLink, packageId, packageTitle, eventType, theme = "dark" }: Props) => {
   const [confirmed, setConfirmed] = useState<null | { name?: string; email?: string; start?: string }>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const normalizedLink = normalizeCalLink(calLink);
+  const embedNamespace = `lauture-${normalizedLink.replace(/\//g, "-")}`;
 
   useEffect(() => {
     let cancelled = false;
 
     (async () => {
       try {
-        const cal = await getCalApi();
+        const cal = await getCalApi({ namespace: embedNamespace, embedJsUrl: CAL_EMBED_JS_URL });
         if (cancelled) return;
 
         cal("ui", {
@@ -55,30 +65,32 @@ const CalBooking = ({ calLink, packageId, packageTitle, eventType, theme = "dark
 
         cal("on", {
           action: "bookingSuccessful",
-          callback: async (e: any) => {
+          callback: async (e: { detail?: { data?: Record<string, unknown> } }) => {
             const data = e?.detail?.data ?? {};
-            const booking = data.booking ?? {};
-            const attendee = (booking.attendees && booking.attendees[0]) || {};
-            const name = attendee.name || data.name;
-            const email = attendee.email || data.email;
-            const start = booking.startTime || data.date;
-            const end = booking.endTime;
+            const booking = (data.booking as Record<string, unknown>) ?? {};
+            const attendees = booking.attendees as Array<Record<string, string>> | undefined;
+            const attendee = attendees?.[0] ?? {};
+            const eventTypeObj = booking.eventType as { slug?: string } | undefined;
+            const name = attendee.name || (data.name as string);
+            const email = attendee.email || (data.email as string);
+            const start = (booking.startTime as string) || (data.date as string);
+            const end = booking.endTime as string | undefined;
 
             try {
-              const { error } = await supabase.from("bookings" as any).insert({
-                booking_uid: booking.uid || null,
-                event_type: eventType || booking.eventType?.slug || normalizedLink,
+              const { error } = await supabase.from("bookings").insert({
+                booking_uid: (booking.uid as string) || null,
+                event_type: eventType || eventTypeObj?.slug || normalizedLink,
                 package_id: packageId || null,
                 package_title: packageTitle || null,
                 attendee_name: name || null,
                 attendee_email: email || null,
                 start_time: start || null,
                 end_time: end || null,
-                status: booking.status || "confirmed",
-                raw: data as any,
+                status: (booking.status as string) || "confirmed",
+                raw: data as import("@/integrations/supabase/types").Json,
               });
               if (error) throw error;
-            } catch (err: any) {
+            } catch (err) {
               console.error("Failed to save booking:", err);
               toast.error("Booking made but not saved. We'll follow up by email.");
             }
@@ -97,7 +109,7 @@ const CalBooking = ({ calLink, packageId, packageTitle, eventType, theme = "dark
     return () => {
       cancelled = true;
     };
-  }, [normalizedLink, packageId, packageTitle, eventType, theme]);
+  }, [normalizedLink, packageId, packageTitle, eventType, theme, embedNamespace]);
 
   if (confirmed) {
     return (
@@ -120,7 +132,7 @@ const CalBooking = ({ calLink, packageId, packageTitle, eventType, theme = "dark
       <div className="rounded-xl border border-accent/20 bg-background p-6 text-center text-sm text-muted-foreground">
         <p>{loadError}</p>
         <a
-          href={`https://${normalizedLink}`}
+          href={calBookingUrl(normalizedLink)}
           target="_blank"
           rel="noreferrer"
           className="mt-3 inline-flex items-center text-accent underline-offset-4 hover:underline"
@@ -140,7 +152,11 @@ const CalBooking = ({ calLink, packageId, packageTitle, eventType, theme = "dark
         </div>
       )}
       <Cal
+        key={normalizedLink}
+        namespace={embedNamespace}
         calLink={normalizedLink}
+        calOrigin={CAL_ORIGIN}
+        embedJsUrl={CAL_EMBED_JS_URL}
         style={{ width: "100%", height: "600px", overflow: "scroll", display: isLoaded ? "block" : "none" }}
         config={{ theme, layout: "month_view" }}
       />
@@ -148,10 +164,23 @@ const CalBooking = ({ calLink, packageId, packageTitle, eventType, theme = "dark
   );
 };
 
+/** Verified event slugs on cal.com/lauture-global (as of project setup). */
 export const CAL_LINKS: Record<string, { link: string; eventType: string }> = {
-  basic: { link: "https://cal.com/lauture-global/basic-guidance-consultation", eventType: "basic-guidance" },
-  comprehensive: { link: "https://cal.com/lauture-global/comprehensive-strategy-session", eventType: "comprehensive-strategy" },
-  premium: { link: "https://cal.com/lauture-global/full-service-coaching-call", eventType: "full-service" },
+  basic: {
+    link: "lauture-global/basic-guidance-consultation",
+    eventType: "basic-guidance-consultation",
+  },
+  comprehensive: {
+    link: "lauture-global/comprehensive-strategy-session",
+    eventType: "comprehensive-strategy-session",
+  },
+  premium: {
+    link: "lauture-global/full-service-coaching-call",
+    eventType: "full-service-coaching-call",
+  },
 };
+
+/** Free discovery / intro call — uses the Basic Guidance event type. */
+export const DISCOVERY_CAL_LINK = CAL_LINKS.basic;
 
 export default CalBooking;
