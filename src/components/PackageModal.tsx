@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, ArrowRight, ArrowLeft, Sparkles, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
+import CalBooking, { CAL_LINKS } from "./CalBooking";
 
 export type PackageData = {
   id: string;
@@ -147,6 +148,24 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
               <Button variant="gold" size="lg" className="w-full" onClick={() => setStep("form1")}>
                 {pkg.ctaLabel} <ArrowRight size={18} />
               </Button>
+
+              <div className="mt-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="h-px flex-1 bg-primary-foreground/10" />
+                  <span className="text-xs uppercase tracking-widest text-primary-foreground/60">
+                    Or book a call directly
+                  </span>
+                  <div className="h-px flex-1 bg-primary-foreground/10" />
+                </div>
+                {CAL_LINKS[pkg.id] && (
+                  <CalBooking
+                    calLink={CAL_LINKS[pkg.id].link}
+                    eventType={CAL_LINKS[pkg.id].eventType}
+                    packageId={pkg.id}
+                    packageTitle={pkg.title}
+                  />
+                )}
+              </div>
             </motion.div>
           )}
 

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Pricing from "@/components/Pricing";
+import CalBooking from "@/components/CalBooking";
 
 const services = [
   { icon: Home, title: "Residential Relocation", desc: "From finding the perfect home to settling in, we handle every detail of your move to Rwanda. Our team scouts properties, negotiates leases, and ensures a smooth transition." },
@@ -44,6 +45,23 @@ const Services = () => (
       </section>
 
       <Pricing />
+
+      <section className="py-20 bg-background">
+        <div className="container max-w-4xl">
+          <div className="text-center mb-10">
+            <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Book a Discovery Call</p>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-3">Schedule a Free Consultation</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Prefer to talk first? Pick a time that works for you and we'll walk you through your relocation options.
+            </p>
+          </div>
+          <CalBooking
+            calLink="lauture-global/discovery-call"
+            eventType="discovery-call"
+            theme="light"
+          />
+        </div>
+      </section>
 
       <section className="bg-primary py-16 relative overflow-hidden grain">
         <div className="container text-center relative z-10">
