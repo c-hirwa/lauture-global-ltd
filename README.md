@@ -2,49 +2,52 @@
 
 **Visit • Relocate • Invest • Thrive**
 
-Official website for Lauture Global LTD — a premium exploration, 
-relocation, and investment consulting company based in Kigali, Rwanda.
-
-## About
-
-Lauture Global LTD is a trusted partner for individuals, families, 
-and entrepreneurs looking to visit, relocate, or invest in Rwanda. 
-We provide expert consultation, personalized strategy, and end-to-end 
-support to ensure a smooth and successful transition.
+Official website for Lauture Global LTD — a premium exploration, relocation, and investment consulting company based in Kigali, Rwanda.
 
 ## Tech Stack
 
-- **Framework:** Next.js
-- **Styling:** Tailwind CSS
-- **UI Components:** shadcn/ui
-- **Database:** Supabase
-- **CMS:** Sanity
-- **Payments:** Stripe
-- **Booking:** Cal.com
+- **Framework:** Vite + React + TypeScript
+- **Styling:** Tailwind CSS + shadcn/ui
+- **Database & Auth:** Supabase (your own project)
+- **Booking:** Cal.com (client dashboard only)
 - **Deployment:** Vercel
 
-## Pages
+## Client Journey
 
-- Home
-- About
-- Services
-- Pricing
-- Founders
-- Contact
+1. Browse packages on the website and complete the intake form
+2. Create a client portal account with the same email
+3. Book consultations and track progress from `/dashboard`
 
 ## Getting Started
 
 ```bash
-# Install dependencies
 npm install
-
-# Run development server
-npm run dev
-
-# Build for production
-npm run build
+cp .env.example .env   # add your Supabase credentials
+npm run dev            # http://localhost:8080
 ```
 
 ## Environment Variables
 
-Create a `.env.local` file with the following:
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `VITE_SUPABASE_URL` | Yes | Your Supabase project URL |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Yes | Supabase anon/public key |
+| `VITE_CAL_ORIGIN` | No | Cal.com origin (default: `https://cal.com`) |
+| `VITE_CAL_EMBED_JS_URL` | No | Embed script URL |
+
+## Supabase Setup
+
+Run all migrations in `supabase/migrations/` against your Supabase project, then promote an admin user:
+
+```sql
+UPDATE public.profiles SET role = 'admin' WHERE email = 'your@email.com';
+```
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server |
+| `npm run build` | Production build |
+| `npm run test` | Run tests |
+| `npm run lint` | ESLint |

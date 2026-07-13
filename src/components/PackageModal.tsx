@@ -1,14 +1,14 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, ArrowRight, ArrowLeft, Sparkles, Loader2 } from "lucide-react";
+import { Check, ArrowRight, ArrowLeft, Sparkles, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
-import CalBooking, { CAL_LINKS } from "./CalBooking";
 
 export type PackageData = {
   id: string;
@@ -22,7 +22,7 @@ export type PackageData = {
   ctaLabel: string;
 };
 
-type Step = "details" | "form1" | "form2" | "form3";
+type Step = "details" | "form1" | "form2" | "form3" | "success";
 
 interface Props {
   pkg: PackageData | null;
@@ -83,12 +83,11 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
         package_price: pkg.price,
       });
       if (error) throw error;
-      toast.success("Details saved! Redirecting to payment...");
-      // Stripe checkout hook — to be wired once products are created
-      setTimeout(() => close(false), 1200);
-    } catch (err: any) {
+      setStep("success");
+    } catch (err: unknown) {
       console.error(err);
-      toast.error(err?.message || "Something went wrong. Please try again.");
+      const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }
@@ -148,28 +147,36 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
               <Button variant="gold" size="lg" className="w-full" onClick={() => setStep("form1")}>
                 {pkg.ctaLabel} <ArrowRight size={18} />
               </Button>
+            </motion.div>
+          )}
 
-              <div className="mt-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-px flex-1 bg-primary-foreground/10" />
-                  <span className="text-xs uppercase tracking-widest text-primary-foreground/60">
-                    Or book a call directly
-                  </span>
-                  <div className="h-px flex-1 bg-primary-foreground/10" />
-                </div>
-                {CAL_LINKS[pkg.id] && (
-                  <CalBooking
-                    calLink={CAL_LINKS[pkg.id].link}
-                    eventType={CAL_LINKS[pkg.id].eventType}
-                    packageId={pkg.id}
-                    packageTitle={pkg.title}
-                  />
-                )}
+          {step === "success" && (
+            <motion.div key="success" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="p-8 md:p-10 text-center">
+              <CheckCircle2 className="mx-auto text-accent mb-4" size={48} />
+              <h2 className="font-heading text-2xl md:text-3xl font-bold mb-2">You're all set!</h2>
+              <p className="text-primary-foreground/70 text-sm mb-2 max-w-md mx-auto">
+                Your intake for <strong>{pkg.title}</strong> has been saved. Create your client portal account to book your consultation and track your journey.
+              </p>
+              <p className="text-primary-foreground/50 text-xs mb-8">
+                Use <strong className="text-primary-foreground/80">{form.email}</strong> when signing up.
+              </p>
+              <div className="flex flex-col gap-3">
+                <Button variant="gold" size="lg" className="w-full" asChild>
+                  <Link
+                    to={`/login?intake=complete&mode=signup&email=${encodeURIComponent(form.email)}&name=${encodeURIComponent(form.fullName)}`}
+                    onClick={() => close(false)}
+                  >
+                    Create portal account <ArrowRight size={18} />
+                  </Link>
+                </Button>
+                <Button variant="outline-light" onClick={() => close(false)}>
+                  I'll do this later
+                </Button>
               </div>
             </motion.div>
           )}
 
-          {stepNum > 0 && (
+          {stepNum > 0 && step !== "success" && (
             <motion.div key="form" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.4 }} className="p-8 md:p-10">
               {/* Step indicator + gold progress bar */}
               <div className="mb-6">

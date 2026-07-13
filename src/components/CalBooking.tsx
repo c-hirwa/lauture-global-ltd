@@ -164,7 +164,7 @@ const CalBooking = ({ calLink, packageId, packageTitle, eventType, theme = "dark
   );
 };
 
-/** Verified event slugs on cal.com/lauture-global (as of project setup). */
+/** Verified event slugs on cal.com/lauture-global */
 export const CAL_LINKS: Record<string, { link: string; eventType: string }> = {
   basic: {
     link: "lauture-global/basic-guidance-consultation",
@@ -179,8 +179,5 @@ export const CAL_LINKS: Record<string, { link: string; eventType: string }> = {
     eventType: "full-service-coaching-call",
   },
 };
-
-/** Free discovery / intro call — uses the Basic Guidance event type. */
-export const DISCOVERY_CAL_LINK = CAL_LINKS.basic;
 
 export default CalBooking;

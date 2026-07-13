@@ -65,7 +65,7 @@ const Navbar = () => {
           </div>
           <div className="flex items-center gap-3">
             <Button variant="gold" size="sm" asChild>
-              <Link to="/dashboard">
+              <Link to="/login">
                 <UserCircle size={16} /> Client Portal
               </Link>
             </Button>
@@ -100,7 +100,7 @@ const Navbar = () => {
           ))}
           <div className="px-6 pt-2 flex flex-col gap-2">
             <Button variant="gold" size="sm" className="w-full" asChild>
-              <Link to="/dashboard" onClick={() => setOpen(false)}>
+              <Link to="/login" onClick={() => setOpen(false)}>
                 <UserCircle size={16} /> Client Portal
               </Link>
             </Button>

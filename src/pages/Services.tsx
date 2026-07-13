@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Home, Plane, Globe, Shield, Building, Map, ArrowRight } from "lucide-react";
+import { Home, Plane, Globe, Shield, Building, Map, ArrowRight, UserCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Pricing from "@/components/Pricing";
-import CalBooking, { DISCOVERY_CAL_LINK } from "@/components/CalBooking";
 
 const services = [
   { icon: Home, title: "Residential Relocation", desc: "From finding the perfect home to settling in, we handle every detail of your move to Rwanda. Our team scouts properties, negotiates leases, and ensures a smooth transition." },
@@ -47,19 +46,24 @@ const Services = () => (
       <Pricing />
 
       <section className="py-20 bg-background">
-        <div className="container max-w-4xl">
-          <div className="text-center mb-10">
-            <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Book a Discovery Call</p>
-            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-3">Schedule a Free Consultation</h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Prefer to talk first? Pick a time that works for you and we'll walk you through your relocation options.
-            </p>
+        <div className="container max-w-3xl text-center">
+          <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Next Steps</p>
+          <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">Ready to get started?</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto mb-8">
+            Choose a package above and complete the intake form. Once submitted, you'll create a client portal account where you can book your consultation and track your relocation journey.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button variant="gold" size="lg" asChild>
+              <a href="#pricing">
+                Choose a package <ArrowRight size={18} />
+              </a>
+            </Button>
+            <Button variant="outline" size="lg" asChild>
+              <Link to="/login">
+                <UserCircle size={18} /> Client portal
+              </Link>
+            </Button>
           </div>
-          <CalBooking
-            calLink={DISCOVERY_CAL_LINK.link}
-            eventType={DISCOVERY_CAL_LINK.eventType}
-            theme="light"
-          />
         </div>
       </section>
 

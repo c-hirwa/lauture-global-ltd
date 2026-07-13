@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Navigate, Link } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/lib/supabase";
+import { useClientData } from "@/hooks/useClientData";
 import { Button } from "@/components/ui/button";
 import {
   LayoutDashboard,
@@ -18,91 +18,43 @@ import {
   Mail,
   Loader2,
   ExternalLink,
+  ArrowRight,
 } from "lucide-react";
 import logo from "@/assets/logo-lauture.png";
 import { JOURNEY_STAGES as STAGES, prettyStatus } from "@/lib/constants";
-
-type Client = {
-  id: string;
-  full_name: string;
-  email: string;
-  phone: string | null;
-  package_id: string | null;
-  package_title: string | null;
-  package_price: number | null;
-  stage: string;
-  payment_status: string;
-};
-
-type Booking = {
-  id: string;
-  event_type: string | null;
-  package_title: string | null;
-  start_time: string | null;
-  end_time: string | null;
-  status: string | null;
-};
-
-type Doc = {
-  id: string;
-  title: string;
-  description: string | null;
-  category: string | null;
-  file_url: string;
-  created_at: string;
-};
+import BookSession from "@/components/dashboard/BookSession";
+import NoIntakeState from "@/components/dashboard/NoIntakeState";
+import type { BookingRecord } from "@/hooks/useClientData";
 
 const NAV = [
   { key: "overview", label: "Overview", icon: LayoutDashboard },
   { key: "journey", label: "My Journey", icon: Check },
   { key: "package", label: "My Package", icon: Package },
+  { key: "bookings", label: "Book a Session", icon: CalendarDays },
   { key: "documents", label: "Documents", icon: FileText },
-  { key: "bookings", label: "Bookings", icon: CalendarDays },
   { key: "support", label: "Support", icon: LifeBuoy },
 ] as const;
 
-type Section = typeof NAV[number]["key"];
+type Section = (typeof NAV)[number]["key"];
 
 const Dashboard = () => {
-  const { user, loading: authLoading, signOut } = useAuth();
-  const [client, setClient] = useState<Client | null>(null);
-  const [bookings, setBookings] = useState<Booking[]>([]);
-  const [documents, setDocuments] = useState<Doc[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { user, signOut } = useAuth();
+  const { data, isLoading, isError, refetch } = useClientData(user?.email);
   const [section, setSection] = useState<Section>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  useEffect(() => {
-    if (!user?.email) return;
-    (async () => {
-      setLoading(true);
-      const email = user.email!.toLowerCase();
-      const [c, b, d] = await Promise.all([
-        supabase.from("clients" as any).select("*").ilike("email", email).order("created_at", { ascending: false }).limit(1).maybeSingle(),
-        supabase.from("bookings" as any).select("*").ilike("attendee_email", email).order("start_time", { ascending: false }),
-        supabase.from("documents" as any).select("*").ilike("client_email", email).order("created_at", { ascending: false }),
-      ]);
-      setClient((c.data as any) ?? null);
-      setBookings(((b.data as any) ?? []) as Booking[]);
-      setDocuments(((d.data as any) ?? []) as Doc[]);
-      setLoading(false);
-    })();
-  }, [user]);
+  const client = data?.client ?? null;
+  const bookings = data?.bookings ?? [];
+  const documents = data?.documents ?? [];
+  const firstName = client?.full_name?.split(" ")[0] ?? user?.email?.split("@")[0] ?? "there";
 
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin text-accent" size={32} />
-      </div>
-    );
-  }
-  if (!user) return <Navigate to="/login" replace />;
-
-  const firstName = client?.full_name?.split(" ")[0] ?? user.email?.split("@")[0] ?? "there";
+  const goTo = (key: Section) => {
+    setSection(key);
+    setSidebarOpen(false);
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 flex">
-      {/* Sidebar */}
       <aside
         className={`fixed lg:sticky top-0 left-0 h-screen w-64 bg-[hsl(226_65%_10%)] text-primary-foreground z-40 transform transition-transform lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -117,16 +69,17 @@ const Dashboard = () => {
           {NAV.map((item) => {
             const Icon = item.icon;
             const active = section === item.key;
+            const disabled = !client && item.key !== "overview" && item.key !== "support";
             return (
               <button
                 key={item.key}
-                onClick={() => {
-                  setSection(item.key);
-                  setSidebarOpen(false);
-                }}
+                onClick={() => !disabled && goTo(item.key)}
+                disabled={disabled}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   active
                     ? "bg-accent text-accent-foreground"
+                    : disabled
+                    ? "text-primary-foreground/30 cursor-not-allowed"
                     : "text-primary-foreground/70 hover:bg-primary-foreground/5 hover:text-primary-foreground"
                 }`}
               >
@@ -137,7 +90,7 @@ const Dashboard = () => {
           })}
         </nav>
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-primary-foreground/10">
-          <div className="text-xs text-primary-foreground/50 mb-2 truncate">{user.email}</div>
+          <div className="text-xs text-primary-foreground/50 mb-2 truncate">{user?.email}</div>
           <Button variant="outline-light" size="sm" className="w-full" onClick={signOut}>
             <LogOut size={14} /> Sign out
           </Button>
@@ -145,32 +98,32 @@ const Dashboard = () => {
       </aside>
 
       {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-30 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
+        <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
-      {/* Main */}
       <div className="flex-1 min-w-0">
         <header className="sticky top-0 z-20 bg-white border-b border-slate-200 flex items-center justify-between px-4 lg:px-8 h-14">
-          <button
-            className="lg:hidden text-slate-700"
-            onClick={() => setSidebarOpen(true)}
-          >
+          <button className="lg:hidden text-slate-700" onClick={() => setSidebarOpen(true)}>
             <Menu size={22} />
           </button>
-          <h2 className="font-heading text-lg font-semibold text-slate-900 capitalize">
+          <h2 className="font-heading text-lg font-semibold text-slate-900">
             {NAV.find((n) => n.key === section)?.label}
           </h2>
-          <div />
+          <div className="w-6 lg:hidden" />
         </header>
 
         <main className="p-4 lg:p-8 max-w-6xl mx-auto">
-          {loading ? (
+          {isLoading ? (
             <div className="flex items-center justify-center py-24">
               <Loader2 className="animate-spin text-accent" size={28} />
             </div>
+          ) : isError ? (
+            <div className="text-center py-16">
+              <p className="text-slate-600 mb-4">Couldn't load your dashboard data.</p>
+              <Button variant="gold" onClick={() => refetch()}>Try again</Button>
+            </div>
+          ) : !client ? (
+            <NoIntakeState />
           ) : (
             <>
               {section === "overview" && (
@@ -183,11 +136,23 @@ const Dashboard = () => {
                       Here's a snapshot of your relocation journey with Lauture Global.
                     </p>
                   </div>
-                  <JourneyTracker stage={client?.stage} />
+                  <JourneyTracker stage={client.stage} />
                   <div className="grid md:grid-cols-3 gap-4">
-                    <StatCard label="Package" value={client?.package_title ?? "—"} />
-                    <StatCard label="Payment" value={prettyStatus(client?.payment_status)} />
+                    <StatCard label="Package" value={client.package_title ?? "—"} />
+                    <StatCard label="Payment" value={prettyStatus(client.payment_status)} />
                     <StatCard label="Upcoming sessions" value={String(upcomingCount(bookings))} />
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <QuickAction
+                      title="Book a consultation"
+                      desc="Schedule your next session"
+                      onClick={() => goTo("bookings")}
+                    />
+                    <QuickAction
+                      title="View documents"
+                      desc={`${documents.length} file${documents.length === 1 ? "" : "s"} shared with you`}
+                      onClick={() => goTo("documents")}
+                    />
                   </div>
                 </div>
               )}
@@ -195,37 +160,51 @@ const Dashboard = () => {
               {section === "journey" && (
                 <div className="space-y-4">
                   <p className="text-slate-600">Your current relocation stage:</p>
-                  <JourneyTracker stage={client?.stage} vertical />
+                  <JourneyTracker stage={client.stage} vertical />
                 </div>
               )}
 
               {section === "package" && (
                 <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
                   <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
-                    {client?.package_title ?? "No package selected yet"}
+                    {client.package_title ?? "No package selected"}
                   </h3>
-                  {client?.package_price && (
+                  {client.package_price != null && (
                     <p className="text-slate-600 mb-4">
                       ${Number(client.package_price).toLocaleString()}
                     </p>
                   )}
                   <div className="flex items-center gap-2 mb-6">
-                    <span className="text-xs uppercase tracking-widest text-slate-500">
-                      Payment status
-                    </span>
+                    <span className="text-xs uppercase tracking-widest text-slate-500">Payment status</span>
                     <span
                       className={`text-xs font-semibold px-2 py-1 rounded ${
-                        client?.payment_status === "paid"
+                        client.payment_status === "paid"
                           ? "bg-emerald-100 text-emerald-700"
                           : "bg-amber-100 text-amber-700"
                       }`}
                     >
-                      {prettyStatus(client?.payment_status)}
+                      {prettyStatus(client.payment_status)}
                     </span>
                   </div>
-                  <Button variant="gold" asChild>
-                    <Link to="/services">Book or reschedule a session</Link>
+                  <Button variant="gold" onClick={() => goTo("bookings")}>
+                    Book a consultation <ArrowRight size={16} />
                   </Button>
+                </div>
+              )}
+
+              {section === "bookings" && (
+                <div className="space-y-6">
+                  <BookSession client={client} />
+                  {bookings.length > 0 && (
+                    <div>
+                      <h3 className="font-heading font-bold text-slate-900 mb-3">Your sessions</h3>
+                      <div className="space-y-3">
+                        {bookings.map((b) => (
+                          <BookingCard key={b.id} booking={b} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -266,50 +245,6 @@ const Dashboard = () => {
                 </div>
               )}
 
-              {section === "bookings" && (
-                <div className="space-y-3">
-                  {bookings.length === 0 ? (
-                    <EmptyState
-                      icon={CalendarDays}
-                      title="No bookings yet"
-                      desc="Your upcoming and past consultations will appear here."
-                    />
-                  ) : (
-                    bookings.map((b) => {
-                      const start = b.start_time ? new Date(b.start_time) : null;
-                      const past = start ? start.getTime() < Date.now() : false;
-                      return (
-                        <div
-                          key={b.id}
-                          className="bg-white rounded-xl border border-slate-200 p-4 flex items-center justify-between gap-4"
-                        >
-                          <div>
-                            <h4 className="font-semibold text-slate-900">
-                              {b.package_title ?? b.event_type ?? "Consultation"}
-                            </h4>
-                            <p className="text-sm text-slate-600">
-                              {start ? start.toLocaleString() : "Time TBD"}
-                            </p>
-                          </div>
-                          <span
-                            className={`text-xs font-semibold px-2 py-1 rounded ${
-                              past
-                                ? "bg-slate-100 text-slate-600"
-                                : "bg-accent/15 text-accent"
-                            }`}
-                          >
-                            {past ? "Past" : b.status || "Upcoming"}
-                          </span>
-                        </div>
-                      );
-                    })
-                  )}
-                  <Button variant="gold" asChild className="mt-4">
-                    <Link to="/services">Book new session</Link>
-                  </Button>
-                </div>
-              )}
-
               {section === "support" && (
                 <div className="grid md:grid-cols-2 gap-4">
                   <a
@@ -320,9 +255,7 @@ const Dashboard = () => {
                       <Mail size={22} />
                     </div>
                     <div>
-                      <h4 className="font-heading font-bold text-slate-900 mb-1">
-                        Email support
-                      </h4>
+                      <h4 className="font-heading font-bold text-slate-900 mb-1">Email support</h4>
                       <p className="text-sm text-slate-600">info@lautureglobal.com</p>
                       <span className="inline-flex items-center gap-1 text-xs text-accent font-semibold mt-2">
                         Send email <ExternalLink size={12} />
@@ -356,14 +289,56 @@ const Dashboard = () => {
   );
 };
 
-const upcomingCount = (bs: Booking[]) =>
+const upcomingCount = (bs: BookingRecord[]) =>
   bs.filter((b) => b.start_time && new Date(b.start_time).getTime() > Date.now()).length;
+
+const BookingCard = ({ booking: b }: { booking: BookingRecord }) => {
+  const start = b.start_time ? new Date(b.start_time) : null;
+  const past = start ? start.getTime() < Date.now() : false;
+  return (
+    <div className="bg-white rounded-xl border border-slate-200 p-4 flex items-center justify-between gap-4">
+      <div>
+        <h4 className="font-semibold text-slate-900">
+          {b.package_title ?? b.event_type ?? "Consultation"}
+        </h4>
+        <p className="text-sm text-slate-600">{start ? start.toLocaleString() : "Time TBD"}</p>
+      </div>
+      <span
+        className={`text-xs font-semibold px-2 py-1 rounded ${
+          past ? "bg-slate-100 text-slate-600" : "bg-accent/15 text-accent"
+        }`}
+      >
+        {past ? "Past" : b.status || "Upcoming"}
+      </span>
+    </div>
+  );
+};
 
 const StatCard = ({ label, value }: { label: string; value: string }) => (
   <div className="bg-white rounded-xl border border-slate-200 p-5">
     <div className="text-xs uppercase tracking-widest text-slate-500 mb-1">{label}</div>
     <div className="font-heading text-lg font-bold text-slate-900 truncate">{value}</div>
   </div>
+);
+
+const QuickAction = ({
+  title,
+  desc,
+  onClick,
+}: {
+  title: string;
+  desc: string;
+  onClick: () => void;
+}) => (
+  <button
+    onClick={onClick}
+    className="bg-white rounded-xl border border-slate-200 p-5 text-left hover:border-accent/40 hover:shadow-sm transition-all group"
+  >
+    <h4 className="font-heading font-bold text-slate-900 mb-1 group-hover:text-accent transition-colors">
+      {title}
+    </h4>
+    <p className="text-sm text-slate-500">{desc}</p>
+  </button>
 );
 
 const EmptyState = ({
@@ -389,23 +364,28 @@ const JourneyTracker = ({
   stage?: string;
   vertical?: boolean;
 }) => {
-  const idx = Math.max(
-    0,
-    STAGES.findIndex((s) => s.key === (stage ?? "enquiry_received")),
-  );
+  const idx = Math.max(0, STAGES.findIndex((s) => s.key === (stage ?? "enquiry_received")));
   return (
     <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-      <h3 className="font-heading text-lg font-bold text-slate-900 mb-5">
-        My Journey Status
-      </h3>
-      <div className={vertical ? "space-y-4" : "flex flex-col md:flex-row md:items-start md:justify-between gap-4 md:gap-2"}>
+      <h3 className="font-heading text-lg font-bold text-slate-900 mb-5">My Journey Status</h3>
+      <div
+        className={
+          vertical
+            ? "space-y-4"
+            : "flex flex-col md:flex-row md:items-start md:justify-between gap-4 md:gap-2"
+        }
+      >
         {STAGES.map((s, i) => {
           const done = i < idx;
           const active = i === idx;
           return (
             <div
               key={s.key}
-              className={vertical ? "flex items-center gap-4" : "flex md:flex-col items-center gap-3 md:gap-2 md:flex-1 relative"}
+              className={
+                vertical
+                  ? "flex items-center gap-4"
+                  : "flex md:flex-col items-center gap-3 md:gap-2 md:flex-1 relative"
+              }
             >
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 border-2 transition-all ${
