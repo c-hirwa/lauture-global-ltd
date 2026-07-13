@@ -99,9 +99,9 @@ const CalBooking = ({ calLink, packageId, packageTitle, eventType, theme = "dark
 };
 
 export const CAL_LINKS: Record<string, { link: string; eventType: string }> = {
-  basic: { link: "lauture-global/basic-guidance", eventType: "basic-guidance" },
-  comprehensive: { link: "lauture-global/comprehensive-strategy", eventType: "comprehensive-strategy" },
-  premium: { link: "lauture-global/full-service", eventType: "full-service" },
+  basic: { link: "https://cal.com/lauture-global/basic-guidance-consultation", eventType: "basic-guidance" },
+  comprehensive: { link: "https://cal.com/lauture-global/comprehensive-strategy-session", eventType: "comprehensive-strategy" },
+  premium: { link: "https://cal.com/lauture-global/full-service-coaching-call", eventType: "full-service" },
 };
 
 export default CalBooking;
