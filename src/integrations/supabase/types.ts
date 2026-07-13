@@ -71,8 +71,10 @@ export type Database = {
           package_id: string | null
           package_price: number | null
           package_title: string | null
+          payment_status: string
           phone: string | null
           purpose: string | null
+          stage: string
           timeline: string | null
           travelers: string | null
         }
@@ -87,8 +89,10 @@ export type Database = {
           package_id?: string | null
           package_price?: number | null
           package_title?: string | null
+          payment_status?: string
           phone?: string | null
           purpose?: string | null
+          stage?: string
           timeline?: string | null
           travelers?: string | null
         }
@@ -103,10 +107,42 @@ export type Database = {
           package_id?: string | null
           package_price?: number | null
           package_title?: string | null
+          payment_status?: string
           phone?: string | null
           purpose?: string | null
+          stage?: string
           timeline?: string | null
           travelers?: string | null
+        }
+        Relationships: []
+      }
+      documents: {
+        Row: {
+          category: string | null
+          client_email: string
+          created_at: string
+          description: string | null
+          file_url: string
+          id: string
+          title: string
+        }
+        Insert: {
+          category?: string | null
+          client_email: string
+          created_at?: string
+          description?: string | null
+          file_url: string
+          id?: string
+          title: string
+        }
+        Update: {
+          category?: string | null
+          client_email?: string
+          created_at?: string
+          description?: string | null
+          file_url?: string
+          id?: string
+          title?: string
         }
         Relationships: []
       }

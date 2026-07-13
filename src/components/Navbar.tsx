@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Mail, Phone } from "lucide-react";
+import { Menu, X, Mail, Phone, UserCircle } from "lucide-react";
 import logo from "@/assets/logo-lauture.png";
 
 const navLinks = [
@@ -64,14 +64,14 @@ const Navbar = () => {
             ))}
           </div>
           <div className="flex items-center gap-3">
+            <Button variant="gold" size="sm" asChild>
+              <Link to="/dashboard">
+                <UserCircle size={16} /> Client Portal
+              </Link>
+            </Button>
             <Button variant="sky" size="sm" asChild>
               <a href="mailto:info@lautureglobal.com">
                 <Mail size={16} /> Email Us
-              </a>
-            </Button>
-            <Button variant="outline-light" size="sm" asChild>
-              <a href="tel:+250792866210">
-                <Phone size={16} /> Phone
               </a>
             </Button>
           </div>
@@ -99,6 +99,11 @@ const Navbar = () => {
             </Link>
           ))}
           <div className="px-6 pt-2 flex flex-col gap-2">
+            <Button variant="gold" size="sm" className="w-full" asChild>
+              <Link to="/dashboard" onClick={() => setOpen(false)}>
+                <UserCircle size={16} /> Client Portal
+              </Link>
+            </Button>
             <Button variant="sky" size="sm" className="w-full" asChild>
               <a href="mailto:info@lautureglobal.com" onClick={() => setOpen(false)}>
                 <Mail size={16} /> Email Us
