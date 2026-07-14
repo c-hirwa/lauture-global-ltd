@@ -52,8 +52,8 @@ const Index = () => {
               height={1080}
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/70 to-primary/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/30 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/30 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
 
           <div className="container relative z-10 py-32">
             <motion.div initial="hidden" animate="visible" className="max-w-3xl">
@@ -100,8 +100,8 @@ const Index = () => {
         </section>
 
         {/* ABOUT */}
-        <section className="bg-background py-32 md:py-40 relative overflow-hidden">
-          <div className="container grid md:grid-cols-2 gap-16 items-center">
+        <section className="bg-background py-24 md:py-32 relative overflow-hidden">
+          <div className="container grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, x: -60 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -144,8 +144,8 @@ const Index = () => {
         </section>
 
         {/* SERVICES — dark, diagonal opposite */}
-        <section className="relative py-32 md:py-40 overflow-hidden grain" style={{ background: "hsl(226 65% 10%)" }}>
-          <div className="absolute inset-0 opacity-50" style={{ background: "var(--gradient-radial)" }} />
+        <section className="relative py-24 md:py-32 overflow-hidden grain" style={{ background: "hsl(var(--navy-dark))" }}>
+          <div className="absolute inset-0 opacity-40" style={{ background: "var(--gradient-radial)" }} />
           <div className="container relative z-10">
             <motion.div
               variants={slideFromLeft}
@@ -183,7 +183,7 @@ const Index = () => {
                       width={640}
                       height={512}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                   </div>
                   <div className="p-6">
                     <div className="w-12 h-0.5 bg-accent mb-4 group-hover:w-20 transition-all duration-500" />
@@ -209,7 +209,7 @@ const Index = () => {
         <GuidesSection />
 
         {/* CTA BANNER — dark with diagonal */}
-        <section className="relative py-32 md:py-40 overflow-hidden grain">
+        <section className="relative py-24 md:py-32 overflow-hidden grain">
           <img
             src={ctaKigali}
             alt="Kigali skyline at night"
@@ -218,7 +218,7 @@ const Index = () => {
             width={1920}
             height={800}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/35 to-black/25" />
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}

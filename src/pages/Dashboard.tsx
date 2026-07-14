@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useClientData } from "@/hooks/useClientData";
 import { Button } from "@/components/ui/button";
+import StatusBadge from "@/components/StatusBadge";
 import {
   LayoutDashboard,
   Package,
@@ -11,7 +12,6 @@ import {
   LifeBuoy,
   LogOut,
   Menu,
-  X,
   Check,
   Download,
   MessageCircle,
@@ -54,18 +54,20 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-background flex">
       <aside
-        className={`fixed lg:sticky top-0 left-0 h-screen w-64 bg-[hsl(226_65%_10%)] text-primary-foreground z-40 transform transition-transform lg:translate-x-0 ${
+        className={`fixed lg:sticky top-0 left-0 h-screen w-64 bg-[hsl(var(--navy-dark))] text-primary-foreground z-40 flex flex-col transform transition-transform duration-300 lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="p-6 border-b border-primary-foreground/10">
+        <div className="p-6 border-b border-white/10">
           <Link to="/" className="flex items-center">
             <img src={logo} alt="Lauture Global" className="h-8 w-auto" />
           </Link>
+          <p className="text-[10px] uppercase tracking-widest text-white/40 mt-2">Client Portal</p>
         </div>
-        <nav className="p-4 space-y-1">
+
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {NAV.map((item) => {
             const Icon = item.icon;
             const active = section === item.key;
@@ -79,8 +81,8 @@ const Dashboard = () => {
                   active
                     ? "bg-accent text-accent-foreground"
                     : disabled
-                    ? "text-primary-foreground/30 cursor-not-allowed"
-                    : "text-primary-foreground/70 hover:bg-primary-foreground/5 hover:text-primary-foreground"
+                    ? "text-white/25 cursor-not-allowed"
+                    : "text-white/70 hover:bg-white/5 hover:text-white"
                 }`}
               >
                 <Icon size={18} />
@@ -89,8 +91,9 @@ const Dashboard = () => {
             );
           })}
         </nav>
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-primary-foreground/10">
-          <div className="text-xs text-primary-foreground/50 mb-2 truncate">{user?.email}</div>
+
+        <div className="p-4 border-t border-white/10">
+          <p className="text-xs text-white/45 mb-3 truncate px-1">{user?.email}</p>
           <Button variant="outline-light" size="sm" className="w-full" onClick={signOut}>
             <LogOut size={14} /> Sign out
           </Button>
@@ -101,25 +104,34 @@ const Dashboard = () => {
         <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
-      <div className="flex-1 min-w-0">
-        <header className="sticky top-0 z-20 bg-white border-b border-slate-200 flex items-center justify-between px-4 lg:px-8 h-14">
-          <button className="lg:hidden text-slate-700" onClick={() => setSidebarOpen(true)}>
-            <Menu size={22} />
-          </button>
-          <h2 className="font-heading text-lg font-semibold text-slate-900">
-            {NAV.find((n) => n.key === section)?.label}
-          </h2>
-          <div className="w-6 lg:hidden" />
+      <div className="flex-1 min-w-0 flex flex-col">
+        <header className="sticky top-0 z-20 bg-white/95 backdrop-blur border-b border-border flex items-center justify-between gap-4 px-4 lg:px-8 h-16">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              className="lg:hidden text-foreground p-1"
+              onClick={() => setSidebarOpen(true)}
+              aria-label="Open menu"
+            >
+              <Menu size={22} />
+            </button>
+            <h2 className="font-heading text-lg font-semibold text-foreground">
+              {NAV.find((n) => n.key === section)?.label}
+            </h2>
+          </div>
+          <Button variant="outline" size="sm" onClick={signOut} className="hidden sm:inline-flex">
+            <LogOut size={14} /> Sign out
+          </Button>
         </header>
 
-        <main className="p-4 lg:p-8 max-w-6xl mx-auto">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-6xl w-full mx-auto">
           {isLoading ? (
             <div className="flex items-center justify-center py-24">
               <Loader2 className="animate-spin text-accent" size={28} />
             </div>
           ) : isError ? (
             <div className="text-center py-16">
-              <p className="text-slate-600 mb-4">Couldn't load your dashboard data.</p>
+              <p className="text-muted-foreground mb-4">Couldn't load your dashboard data.</p>
               <Button variant="gold" onClick={() => refetch()}>Try again</Button>
             </div>
           ) : !client ? (
@@ -127,25 +139,28 @@ const Dashboard = () => {
           ) : (
             <>
               {section === "overview" && (
-                <div className="space-y-6">
+                <div className="space-y-8">
                   <div>
-                    <h1 className="font-heading text-3xl font-bold text-slate-900">
+                    <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground">
                       Welcome back, {firstName}
                     </h1>
-                    <p className="text-slate-600 mt-1">
+                    <p className="text-muted-foreground mt-2">
                       Here's a snapshot of your relocation journey with Lauture Global.
                     </p>
                   </div>
+
                   <JourneyTracker stage={client.stage} />
-                  <div className="grid md:grid-cols-3 gap-4">
+
+                  <div className="grid sm:grid-cols-3 gap-4">
                     <StatCard label="Package" value={client.package_title ?? "—"} />
                     <StatCard label="Payment" value={prettyStatus(client.payment_status)} />
                     <StatCard label="Upcoming sessions" value={String(upcomingCount(bookings))} />
                   </div>
+
                   <div className="grid sm:grid-cols-2 gap-4">
                     <QuickAction
                       title="Book a consultation"
-                      desc="Schedule your next session"
+                      desc="Schedule your next session with our team"
                       onClick={() => goTo("bookings")}
                     />
                     <QuickAction
@@ -159,32 +174,24 @@ const Dashboard = () => {
 
               {section === "journey" && (
                 <div className="space-y-4">
-                  <p className="text-slate-600">Your current relocation stage:</p>
+                  <p className="text-muted-foreground">Your current relocation stage:</p>
                   <JourneyTracker stage={client.stage} vertical />
                 </div>
               )}
 
               {section === "package" && (
-                <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                  <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
+                <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-sm">
+                  <h3 className="font-heading text-2xl font-bold text-foreground mb-1">
                     {client.package_title ?? "No package selected"}
                   </h3>
                   {client.package_price != null && (
-                    <p className="text-slate-600 mb-4">
+                    <p className="text-muted-foreground mb-5">
                       ${Number(client.package_price).toLocaleString()}
                     </p>
                   )}
-                  <div className="flex items-center gap-2 mb-6">
-                    <span className="text-xs uppercase tracking-widest text-slate-500">Payment status</span>
-                    <span
-                      className={`text-xs font-semibold px-2 py-1 rounded ${
-                        client.payment_status === "paid"
-                          ? "bg-emerald-100 text-emerald-700"
-                          : "bg-amber-100 text-amber-700"
-                      }`}
-                    >
-                      {prettyStatus(client.payment_status)}
-                    </span>
+                  <div className="flex items-center gap-3 mb-8">
+                    <span className="text-xs uppercase tracking-widest text-muted-foreground">Payment</span>
+                    <StatusBadge status={client.payment_status} kind="payment" />
                   </div>
                   <Button variant="gold" onClick={() => goTo("bookings")}>
                     Book a consultation <ArrowRight size={16} />
@@ -193,18 +200,28 @@ const Dashboard = () => {
               )}
 
               {section === "bookings" && (
-                <div className="space-y-6">
+                <div className="space-y-8">
                   <BookSession client={client} />
-                  {bookings.length > 0 && (
-                    <div>
-                      <h3 className="font-heading font-bold text-slate-900 mb-3">Your sessions</h3>
+                  <div>
+                    <h3 className="font-heading text-xl font-bold text-foreground mb-4">Your sessions</h3>
+                    {bookings.length === 0 ? (
+                      <EmptyState
+                        icon={CalendarDays}
+                        title="No bookings yet"
+                        desc="Schedule your first consultation above to get started."
+                        actionLabel="Scroll to calendar"
+                        onAction={() =>
+                          document.querySelector("[data-booking-widget]")?.scrollIntoView({ behavior: "smooth" })
+                        }
+                      />
+                    ) : (
                       <div className="space-y-3">
                         {bookings.map((b) => (
                           <BookingCard key={b.id} booking={b} />
                         ))}
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -220,21 +237,21 @@ const Dashboard = () => {
                     documents.map((d) => (
                       <div
                         key={d.id}
-                        className="bg-white rounded-xl border border-slate-200 p-4 flex items-start justify-between gap-4 hover:border-accent/40 transition-colors"
+                        className="bg-card rounded-xl border border-border p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-accent/40 transition-colors"
                       >
                         <div className="min-w-0">
-                          <h4 className="font-semibold text-slate-900">{d.title}</h4>
+                          <h4 className="font-semibold text-foreground">{d.title}</h4>
                           {d.description && (
-                            <p className="text-sm text-slate-600 mt-1">{d.description}</p>
+                            <p className="text-sm text-muted-foreground mt-1">{d.description}</p>
                           )}
-                          <div className="flex items-center gap-2 mt-2 text-xs text-slate-500">
+                          <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
                             {d.category && (
-                              <span className="px-2 py-0.5 rounded bg-slate-100">{d.category}</span>
+                              <span className="px-2 py-0.5 rounded bg-muted">{d.category}</span>
                             )}
                             <span>{new Date(d.created_at).toLocaleDateString()}</span>
                           </div>
                         </div>
-                        <Button variant="outline" size="sm" asChild>
+                        <Button variant="outline" size="sm" asChild className="self-start sm:self-center">
                           <a href={d.file_url} target="_blank" rel="noreferrer" download>
                             <Download size={14} /> Download
                           </a>
@@ -247,38 +264,22 @@ const Dashboard = () => {
 
               {section === "support" && (
                 <div className="grid md:grid-cols-2 gap-4">
-                  <a
+                  <SupportCard
                     href="mailto:info@lautureglobal.com"
-                    className="bg-white rounded-2xl border border-slate-200 p-6 hover:border-accent/40 hover:shadow-md transition-all flex items-start gap-4"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-accent/15 text-accent flex items-center justify-center flex-shrink-0">
-                      <Mail size={22} />
-                    </div>
-                    <div>
-                      <h4 className="font-heading font-bold text-slate-900 mb-1">Email support</h4>
-                      <p className="text-sm text-slate-600">info@lautureglobal.com</p>
-                      <span className="inline-flex items-center gap-1 text-xs text-accent font-semibold mt-2">
-                        Send email <ExternalLink size={12} />
-                      </span>
-                    </div>
-                  </a>
-                  <a
+                    icon={Mail}
+                    title="Email support"
+                    detail="info@lautureglobal.com"
+                    cta="Send email"
+                  />
+                  <SupportCard
                     href="https://wa.me/250792866210"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="bg-white rounded-2xl border border-slate-200 p-6 hover:border-accent/40 hover:shadow-md transition-all flex items-start gap-4"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0">
-                      <MessageCircle size={22} />
-                    </div>
-                    <div>
-                      <h4 className="font-heading font-bold text-slate-900 mb-1">WhatsApp</h4>
-                      <p className="text-sm text-slate-600">+250 792 866 210</p>
-                      <span className="inline-flex items-center gap-1 text-xs text-accent font-semibold mt-2">
-                        Message us <ExternalLink size={12} />
-                      </span>
-                    </div>
-                  </a>
+                    icon={MessageCircle}
+                    title="WhatsApp"
+                    detail="+250 792 866 210"
+                    cta="Message us"
+                    external
+                    iconClass="bg-emerald-100 text-emerald-600"
+                  />
                 </div>
               )}
             </>
@@ -295,29 +296,35 @@ const upcomingCount = (bs: BookingRecord[]) =>
 const BookingCard = ({ booking: b }: { booking: BookingRecord }) => {
   const start = b.start_time ? new Date(b.start_time) : null;
   const past = start ? start.getTime() < Date.now() : false;
+  const dateLabel = start
+    ? start.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric", year: "numeric" })
+    : "Date TBD";
+  const timeLabel = start
+    ? start.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })
+    : "Time TBD";
+
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-4 flex items-center justify-between gap-4">
-      <div>
-        <h4 className="font-semibold text-slate-900">
+    <div className="bg-card rounded-xl border border-border p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="min-w-0 space-y-1">
+        <h4 className="font-heading font-semibold text-lg text-foreground">
           {b.package_title ?? b.event_type ?? "Consultation"}
         </h4>
-        <p className="text-sm text-slate-600">{start ? start.toLocaleString() : "Time TBD"}</p>
+        <p className="text-sm text-muted-foreground">
+          {dateLabel} · {timeLabel}
+        </p>
       </div>
-      <span
-        className={`text-xs font-semibold px-2 py-1 rounded ${
-          past ? "bg-slate-100 text-slate-600" : "bg-accent/15 text-accent"
-        }`}
-      >
-        {past ? "Past" : b.status || "Upcoming"}
-      </span>
+      <div className="flex items-center gap-2 flex-shrink-0">
+        {past && <span className="status-badge bg-slate-100 text-slate-600">Past</span>}
+        <StatusBadge status={b.status || (past ? "confirmed" : "pending")} kind="booking" />
+      </div>
     </div>
   );
 };
 
 const StatCard = ({ label, value }: { label: string; value: string }) => (
-  <div className="bg-white rounded-xl border border-slate-200 p-5">
-    <div className="text-xs uppercase tracking-widest text-slate-500 mb-1">{label}</div>
-    <div className="font-heading text-lg font-bold text-slate-900 truncate">{value}</div>
+  <div className="bg-card rounded-xl border border-border p-5 shadow-sm">
+    <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">{label}</div>
+    <div className="font-heading text-lg font-bold text-foreground truncate">{value}</div>
   </div>
 );
 
@@ -331,13 +338,14 @@ const QuickAction = ({
   onClick: () => void;
 }) => (
   <button
+    type="button"
     onClick={onClick}
-    className="bg-white rounded-xl border border-slate-200 p-5 text-left hover:border-accent/40 hover:shadow-sm transition-all group"
+    className="bg-card rounded-xl border border-border p-5 text-left hover:border-accent/50 hover:shadow-sm transition-all group"
   >
-    <h4 className="font-heading font-bold text-slate-900 mb-1 group-hover:text-accent transition-colors">
+    <h4 className="font-heading font-bold text-foreground mb-1 group-hover:text-accent transition-colors">
       {title}
     </h4>
-    <p className="text-sm text-slate-500">{desc}</p>
+    <p className="text-sm text-muted-foreground">{desc}</p>
   </button>
 );
 
@@ -345,16 +353,61 @@ const EmptyState = ({
   icon: Icon,
   title,
   desc,
+  actionLabel,
+  onAction,
 }: {
   icon: typeof FileText;
   title: string;
   desc: string;
+  actionLabel?: string;
+  onAction?: () => void;
 }) => (
-  <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center">
-    <Icon size={36} className="mx-auto text-slate-400 mb-3" />
-    <h3 className="font-heading font-bold text-slate-900 mb-1">{title}</h3>
-    <p className="text-sm text-slate-500">{desc}</p>
+  <div className="bg-card rounded-2xl border border-dashed border-border p-10 md:p-12 text-center">
+    <Icon size={36} className="mx-auto text-muted-foreground/60 mb-4" />
+    <h3 className="font-heading font-bold text-foreground mb-1">{title}</h3>
+    <p className="text-sm text-muted-foreground mb-5 max-w-sm mx-auto">{desc}</p>
+    {actionLabel && onAction && (
+      <Button variant="gold" size="sm" onClick={onAction}>
+        {actionLabel}
+      </Button>
+    )}
   </div>
+);
+
+const SupportCard = ({
+  href,
+  icon: Icon,
+  title,
+  detail,
+  cta,
+  external,
+  iconClass = "bg-accent/15 text-accent",
+}: {
+  href: string;
+  icon: typeof Mail;
+  title: string;
+  detail: string;
+  cta: string;
+  external?: boolean;
+  iconClass?: string;
+}) => (
+  <a
+    href={href}
+    target={external ? "_blank" : undefined}
+    rel={external ? "noreferrer" : undefined}
+    className="bg-card rounded-2xl border border-border p-6 hover:border-accent/40 hover:shadow-md transition-all flex items-start gap-4"
+  >
+    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${iconClass}`}>
+      <Icon size={22} />
+    </div>
+    <div>
+      <h4 className="font-heading font-bold text-foreground mb-1">{title}</h4>
+      <p className="text-sm text-muted-foreground">{detail}</p>
+      <span className="inline-flex items-center gap-1 text-xs text-accent font-semibold mt-2">
+        {cta} <ExternalLink size={12} />
+      </span>
+    </div>
+  </a>
 );
 
 const JourneyTracker = ({
@@ -366,13 +419,13 @@ const JourneyTracker = ({
 }) => {
   const idx = Math.max(0, STAGES.findIndex((s) => s.key === (stage ?? "enquiry_received")));
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-      <h3 className="font-heading text-lg font-bold text-slate-900 mb-5">My Journey Status</h3>
+    <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-sm">
+      <h3 className="font-heading text-xl font-bold text-foreground mb-6">My Journey Status</h3>
       <div
         className={
           vertical
-            ? "space-y-4"
-            : "flex flex-col md:flex-row md:items-start md:justify-between gap-4 md:gap-2"
+            ? "space-y-5"
+            : "flex flex-col md:flex-row md:items-start gap-5 md:gap-2"
         }
       >
         {STAGES.map((s, i) => {
@@ -388,12 +441,12 @@ const JourneyTracker = ({
               }
             >
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 border-2 transition-all ${
+                className={`w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 border-2 transition-all ${
                   done
-                    ? "bg-accent border-accent text-accent-foreground"
+                    ? "bg-primary border-primary text-primary-foreground"
                     : active
-                    ? "bg-white border-accent text-accent ring-4 ring-accent/20"
-                    : "bg-white border-slate-300 text-slate-400"
+                    ? "bg-accent border-accent text-accent-foreground ring-4 ring-accent/25"
+                    : "bg-white border-border text-muted-foreground"
                 }`}
               >
                 {done ? <Check size={16} /> : i + 1}
@@ -401,7 +454,7 @@ const JourneyTracker = ({
               <div className={vertical ? "" : "md:text-center"}>
                 <div
                   className={`text-sm font-semibold ${
-                    done || active ? "text-slate-900" : "text-slate-500"
+                    done || active ? "text-foreground" : "text-muted-foreground"
                   }`}
                 >
                   {s.label}
@@ -412,8 +465,8 @@ const JourneyTracker = ({
               </div>
               {!vertical && i < STAGES.length - 1 && (
                 <div
-                  className={`hidden md:block absolute top-5 left-1/2 w-full h-0.5 -z-0 ${
-                    done ? "bg-accent" : "bg-slate-200"
+                  className={`hidden md:block absolute top-[22px] left-[calc(50%+22px)] right-[-50%] h-0.5 ${
+                    done ? "bg-primary" : "bg-border"
                   }`}
                 />
               )}

@@ -6,7 +6,15 @@ import marieImg from "@/assets/founder-marie.jpeg";
 import jorisImg from "@/assets/founder-joris.png";
 import vladimirImg from "@/assets/founder-vladimir.jpeg";
 
-const founders = [
+const founders: {
+  name: string;
+  role: string;
+  image: string;
+  bio: string;
+  email: string;
+  linkedin: string | null;
+  facebook: string | null;
+}[] = [
   {
     name: "Marie Vianie Lundi Lauture",
     role: "Founder & CEO",
@@ -31,8 +39,8 @@ const founders = [
     image: vladimirImg,
     bio: "Vladimir leads the firm's financial strategy and investment advisory with decades of cross-border financial expertise. He guides clients through Rwanda's investment landscape with clarity, rigor, and long-term vision.",
     email: "Vladimirgse1334@gmail.com",
-    linkedin: "https://www.linkedin.com/in/",
-    facebook: "https://www.facebook.com/",
+    linkedin: null,
+    facebook: null,
   },
 ];
 
@@ -89,7 +97,7 @@ const Founders = () => (
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-accent" />
               </div>
               <div className="p-8">
@@ -100,28 +108,32 @@ const Founders = () => (
                   <a
                     href={`mailto:${f.email}`}
                     aria-label={`Email ${f.name}`}
-                    className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-primary transition-colors"
+                    className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors"
                   >
                     <Mail size={18} />
                   </a>
-                  <a
-                    href={f.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${f.name} on LinkedIn`}
-                    className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-primary transition-colors"
-                  >
-                    <Linkedin size={18} />
-                  </a>
-                  <a
-                    href={f.facebook}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${f.name} on Facebook`}
-                    className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-primary transition-colors"
-                  >
-                    <Facebook size={18} />
-                  </a>
+                  {f.linkedin && (
+                    <a
+                      href={f.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${f.name} on LinkedIn`}
+                      className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
+                      <Linkedin size={18} />
+                    </a>
+                  )}
+                  {f.facebook && (
+                    <a
+                      href={f.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${f.name} on Facebook`}
+                      className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
+                      <Facebook size={18} />
+                    </a>
+                  )}
                 </div>
               </div>
             </motion.div>

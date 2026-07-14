@@ -85,7 +85,6 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
       if (error) throw error;
       setStep("success");
     } catch (err: unknown) {
-      console.error(err);
       const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
       toast.error(message);
     } finally {

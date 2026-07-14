@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,59 +6,67 @@
 
 @layer base {
   :root {
-    --background: 222 60% 97%;
-    --foreground: 230 75% 10%;
+    /* Light background #F8FAFF */
+    --background: 225 100% 98%;
+    --foreground: 230 76% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 230 75% 10%;
+    --card-foreground: 230 76% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 230 75% 10%;
+    --popover-foreground: 230 76% 12%;
 
-    --primary: 226 65% 32%;
-    --primary-foreground: 222 60% 97%;
-    --primary-glow: 226 75% 48%;
+    /* Navy #0D1B5E */
+    --primary: 230 76% 21%;
+    --primary-foreground: 225 100% 98%;
+    --primary-glow: 230 70% 35%;
 
-    --secondary: 199 95% 60%;
+    /* Dark background #0A1128 */
+    --navy-dark: 226 60% 10%;
+
+    /* Sky blue #38BDF8 */
+    --secondary: 199 89% 60%;
     --secondary-foreground: 0 0% 100%;
 
-    --accent: 43 70% 55%;
-    --accent-foreground: 226 65% 18%;
-    --accent-glow: 43 85% 65%;
+    /* Gold #D4AF37 */
+    --accent: 43 65% 52%;
+    --accent-foreground: 230 76% 14%;
+    --accent-glow: 43 70% 62%;
 
-    --muted: 220 30% 92%;
-    --muted-foreground: 220 15% 46%;
+    --muted: 225 40% 94%;
+    --muted-foreground: 225 15% 42%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 20% 88%;
-    --input: 220 20% 88%;
-    --ring: 230 75% 21%;
+    --border: 225 25% 88%;
+    --input: 225 25% 88%;
+    --ring: 230 76% 21%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 226 60% 10%;
+    --sidebar-foreground: 225 100% 98%;
+    --sidebar-primary: 43 65% 52%;
+    --sidebar-primary-foreground: 230 76% 14%;
+    --sidebar-accent: 230 40% 18%;
+    --sidebar-accent-foreground: 225 100% 98%;
+    --sidebar-border: 230 30% 20%;
+    --sidebar-ring: 43 65% 52%;
 
     --font-heading: 'Caladea', serif;
     --font-body: 'DM Sans', sans-serif;
 
-    --gradient-hero: linear-gradient(135deg, hsl(226 65% 18%) 0%, hsl(226 65% 32%) 50%, hsl(226 75% 42%) 100%);
-    --gradient-gold: linear-gradient(135deg, hsl(43 70% 55%) 0%, hsl(43 85% 68%) 100%);
-    --gradient-sky: linear-gradient(135deg, hsl(199 95% 50%) 0%, hsl(199 95% 65%) 100%);
-    --gradient-radial: radial-gradient(ellipse at top, hsl(226 75% 42% / 0.4), transparent 70%);
+    --gradient-hero: linear-gradient(135deg, hsl(226 60% 10%) 0%, hsl(230 76% 21%) 50%, hsl(230 70% 35%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(43 65% 52%) 0%, hsl(43 70% 62%) 100%);
+    --gradient-sky: linear-gradient(135deg, hsl(199 89% 50%) 0%, hsl(199 89% 65%) 100%);
+    --gradient-radial: radial-gradient(ellipse at top, hsl(230 70% 35% / 0.25), transparent 70%);
 
-    --shadow-card: 0 4px 24px -4px hsl(226 65% 32% / 0.1);
-    --shadow-elevated: 0 20px 50px -12px hsl(226 65% 32% / 0.25);
-    --shadow-glow: 0 0 60px hsl(43 85% 65% / 0.4);
-    --shadow-premium: 0 30px 80px -20px hsl(226 75% 42% / 0.5);
+    --shadow-card: 0 4px 24px -4px hsl(230 76% 21% / 0.1);
+    --shadow-elevated: 0 20px 50px -12px hsl(230 76% 21% / 0.2);
+    --shadow-glow: 0 0 60px hsl(43 65% 52% / 0.35);
+    --shadow-premium: 0 30px 80px -20px hsl(230 76% 21% / 0.4);
+    --shadow-elegant: 0 16px 40px -12px hsl(230 76% 21% / 0.18);
 
     --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -121,7 +129,7 @@
 
   @keyframes kenBurns {
     0% { transform: scale(1) translate(0, 0); }
-    100% { transform: scale(1.15) translate(-2%, -2%); }
+    100% { transform: scale(1.12) translate(-2%, -2%); }
   }
 
   @keyframes shimmer {
@@ -142,7 +150,6 @@
 
   .float { animation: float 4s ease-in-out infinite; }
 
-  /* Diagonal section cuts */
   .clip-diagonal-tr {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 80px));
   }
@@ -156,12 +163,10 @@
     clip-path: polygon(0 0, 100% 80px, 100% 100%, 0 calc(100% - 80px));
   }
 
-  /* Pentagon/shield bottom — bold geometric signature for hero */
   .clip-pentagon-bottom {
     clip-path: polygon(0 0, 100% 0, 100% calc(100% - 90px), 50% 100%, 0 calc(100% - 90px));
   }
 
-  /* Smooth gradient fades between sections */
   .fade-to-dark::after {
     content: '';
     position: absolute;
@@ -169,7 +174,7 @@
     right: 0;
     bottom: 0;
     height: 140px;
-    background: linear-gradient(to bottom, transparent, hsl(226 65% 10%));
+    background: linear-gradient(to bottom, transparent, hsl(var(--navy-dark)));
     pointer-events: none;
     z-index: 5;
   }
@@ -180,7 +185,7 @@
     right: 0;
     top: 0;
     height: 140px;
-    background: linear-gradient(to top, transparent, hsl(226 65% 10%));
+    background: linear-gradient(to top, transparent, hsl(var(--navy-dark)));
     pointer-events: none;
     z-index: 5;
   }
@@ -207,13 +212,12 @@
     z-index: 5;
   }
 
-  /* Subtle grain texture for dark sections */
   .grain::before {
     content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.04;
+    opacity: 0.03;
     mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
@@ -223,7 +227,11 @@
   }
   .gold-pill-hover:hover {
     background: hsl(var(--accent-glow));
-    box-shadow: 0 0 40px hsl(var(--accent) / 0.6);
+    box-shadow: 0 0 40px hsl(var(--accent) / 0.45);
     transform: translateY(-2px);
+  }
+
+  .status-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap;
   }
 }

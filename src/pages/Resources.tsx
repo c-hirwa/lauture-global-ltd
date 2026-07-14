@@ -9,7 +9,7 @@ const Resources = () => {
       <Navbar />
       <main>
         <section className="relative pt-40 pb-20 md:pt-48 md:pb-28 bg-primary overflow-hidden grain">
-          <div className="absolute inset-0 opacity-50" style={{ background: "var(--gradient-radial)" }} />
+          <div className="absolute inset-0 opacity-30" style={{ background: "var(--gradient-radial)" }} />
           <div className="container relative z-10 max-w-3xl">
             <motion.div
               initial={{ opacity: 0, y: 30 }}

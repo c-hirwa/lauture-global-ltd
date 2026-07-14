@@ -1,15 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, Loader2 } from "lucide-react";
+import { Search, Loader2, Users } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
+import { toast } from "sonner";
 import {
   JOURNEY_STAGES,
   PAYMENT_STATUSES,
   PACKAGE_OPTIONS,
-  prettyStatus,
   formatDate,
 } from "@/lib/constants";
+import StatusBadge from "@/components/StatusBadge";
 import AdminTable, { AdminTableRow, AdminTableCell } from "@/components/admin/AdminTable";
 import {
   Select,
@@ -43,13 +45,18 @@ const AdminClients = () => {
 
   useEffect(() => {
     (async () => {
-      const { data, error } = await supabase
-        .from("clients")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (error) console.error(error);
-      setClients((data as Client[]) ?? []);
-      setLoading(false);
+      try {
+        const { data, error } = await supabase
+          .from("clients")
+          .select("*")
+          .order("created_at", { ascending: false });
+        if (error) throw error;
+        setClients((data as Client[]) ?? []);
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "Failed to load clients");
+      } finally {
+        setLoading(false);
+      }
     })();
   }, []);
 
@@ -76,69 +83,101 @@ const AdminClients = () => {
     );
   }
 
+  if (clients.length === 0) {
+    return (
+      <div>
+        <h1 className="font-heading text-2xl md:text-3xl font-bold text-foreground mb-2">Clients</h1>
+        <p className="text-muted-foreground text-sm mb-8">Manage all client records</p>
+        <div className="bg-card rounded-2xl border border-dashed border-border p-14 text-center">
+          <Users size={40} className="mx-auto text-muted-foreground/50 mb-4" />
+          <h2 className="font-heading text-xl font-bold text-foreground mb-2">No clients yet</h2>
+          <p className="text-sm text-muted-foreground max-w-md mx-auto mb-6">
+            Client records appear here when someone completes the package intake form on the website.
+          </p>
+          <Button variant="gold" asChild>
+            <a href="/services#pricing">View packages</a>
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <h1 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-2">Clients</h1>
-      <p className="text-slate-500 text-sm mb-6">Manage all client records</p>
+      <div className="mb-6">
+        <h1 className="font-heading text-2xl md:text-3xl font-bold text-foreground mb-1">Clients</h1>
+        <p className="text-muted-foreground text-sm">
+          {filtered.length} of {clients.length} client{clients.length === 1 ? "" : "s"}
+        </p>
+      </div>
 
-      <div className="flex flex-col lg:flex-row gap-3 mb-6">
-        <div className="relative flex-1">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <Input
-            placeholder="Search by name, email, or phone..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9"
-          />
+      <div className="bg-card rounded-xl border border-border p-4 mb-6 shadow-sm">
+        <div className="flex flex-col xl:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search by name, email, or phone..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9 h-11"
+            />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 xl:w-auto">
+            <Select value={packageFilter} onValueChange={setPackageFilter}>
+              <SelectTrigger className="h-11 min-w-[160px]">
+                <SelectValue placeholder="Package" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All packages</SelectItem>
+                {PACKAGE_OPTIONS.map((p) => (
+                  <SelectItem key={p.id} value={p.id}>{p.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={paymentFilter} onValueChange={setPaymentFilter}>
+              <SelectTrigger className="h-11 min-w-[150px]">
+                <SelectValue placeholder="Payment" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All payments</SelectItem>
+                {PAYMENT_STATUSES.map((s) => (
+                  <SelectItem key={s} value={s}><span className="capitalize">{s}</span></SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={stageFilter} onValueChange={setStageFilter}>
+              <SelectTrigger className="h-11 min-w-[180px]">
+                <SelectValue placeholder="Journey stage" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All stages</SelectItem>
+                {JOURNEY_STAGES.map((s) => (
+                  <SelectItem key={s.key} value={s.key}>{s.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-        <Select value={packageFilter} onValueChange={setPackageFilter}>
-          <SelectTrigger className="w-full lg:w-44">
-            <SelectValue placeholder="Package" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All packages</SelectItem>
-            {PACKAGE_OPTIONS.map((p) => (
-              <SelectItem key={p.id} value={p.id}>{p.label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={paymentFilter} onValueChange={setPaymentFilter}>
-          <SelectTrigger className="w-full lg:w-40">
-            <SelectValue placeholder="Payment" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All payments</SelectItem>
-            {PAYMENT_STATUSES.map((s) => (
-              <SelectItem key={s} value={s}>{prettyStatus(s)}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={stageFilter} onValueChange={setStageFilter}>
-          <SelectTrigger className="w-full lg:w-48">
-            <SelectValue placeholder="Journey stage" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All stages</SelectItem>
-            {JOURNEY_STAGES.map((s) => (
-              <SelectItem key={s.key} value={s.key}>{s.label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
       </div>
 
       <AdminTable
         headers={["Name", "Email", "Phone", "Country", "Package", "Payment", "Stage", "Added"]}
         isEmpty={filtered.length === 0}
+        emptyMessage="No clients match your filters."
       >
         {filtered.map((c, i) => (
           <AdminTableRow key={c.id} index={i} onClick={() => navigate(`/admin/clients/${c.id}`)}>
-            <AdminTableCell className="font-medium text-slate-900">{c.full_name}</AdminTableCell>
+            <AdminTableCell className="font-semibold text-foreground">{c.full_name}</AdminTableCell>
             <AdminTableCell>{c.email}</AdminTableCell>
             <AdminTableCell>{c.phone ?? "—"}</AdminTableCell>
             <AdminTableCell>{c.country_from ?? "—"}</AdminTableCell>
             <AdminTableCell>{c.package_title ?? "—"}</AdminTableCell>
-            <AdminTableCell>{prettyStatus(c.payment_status)}</AdminTableCell>
-            <AdminTableCell>{JOURNEY_STAGES.find((s) => s.key === c.stage)?.label ?? prettyStatus(c.stage)}</AdminTableCell>
+            <AdminTableCell>
+              <StatusBadge status={c.payment_status} kind="payment" />
+            </AdminTableCell>
+            <AdminTableCell>
+              <StatusBadge status={c.stage} kind="stage" />
+            </AdminTableCell>
             <AdminTableCell>{formatDate(c.created_at)}</AdminTableCell>
           </AdminTableRow>
         ))}

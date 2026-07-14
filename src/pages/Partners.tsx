@@ -33,7 +33,7 @@ const Partners = () => {
       <main className="pt-16">
         {/* HERO */}
         <section className="relative bg-primary text-primary-foreground py-24 md:py-32 overflow-hidden grain">
-          <div className="absolute inset-0 opacity-40" style={{ background: "var(--gradient-radial)" }} />
+          <div className="absolute inset-0 opacity-30" style={{ background: "var(--gradient-radial)" }} />
           <div className="container relative z-10 max-w-3xl">
             <span className="inline-block px-4 py-1.5 rounded-full bg-accent/15 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
               Our Partners
@@ -85,7 +85,7 @@ const Partners = () => {
                           ) : (
                             <div className="flex flex-col items-center gap-2 text-muted-foreground">
                               <ImageIcon size={32} />
-                              <span className="text-xs uppercase tracking-widest">Image coming soon</span>
+                              <span className="text-xs uppercase tracking-widest">Photo unavailable</span>
                             </div>
                           )}
                         </div>
@@ -117,7 +117,7 @@ const Partners = () => {
                               Visit Website <ExternalLink size={14} />
                             </a>
                           ) : (
-                            <span className="text-xs text-muted-foreground italic">Website coming soon</span>
+                            <span className="text-xs text-muted-foreground">Website not listed</span>
                           )}
                         </div>
                       </motion.article>

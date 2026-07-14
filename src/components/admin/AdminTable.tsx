@@ -8,15 +8,15 @@ interface Props {
 }
 
 const AdminTable = ({ headers, children, emptyMessage = "No records found.", isEmpty }: Props) => (
-  <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+  <div className="bg-card rounded-xl border border-border overflow-hidden shadow-sm">
     <div className="overflow-x-auto">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="bg-slate-50 border-b border-slate-200">
+      <table className="w-full text-sm min-w-[720px]">
+        <thead className="sticky top-0 z-10">
+          <tr className="bg-muted/80 border-b border-border backdrop-blur">
             {headers.map((h) => (
               <th
                 key={h}
-                className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500 whitespace-nowrap"
+                className="text-left px-4 py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground whitespace-nowrap"
               >
                 {h}
               </th>
@@ -26,7 +26,7 @@ const AdminTable = ({ headers, children, emptyMessage = "No records found.", isE
         <tbody>
           {isEmpty ? (
             <tr>
-              <td colSpan={headers.length} className="px-4 py-12 text-center text-slate-500">
+              <td colSpan={headers.length} className="px-4 py-14 text-center text-muted-foreground">
                 {emptyMessage}
               </td>
             </tr>
@@ -50,8 +50,8 @@ export const AdminTableRow = ({
 }) => (
   <tr
     onClick={onClick}
-    className={`border-b border-slate-100 last:border-0 ${
-      index % 2 === 0 ? "bg-white" : "bg-slate-50/80"
+    className={`border-b border-border/60 last:border-0 ${
+      index % 2 === 0 ? "bg-card" : "bg-muted/40"
     } ${onClick ? "cursor-pointer hover:bg-accent/5 transition-colors" : ""}`}
   >
     {children}
@@ -65,7 +65,7 @@ export const AdminTableCell = ({
   children: ReactNode;
   className?: string;
 }) => (
-  <td className={`px-4 py-3 text-slate-700 whitespace-nowrap ${className}`}>{children}</td>
+  <td className={`px-4 py-3.5 text-foreground/80 whitespace-nowrap ${className}`}>{children}</td>
 );
 
 export default AdminTable;

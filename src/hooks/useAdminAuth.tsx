@@ -35,8 +35,11 @@ export const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
       .select("id, email, full_name, role")
       .eq("id", user.id)
       .maybeSingle();
-    if (error) console.error("Failed to load profile:", error);
-    setProfile((data as Profile) ?? null);
+    if (error) {
+      setProfile(null);
+    } else {
+      setProfile((data as Profile) ?? null);
+    }
     setLoading(false);
   }, [user]);
 

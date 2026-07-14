@@ -90,8 +90,7 @@ const CalBooking = ({ calLink, packageId, packageTitle, eventType, theme = "dark
                 raw: data as import("@/integrations/supabase/types").Json,
               });
               if (error) throw error;
-            } catch (err) {
-              console.error("Failed to save booking:", err);
+            } catch {
               toast.error("Booking made but not saved. We'll follow up by email.");
             }
 
@@ -100,8 +99,7 @@ const CalBooking = ({ calLink, packageId, packageTitle, eventType, theme = "dark
         });
 
         setIsLoaded(true);
-      } catch (err) {
-        console.error("Unable to initialize Cal widget", err);
+      } catch {
         if (!cancelled) setLoadError("The booking widget could not be loaded right now.");
       }
     })();
