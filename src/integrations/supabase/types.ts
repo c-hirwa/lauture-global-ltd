@@ -19,6 +19,7 @@ export type Database = {
           attendee_email: string | null
           attendee_name: string | null
           booking_uid: string | null
+          consultant_notes: string | null
           created_at: string
           end_time: string | null
           event_type: string | null
@@ -33,6 +34,7 @@ export type Database = {
           attendee_email?: string | null
           attendee_name?: string | null
           booking_uid?: string | null
+          consultant_notes?: string | null
           created_at?: string
           end_time?: string | null
           event_type?: string | null
@@ -47,6 +49,7 @@ export type Database = {
           attendee_email?: string | null
           attendee_name?: string | null
           booking_uid?: string | null
+          consultant_notes?: string | null
           created_at?: string
           end_time?: string | null
           event_type?: string | null
@@ -146,12 +149,90 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          body: string | null
+          channel: string
+          created_at: string
+          id: string
+          recipient_email: string
+          related_booking_id: string | null
+          related_client_id: string | null
+          status: string
+          subject: string
+        }
+        Insert: {
+          body?: string | null
+          channel?: string
+          created_at?: string
+          id?: string
+          recipient_email: string
+          related_booking_id?: string | null
+          related_client_id?: string | null
+          status?: string
+          subject: string
+        }
+        Update: {
+          body?: string | null
+          channel?: string
+          created_at?: string
+          id?: string
+          recipient_email?: string
+          related_booking_id?: string | null
+          related_client_id?: string | null
+          status?: string
+          subject?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_related_booking_id_fkey"
+            columns: ["related_booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_related_client_id_fkey"
+            columns: ["related_client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id: string
+          role?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          role?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
