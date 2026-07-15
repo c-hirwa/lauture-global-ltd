@@ -19,7 +19,6 @@ export type Database = {
           attendee_email: string | null
           attendee_name: string | null
           booking_uid: string | null
-          consultant_notes: string | null
           created_at: string
           end_time: string | null
           event_type: string | null
@@ -34,7 +33,6 @@ export type Database = {
           attendee_email?: string | null
           attendee_name?: string | null
           booking_uid?: string | null
-          consultant_notes?: string | null
           created_at?: string
           end_time?: string | null
           event_type?: string | null
@@ -49,7 +47,6 @@ export type Database = {
           attendee_email?: string | null
           attendee_name?: string | null
           booking_uid?: string | null
-          consultant_notes?: string | null
           created_at?: string
           end_time?: string | null
           event_type?: string | null
@@ -146,69 +143,6 @@ export type Database = {
           file_url?: string
           id?: string
           title?: string
-        }
-        Relationships: []
-      }
-      notifications: {
-        Row: {
-          body: string | null
-          channel: string
-          created_at: string
-          id: string
-          recipient_email: string
-          related_booking_id: string | null
-          related_client_id: string | null
-          status: string
-          subject: string
-        }
-        Insert: {
-          body?: string | null
-          channel?: string
-          created_at?: string
-          id?: string
-          recipient_email: string
-          related_booking_id?: string | null
-          related_client_id?: string | null
-          status?: string
-          subject: string
-        }
-        Update: {
-          body?: string | null
-          channel?: string
-          created_at?: string
-          id?: string
-          recipient_email?: string
-          related_booking_id?: string | null
-          related_client_id?: string | null
-          status?: string
-          subject?: string
-        }
-        Relationships: []
-      }
-      profiles: {
-        Row: {
-          created_at: string
-          email: string
-          full_name: string | null
-          id: string
-          role: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          full_name?: string | null
-          id: string
-          role?: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          full_name?: string | null
-          id?: string
-          role?: string
-          updated_at?: string
         }
         Relationships: []
       }
