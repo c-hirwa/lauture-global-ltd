@@ -15,6 +15,7 @@ import Contact from "./pages/Contact.tsx";
 import Partners from "./pages/Partners.tsx";
 import Login from "./pages/Login.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
+import Success from "./pages/Success.tsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound.tsx";
 import AdminLayout from "./pages/admin/AdminLayout.tsx";
@@ -45,6 +46,7 @@ const App = () => (
               <Route path="/founders" element={<Founders />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/success" element={<Success />} />
               <Route
                 path="/dashboard"
                 element={

@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, ArrowRight, ArrowLeft, Sparkles, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
+import { createCheckoutSession } from "@/lib/createCheckout";
 
 export type PackageData = {
   id: string;
@@ -83,7 +84,13 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
         package_price: pkg.price,
       });
       if (error) throw error;
-      setStep("success");
+
+      await createCheckoutSession({
+        packageType: pkg.id,
+        amount: pkg.price * 100,
+        customerEmail: form.email,
+        customerName: form.fullName,
+      });
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
       toast.error(message);
