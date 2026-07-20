@@ -79,14 +79,12 @@ export const partnerGroups: PartnerGroup[] = [
         category: "Real Estate",
         description:
           "A trusted real estate partner helping clients find secure, comfortable homes and investment properties across Rwanda.",
-        image: "/src/assets/placeholder-green-estate.jpg",
       },
       {
         name: "PIMAR LTD",
         category: "Real Estate",
         description:
           "A professional real estate and property management firm dedicated to smooth relocations and quality housing solutions.",
-        image: "/src/assets/placeholder-pimar.jpg",
       },
     ],
   },
