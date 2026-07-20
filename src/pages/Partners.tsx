@@ -1,16 +1,18 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, ExternalLink, MapPin, Compass, ImageIcon } from "lucide-react";
+import { ArrowRight, ExternalLink, Building2, Hotel, Compass, Home, Briefcase, Users, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { partnerGroups } from "@/data/partners";
 
 const groupIcons: Record<string, React.ElementType> = {
-  Kigali: MapPin,
-  "Kibuye (Karongi)": MapPin,
-  "Gisenyi (Rubavu)": MapPin,
-  "Tourism and Travel Partners": Compass,
+  "Preferred Hotels and Lodges (Kigali)": Hotel,
+  "Preferred Hotels and Lodges (Karongi / Lake Kivu)": Hotel,
+  "Tourism and Experience Partners": Compass,
+  "Real Estate and Relocation Partners": Home,
+  "Business and Investment Partners": Briefcase,
+  "Culture and Community Partners": Users,
 };
 
 const logoGradients = [
@@ -42,7 +44,7 @@ const Partners = () => {
               Our Strategic <span className="text-gradient-gold italic">Partners</span>
             </h1>
             <p className="text-primary-foreground/85 text-lg leading-relaxed">
-              Lauture Global is building a growing network of trusted hospitality, tourism, and travel partners across Rwanda to provide our clients with reliable and high-quality services.
+              Lauture Global is building a growing network of trusted hospitality, tourism, real estate, business, and community partners across Rwanda to provide our clients with reliable and high-quality services.
             </p>
           </div>
         </section>
@@ -51,7 +53,7 @@ const Partners = () => {
         <section className="bg-background py-24 md:py-32">
           <div className="container space-y-20">
             {partnerGroups.map((group, groupIdx) => {
-              const Icon = groupIcons[group.group] ?? MapPin;
+              const Icon = groupIcons[group.group] ?? Building2;
               return (
                 <motion.div
                   key={group.group}
@@ -60,7 +62,7 @@ const Partners = () => {
                   viewport={{ once: true, amount: 0.15 }}
                   transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-8 flex items-center gap-3">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-accent mb-8 flex items-center gap-3">
                     <Icon size={26} className="text-accent" />
                     {group.group}
                   </h2>
@@ -136,7 +138,7 @@ const Partners = () => {
               Interested in partnering with us?
             </h2>
             <p className="text-muted-foreground mb-8 leading-relaxed">
-              Join our growing network of trusted hospitality, tourism, and travel partners across Rwanda.
+              Join our growing network of trusted partners across Rwanda and help us deliver exceptional experiences for our clients.
             </p>
             <Button variant="gold" size="lg" asChild className="px-8">
               <Link to="/contact">

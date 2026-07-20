@@ -18,7 +18,7 @@ function getInitials(name: string) {
 }
 
 const previewPartners = partnerGroups.flatMap((g, gi) =>
-  g.items.slice(0, 2).map((p) => ({ ...p, gradient: logoGradients[gi % logoGradients.length] }))
+  g.items.slice(0, 2).map((p) => ({ ...p, groupIndex: gi, gradient: logoGradients[gi % logoGradients.length] }))
 );
 
 const PartnersSection = () => {
@@ -39,7 +39,7 @@ const PartnersSection = () => {
             Our Strategic Partners
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            A trusted network of hospitality, tourism, and travel partners across Rwanda — carefully selected to deliver reliable, high-quality experiences for our clients.
+            A trusted network of hospitality, tourism, real estate, business, and community partners across Rwanda — carefully selected to deliver reliable, high-quality experiences for our clients.
           </p>
         </motion.div>
 
