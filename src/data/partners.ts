@@ -5,6 +5,10 @@ export interface Partner {
   website?: string;
   image?: string;
 }
+import kigaliMarriott from '../assets/kigali-marriott.jpg'
+import akiraHotel from '../assets/akira-hotel.jpg'
+import zariaCourt from '../assets/zaria-court.jpg'
+import chateauLeMarara from '../assets/chateau-le-marara.jpg'
 
 export interface PartnerGroup {
   group: string;
@@ -21,7 +25,7 @@ export const partnerGroups: PartnerGroup[] = [
         description:
           "A landmark 5-star hotel in the heart of Kigali offering world-class hospitality, refined dining, and premium comfort for business and leisure travelers.",
         website: "https://www.marriott.com/en-us/hotels/kglmc-kigali-marriott-hotel/overview/",
-        image: "/src/assets/kigali-marriott.jpg",
+        image: kigaliMarriott,
       },
       {
         name: "Akira Hotel",
@@ -29,7 +33,7 @@ export const partnerGroups: PartnerGroup[] = [
         description:
           "A modern boutique hotel in Kigali known for its warm service, contemporary design, and convenient access to the city's business districts.",
         website: "https://akirahotel.com/",
-        image: "/src/assets/akira-hotel.jpg",
+        image: akiraHotel,
       },
       {
         name: "Zaria Court Kigali, Tapestry Collection by Hilton",
@@ -37,7 +41,7 @@ export const partnerGroups: PartnerGroup[] = [
         description:
           "A vibrant lifestyle hotel combining sport, culture, and hospitality — an energetic hub for travelers seeking a distinctly Rwandan experience.",
         website: "https://zariacourt.com/",
-        image: "/src/assets/zaria-court.jpg",
+        image: zariaCourt,
       },
     ],
   },
@@ -50,7 +54,7 @@ export const partnerGroups: PartnerGroup[] = [
         description:
           "An elegant lakeside retreat on the shores of Lake Kivu offering panoramic views, refined interiors, and a serene escape into nature.",
         website: "https://www.marara.rw/",
-        image: "../assets/chateau-le-marara.jpg",
+        image: chateauLeMarara,
       },
     ],
   },
