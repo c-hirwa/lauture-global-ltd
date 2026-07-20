@@ -50,7 +50,7 @@ export const partnerGroups: PartnerGroup[] = [
         description:
           "An elegant lakeside retreat on the shores of Lake Kivu offering panoramic views, refined interiors, and a serene escape into nature.",
         website: "https://www.marara.rw/",
-        image: "/src/assets/chateau-le-marara.jpg",
+        image: "../assets/chateau-le-marara.jpg",
       },
     ],
   },
