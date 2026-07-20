@@ -62,14 +62,12 @@ export const partnerGroups: PartnerGroup[] = [
         category: "Tour Operator",
         description:
           "A trusted tour operator crafting immersive Rwandan experiences — from gorilla trekking to cultural discovery journeys.",
-        image: "/src/assets/placeholder-love-rwanda.jpg",
       },
       {
         name: "INAM World",
         category: "Travel Agency",
         description:
           "A full-service travel agency specializing in tailored itineraries, ticketing, and seamless travel logistics across Africa and beyond.",
-        image: "/src/assets/placeholder-inam-world.jpg",
       },
     ],
   },
@@ -81,14 +79,12 @@ export const partnerGroups: PartnerGroup[] = [
         category: "Real Estate",
         description:
           "A trusted real estate partner helping clients find secure, comfortable homes and investment properties across Rwanda.",
-        image: "/src/assets/placeholder-green-estate.jpg",
       },
       {
         name: "PIMAR LTD",
         category: "Real Estate",
         description:
           "A professional real estate and property management firm dedicated to smooth relocations and quality housing solutions.",
-        image: "/src/assets/placeholder-pimar.jpg",
       },
     ],
   },
@@ -100,14 +96,12 @@ export const partnerGroups: PartnerGroup[] = [
         category: "Housing Solutions",
         description:
           "A strategic partner providing innovative housing and accommodation solutions for individuals, families, and businesses relocating to Rwanda.",
-        image: "/src/assets/placeholder-baho.jpg",
       },
       {
         name: "Kama Heritage",
         category: "Investment Partner",
         description:
           "A business and investment partner committed to connecting clients with meaningful opportunities in Rwanda's growing economy.",
-        image: "/src/assets/placeholder-kama-heritage.jpg",
       },
     ],
   },
@@ -119,14 +113,12 @@ export const partnerGroups: PartnerGroup[] = [
         category: "Cultural Center",
         description:
           "A cultural hub fostering community, creativity, and connection — helping newcomers feel at home through arts, language, and shared experiences.",
-        image: "/src/assets/placeholder-centre-ubuntu.jpg",
       },
       {
         name: "Haitiens Tout Kote",
         category: "Community Partner",
         description:
           "A vibrant community partner bringing people together through cultural events, social networks, and support systems for newcomers in Rwanda.",
-        image: "/src/assets/placeholder-haitiens-tout-kote.jpg",
       },
     ],
   },
