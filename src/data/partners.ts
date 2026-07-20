@@ -21,7 +21,7 @@ export const partnerGroups: PartnerGroup[] = [
         description:
           "A landmark 5-star hotel in the heart of Kigali offering world-class hospitality, refined dining, and premium comfort for business and leisure travelers.",
         website: "https://www.marriott.com/en-us/hotels/kglmc-kigali-marriott-hotel/overview/",
-        image: "/src/assets/placeholder-kigali-marriott.jpg",
+        image: "/src/assets/kigali-marriott.jpg",
       },
       {
         name: "Akira Hotel",
@@ -29,7 +29,7 @@ export const partnerGroups: PartnerGroup[] = [
         description:
           "A modern boutique hotel in Kigali known for its warm service, contemporary design, and convenient access to the city's business districts.",
         website: "https://akirahotel.com/",
-        image: "/src/assets/placeholder-akira-hotel.jpg",
+        image: "/src/assets/akira-hotel.jpg",
       },
       {
         name: "Zaria Court Kigali, Tapestry Collection by Hilton",
@@ -37,7 +37,7 @@ export const partnerGroups: PartnerGroup[] = [
         description:
           "A vibrant lifestyle hotel combining sport, culture, and hospitality — an energetic hub for travelers seeking a distinctly Rwandan experience.",
         website: "https://zariacourt.com/",
-        image: "/src/assets/placeholder-zaria-court.jpg",
+        image: "/src/assets/zaria-court.jpg",
       },
     ],
   },
@@ -50,7 +50,7 @@ export const partnerGroups: PartnerGroup[] = [
         description:
           "An elegant lakeside retreat on the shores of Lake Kivu offering panoramic views, refined interiors, and a serene escape into nature.",
         website: "https://www.marara.rw/",
-        image: "/src/assets/placeholder-chateau-le-marara.jpg",
+        image: "/src/assets/chateau-le-marara.jpg",
       },
     ],
   },
