@@ -113,14 +113,12 @@ export const partnerGroups: PartnerGroup[] = [
         category: "Cultural Center",
         description:
           "A cultural hub fostering community, creativity, and connection — helping newcomers feel at home through arts, language, and shared experiences.",
-        image: "/src/assets/placeholder-centre-ubuntu.jpg",
       },
       {
         name: "Haitiens Tout Kote",
         category: "Community Partner",
         description:
           "A vibrant community partner bringing people together through cultural events, social networks, and support systems for newcomers in Rwanda.",
-        image: "/src/assets/placeholder-haitiens-tout-kote.jpg",
       },
     ],
   },
