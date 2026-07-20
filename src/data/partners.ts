@@ -13,7 +13,7 @@ export interface PartnerGroup {
 
 export const partnerGroups: PartnerGroup[] = [
   {
-    group: "Kigali",
+    group: "Preferred Hotels and Lodges (Kigali)",
     items: [
       {
         name: "Kigali Marriott Hotel",
@@ -32,7 +32,7 @@ export const partnerGroups: PartnerGroup[] = [
         image: "/src/assets/placeholder-akira-hotel.jpg",
       },
       {
-        name: "Zaria Court Hotel",
+        name: "Zaria Court Kigali, Tapestry Collection by Hilton",
         category: "Hotel",
         description:
           "A vibrant lifestyle hotel combining sport, culture, and hospitality — an energetic hub for travelers seeking a distinctly Rwandan experience.",
@@ -42,53 +42,20 @@ export const partnerGroups: PartnerGroup[] = [
     ],
   },
   {
-    group: "Kibuye (Karongi)",
+    group: "Preferred Hotels and Lodges (Karongi / Lake Kivu)",
     items: [
       {
-        name: "Chateau Le Marara",
+        name: "Chateau Le Marara by Royal Retreat",
         category: "Lodge",
         description:
           "An elegant lakeside retreat on the shores of Lake Kivu offering panoramic views, refined interiors, and a serene escape into nature.",
         website: "https://www.marara.rw/",
         image: "/src/assets/placeholder-chateau-le-marara.jpg",
       },
-      {
-        name: "Umurobyi Lodge",
-        category: "Lodge",
-        description:
-          "A tranquil lakeside lodge inspired by Rwandan fishing heritage, offering cozy accommodations and authentic local charm.",
-        image: "/src/assets/placeholder-umurobyi-lodge.jpg",
-      },
     ],
   },
   {
-    group: "Gisenyi (Rubavu)",
-    items: [
-      {
-        name: "Musanto Hotel",
-        category: "Hotel",
-        description:
-          "A modern hotel near the shores of Lake Kivu offering comfortable rooms, quality dining, and easy access to Gisenyi's best attractions.",
-        image: "/src/assets/placeholder-musanto-hotel.jpg",
-      },
-      {
-        name: "Araucaria Residence",
-        category: "Residence",
-        description:
-          "A peaceful residence blending comfort and privacy — ideal for travelers seeking a home-away-from-home experience in Rubavu.",
-        image: "/src/assets/placeholder-araucaria-residence.jpg",
-      },
-      {
-        name: "Tam Tam Restaurant",
-        category: "Restaurant",
-        description:
-          "A beloved lakeside restaurant in Gisenyi serving fresh, flavorful dishes with stunning views of Lake Kivu.",
-        image: "/src/assets/placeholder-tam-tam.jpg",
-      },
-    ],
-  },
-  {
-    group: "Tourism and Travel Partners",
+    group: "Tourism and Experience Partners",
     items: [
       {
         name: "Love Rwanda",
@@ -104,12 +71,62 @@ export const partnerGroups: PartnerGroup[] = [
           "A full-service travel agency specializing in tailored itineraries, ticketing, and seamless travel logistics across Africa and beyond.",
         image: "/src/assets/placeholder-inam-world.jpg",
       },
+    ],
+  },
+  {
+    group: "Real Estate and Relocation Partners",
+    items: [
       {
-        name: "Safaris Car Sharing",
-        category: "Car Sharing",
+        name: "Green Estate Rwanda",
+        category: "Real Estate",
         description:
-          "A reliable mobility partner offering flexible car sharing and rental solutions for exploring Rwanda with ease and confidence.",
-        image: "/src/assets/placeholder-safaris-car-sharing.jpg",
+          "A trusted real estate partner helping clients find secure, comfortable homes and investment properties across Rwanda.",
+        image: "/src/assets/placeholder-green-estate.jpg",
+      },
+      {
+        name: "PIMAR LTD",
+        category: "Real Estate",
+        description:
+          "A professional real estate and property management firm dedicated to smooth relocations and quality housing solutions.",
+        image: "/src/assets/placeholder-pimar.jpg",
+      },
+    ],
+  },
+  {
+    group: "Business and Investment Partners",
+    items: [
+      {
+        name: "Baho Housing Solutions",
+        category: "Housing Solutions",
+        description:
+          "A strategic partner providing innovative housing and accommodation solutions for individuals, families, and businesses relocating to Rwanda.",
+        image: "/src/assets/placeholder-baho.jpg",
+      },
+      {
+        name: "Kama Heritage",
+        category: "Investment Partner",
+        description:
+          "A business and investment partner committed to connecting clients with meaningful opportunities in Rwanda's growing economy.",
+        image: "/src/assets/placeholder-kama-heritage.jpg",
+      },
+    ],
+  },
+  {
+    group: "Culture and Community Partners",
+    items: [
+      {
+        name: "Centre Culturel Ubuntu",
+        category: "Cultural Center",
+        description:
+          "A cultural hub fostering community, creativity, and connection — helping newcomers feel at home through arts, language, and shared experiences.",
+        image: "/src/assets/placeholder-centre-ubuntu.jpg",
+      },
+      {
+        name: "Haitiens Tout Kote",
+        category: "Community Partner",
+        description:
+          "A vibrant community partner bringing people together through cultural events, social networks, and support systems for newcomers in Rwanda.",
+        image: "/src/assets/placeholder-haitiens-tout-kote.jpg",
       },
     ],
   },
