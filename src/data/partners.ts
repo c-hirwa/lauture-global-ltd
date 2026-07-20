@@ -96,14 +96,12 @@ export const partnerGroups: PartnerGroup[] = [
         category: "Housing Solutions",
         description:
           "A strategic partner providing innovative housing and accommodation solutions for individuals, families, and businesses relocating to Rwanda.",
-        image: "/src/assets/placeholder-baho.jpg",
       },
       {
         name: "Kama Heritage",
         category: "Investment Partner",
         description:
           "A business and investment partner committed to connecting clients with meaningful opportunities in Rwanda's growing economy.",
-        image: "/src/assets/placeholder-kama-heritage.jpg",
       },
     ],
   },
