@@ -62,14 +62,12 @@ export const partnerGroups: PartnerGroup[] = [
         category: "Tour Operator",
         description:
           "A trusted tour operator crafting immersive Rwandan experiences — from gorilla trekking to cultural discovery journeys.",
-        image: "/src/assets/placeholder-love-rwanda.jpg",
       },
       {
         name: "INAM World",
         category: "Travel Agency",
         description:
           "A full-service travel agency specializing in tailored itineraries, ticketing, and seamless travel logistics across Africa and beyond.",
-        image: "/src/assets/placeholder-inam-world.jpg",
       },
     ],
   },
