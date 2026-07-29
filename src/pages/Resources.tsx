@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GuidesSection from "@/components/GuidesSection";
+import MagazineSection from "@/components/MagazineSection";
 
 const Resources = () => {
   return (
@@ -23,18 +24,20 @@ const Resources = () => {
                 Guides for life in <span className="text-gradient-gold italic">Rwanda</span>
               </h1>
               <p className="text-primary-foreground/80 text-lg leading-relaxed">
-                Practical, in-country knowledge to help you explore, invest, and settle with confidence. Click any guide to dive in.
+                Practical, in-country knowledge to help you explore, invest, and settle with confidence — plus our premium Rwanda 2027 digital magazine.
               </p>
             </motion.div>
           </div>
         </section>
+
+        <MagazineSection />
 
         <GuidesSection
           showAll
           showCta={false}
           eyebrow="Complete Library"
           heading={<>All <span className="text-gradient-gold italic">guides</span></>}
-          subheading="Five focused playbooks covering business, community, culture, finance, and the move itself."
+          subheading="Authoritative guides covering business, community, culture, finance, housing, and daily life in Rwanda."
         />
       </main>
       <Footer />
