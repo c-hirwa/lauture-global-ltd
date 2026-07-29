@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GuidesSection from "@/components/GuidesSection";
+import MagazineSection from "@/components/MagazineSection";
 
 const Resources = () => {
   return (
