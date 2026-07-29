@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Pricing from "@/components/Pricing";
+import TourismPackages from "@/components/TourismPackages";
 
 const services = [
   { icon: Home, title: "Residential Relocation", desc: "From finding the perfect home to settling in, we handle every detail of your move to Rwanda. Our team scouts properties, negotiates leases, and ensures a smooth transition." },
@@ -44,6 +45,8 @@ const Services = () => (
       </section>
 
       <Pricing />
+
+      <TourismPackages />
 
       <section className="py-20 bg-background">
         <div className="container max-w-3xl text-center">
