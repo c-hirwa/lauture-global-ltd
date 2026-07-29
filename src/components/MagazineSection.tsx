@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Download, BookOpen, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import magazineCover from "@/assets/lauture-global-magazine-cover.jpeg.asset.json";
+import magazineCover from "@/assets/lauture-global-magazine-cover.jpg.asset.json";
 import magazinePdf from "@/assets/lauture-global-magazine.pdf.asset.json";
 
 interface MagazineSectionProps {
