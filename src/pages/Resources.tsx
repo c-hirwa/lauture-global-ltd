@@ -30,12 +30,14 @@ const Resources = () => {
           </div>
         </section>
 
+        <MagazineSection />
+
         <GuidesSection
           showAll
           showCta={false}
           eyebrow="Complete Library"
           heading={<>All <span className="text-gradient-gold italic">guides</span></>}
-          subheading="Five focused playbooks covering business, community, culture, finance, and the move itself."
+          subheading="Authoritative guides covering business, community, culture, finance, housing, and daily life in Rwanda."
         />
       </main>
       <Footer />
