@@ -24,7 +24,7 @@ const Resources = () => {
                 Guides for life in <span className="text-gradient-gold italic">Rwanda</span>
               </h1>
               <p className="text-primary-foreground/80 text-lg leading-relaxed">
-                Practical, in-country knowledge to help you explore, invest, and settle with confidence. Click any guide to dive in.
+                Practical, in-country knowledge to help you explore, invest, and settle with confidence — plus our premium Rwanda 2027 digital magazine.
               </p>
             </motion.div>
           </div>
