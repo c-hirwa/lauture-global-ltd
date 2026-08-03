@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Download, BookOpen, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import magazineCover from "@/assets/lauture-global-magazine-cover.jpg.asset.json";
-import magazinePdf from "@/assets/lauture-global-magazine.pdf.asset.json";
+const magazineCover = { url: "/assets/lauture-global-magazine-cover.jpg" };
+const magazinePdf = { url: "/assets/lauture-global-magazine.pdf" };
 
 interface MagazineSectionProps {
   compact?: boolean;
