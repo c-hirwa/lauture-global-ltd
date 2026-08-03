@@ -59,6 +59,23 @@ export const partnerGroups: PartnerGroup[] = [
     ],
   },
   {
+    group: "Preferred Hotels and Lodges (Gisenyi / Rubavu)",
+    items: [
+      {
+        name: "Araucaria Residence",
+        category: "Hospitality",
+        description:
+          "A comfortable, well-appointed residence in Gisenyi offering a relaxed home-away-from-home base near the shores of Lake Kivu.",
+      },
+      {
+        name: "Musanto Hotel - Gisenyi",
+        category: "Hotel",
+        description:
+          "A welcoming Gisenyi hotel combining warm Rwandan hospitality with easy access to Lake Kivu's beaches, dining, and border crossings.",
+      },
+    ],
+  },
+  {
     group: "Tourism and Experience Partners",
     items: [
       {
@@ -66,6 +83,12 @@ export const partnerGroups: PartnerGroup[] = [
         category: "Tour Operator",
         description:
           "A trusted tour operator crafting immersive Rwandan experiences — from gorilla trekking to cultural discovery journeys.",
+      },
+      {
+        name: "Nziza Adventures",
+        category: "Tour Agency",
+        description:
+          "An adventure-focused tour agency curating guided treks, safaris, and off-the-beaten-path journeys across Rwanda's landscapes.",
       },
       {
         name: "INAM World",
@@ -83,6 +106,18 @@ export const partnerGroups: PartnerGroup[] = [
         category: "Real Estate",
         description:
           "A trusted real estate partner helping clients find secure, comfortable homes and investment properties across Rwanda.",
+      },
+      {
+        name: "Assumy Realty Rwanda",
+        category: "Real Estate",
+        description:
+          "A Rwanda-based realty partner supporting clients with property search, acquisition, and rental solutions tailored to their needs.",
+      },
+      {
+        name: "FunLife Properties Kenya",
+        category: "Real Estate",
+        description:
+          "A regional property partner in Kenya offering cross-border real estate and investment opportunities for East Africa-bound clients.",
       },
       {
         name: "PIMAR LTD",
