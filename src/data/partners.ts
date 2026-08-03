@@ -9,6 +9,10 @@ import kigaliMarriott from '../assets/kigali-marriott.jpg'
 import akiraHotel from '../assets/akira-hotel.jpg'
 import zariaCourt from '../assets/zaria-court.jpg'
 import chateauLeMarara from '../assets/chateau-le-marara.jpg'
+import araucaria from '../assets/araucaria-residence.jpg'
+import musanto from '../assets/musanto-hotel.jpg'
+import lovaRwanda from '../assets/LoveRwanda.jpeg'
+import greenEstate from '../assets/greenEstate.jpeg'
 
 export interface PartnerGroup {
   group: string;
@@ -66,12 +70,14 @@ export const partnerGroups: PartnerGroup[] = [
         category: "Hospitality",
         description:
           "A comfortable, well-appointed residence in Gisenyi offering a relaxed home-away-from-home base near the shores of Lake Kivu.",
+          image: araucaria,
       },
       {
         name: "Musanto Hotel - Gisenyi",
         category: "Hotel",
         description:
           "A welcoming Gisenyi hotel combining warm Rwandan hospitality with easy access to Lake Kivu's beaches, dining, and border crossings.",
+          image: musanto,
       },
     ],
   },
@@ -83,6 +89,7 @@ export const partnerGroups: PartnerGroup[] = [
         category: "Tour Operator",
         description:
           "A trusted tour operator crafting immersive Rwandan experiences — from gorilla trekking to cultural discovery journeys.",
+          image: lovaRwanda,
       },
       {
         name: "Nziza Adventures",
@@ -106,6 +113,7 @@ export const partnerGroups: PartnerGroup[] = [
         category: "Real Estate",
         description:
           "A trusted real estate partner helping clients find secure, comfortable homes and investment properties across Rwanda.",
+          image: greenEstate,
       },
       {
         name: "Assumy Realty Rwanda",
