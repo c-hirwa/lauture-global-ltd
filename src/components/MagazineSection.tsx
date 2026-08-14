@@ -27,8 +27,8 @@ const resources = [
       "A concise, visual overview of the top reasons to visit, invest, and explore Rwanda — from safety and cleanliness to breathtaking landscapes and fast-growing business opportunities.",
     meta: "Brochure • PDF",
     metaIcon: FileText,
-    cover: "/assets/about-expo.jpg",
-    pdf: "/assets/10-reasons-to-explore-rwanda.pdf",
+    cover: "/assets/Lauture_Global_Rwanda_Brochure.jpg",
+    pdf: "/assets/Lauture_Global_Rwanda_Brochure_Final.pdf",
     featured: false,
   },
   {
@@ -40,8 +40,8 @@ const resources = [
       "Download our full trifold brochure to compare our relocation, strategy, and concierge packages — plus our signature tourism experiences — all in one beautifully designed handout.",
     meta: "Trifold • PDF",
     metaIcon: FileText,
-    cover: "/assets/vacation-rwanda.jpg",
-    pdf: "/assets/packages-trifold-brochure.pdf",
+    cover: "/assets/Blue and White Modern Travel Trifold.jpg",
+    pdf: "/assets/Lauture Global_Packages Trifold Brochure.pdf",
     featured: false,
   },
 ];
