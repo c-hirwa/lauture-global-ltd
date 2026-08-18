@@ -8,7 +8,10 @@ import { partnerGroups } from "@/data/partners";
 
 const groupIcons: Record<string, React.ElementType> = {
   "Preferred Hotels and Lodges (Kigali)": Hotel,
+  "Preferred Hotels and Lodges (Bugesera)": Hotel,
   "Preferred Hotels and Lodges (Karongi / Lake Kivu)": Hotel,
+  "Preferred Hotels and Lodges (Gisenyi / Rubavu)": Hotel,
+  "Preferred Hotels and Lodges (Uganda)": Hotel,
   "Tourism and Experience Partners": Compass,
   "Real Estate and Relocation Partners": Home,
   "Business and Investment Partners": Briefcase,
