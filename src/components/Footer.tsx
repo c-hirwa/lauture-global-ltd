@@ -20,7 +20,7 @@ const socialLinks = [
   },
   {
     label: "TikTok",
-    href: "https://www.tiktok.com/@lautureglobal",
+    href: "https://www.tiktok.com/@lauture.global",
     icon: ({ className, size }: { className?: string; size?: number }) => (
       <svg
         viewBox="0 0 24 24"
