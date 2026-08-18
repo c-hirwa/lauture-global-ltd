@@ -85,7 +85,7 @@ const Footer = () => (
       {/* Contact Info */}
       <div>
         <h3 className="font-heading text-xl font-bold text-primary mb-5">Contact Info</h3>
-        <ul className="space-y-4 text-sm">
+        <ul className="space-y-4 text-sm mb-6">
           <li className="flex gap-3 text-foreground/80">
             <MapPin size={18} className="flex-shrink-0 text-accent mt-0.5" />
             <span className="leading-relaxed">
@@ -112,6 +112,24 @@ const Footer = () => (
             </a>
           </li>
         </ul>
+
+        <div className="flex items-center gap-4">
+          {socialLinks.map((social) => {
+            const Icon = social.icon;
+            return (
+              <a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Lauture Global on ${social.label}`}
+                className="text-muted-foreground hover:text-accent transition-colors"
+              >
+                <Icon size={18} />
+              </a>
+            );
+          })}
+        </div>
       </div>
     </div>
 
