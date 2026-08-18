@@ -13,6 +13,9 @@ import araucaria from '../assets/araucaria-residence.jpg'
 import musanto from '../assets/musanto-hotel.jpg'
 import lovaRwanda from '../assets/LoveRwanda.jpeg'
 import greenEstate from '../assets/greenEstate.jpeg'
+import fourPoints from '../assets/sheraton.jpg'
+import oak from '../assets/oak.jpg'
+import nyamunyonyi from '../assets/Nyamunyonyi.jpg'
 
 export interface PartnerGroup {
   group: string;
@@ -37,6 +40,7 @@ export const partnerGroups: PartnerGroup[] = [
         description:
           "A contemporary hotel in Kigali blending comfort and style with reliable service, modern amenities, and a welcoming atmosphere for every traveler.",
         website: "https://www.marriott.com/en-us/hotels/kglfp-four-points-kigali/overview/",
+        image: fourPoints,
       },
       {
         name: "Akira Hotel",
@@ -107,6 +111,7 @@ export const partnerGroups: PartnerGroup[] = [
         category: "Resort",
         description:
           "A tranquil lakeside resort in Uganda offering comfortable accommodation, scenic views, and a relaxing base for cross-border exploration and leisure.",
+          image: nyamunyonyi,
       },
     ],
   },
@@ -155,6 +160,7 @@ export const partnerGroups: PartnerGroup[] = [
         category: "Real Estate",
         description:
           "A premium real estate partner in Kenya delivering elegant residential and investment properties for clients seeking quality homes in East Africa.",
+          image: oak,
       },
       {
         name: "PIMAR LTD",
