@@ -136,23 +136,6 @@ const Footer = () => (
     <div className="border-t border-border">
       <div className="container py-5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
         <p className="font-heading text-sm font-bold text-primary">Lauture Global LTD</p>
-        <div className="flex items-center gap-4">
-          {socialLinks.map((social) => {
-            const Icon = social.icon;
-            return (
-              <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Lauture Global on ${social.label}`}
-                className="text-muted-foreground hover:text-accent transition-colors"
-              >
-                <Icon size={18} />
-              </a>
-            );
-          })}
-        </div>
         <p>© {new Date().getFullYear()} Lauture Global LTD. All rights reserved.</p>
       </div>
     </div>
