@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
 import { Check, ImageOff, ArrowRight, Sparkles } from "lucide-react";
+import tourism from '../assets/1tpackage.jpeg'
+import prestige from '../assets/2tpackage.jpg'
 
 type TourPackage = {
   id: string;
@@ -26,7 +28,7 @@ const tourPackages: TourPackage[] = [
     subtitle: "8-Day Signature Experience",
     tagline: "Signature journey",
     featured: false,
-    images: [],
+    images: [tourism],
     intro: [
       "Experience the very best of Rwanda with Lauture Global LTD and Galop Trans Express on an unforgettable journey through the Land of a Thousand Hills. Designed for travelers seeking authentic experiences, this carefully curated package combines breathtaking natural landscapes, incredible wildlife, vibrant culture, and warm Rwandan hospitality.",
       "From unforgettable gorilla encounters and exciting safari adventures to the serene beauty of Lake Kivu, Kigali's modern charm, and immersive cultural experiences, every moment is thoughtfully planned to showcase Rwanda's unique spirit. Whether you're traveling solo, as a couple, with family, or in a group, our expert team ensures a seamless, comfortable, and enriching experience from arrival to departure.",
