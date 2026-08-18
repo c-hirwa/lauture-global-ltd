@@ -32,6 +32,13 @@ export const partnerGroups: PartnerGroup[] = [
         image: kigaliMarriott,
       },
       {
+        name: "Four Points by Sheraton Kigali",
+        category: "Hotel",
+        description:
+          "A contemporary hotel in Kigali blending comfort and style with reliable service, modern amenities, and a welcoming atmosphere for every traveler.",
+        website: "https://www.marriott.com/en-us/hotels/kglfp-four-points-kigali/overview/",
+      },
+      {
         name: "Akira Hotel",
         category: "Hotel",
         description:
@@ -46,6 +53,17 @@ export const partnerGroups: PartnerGroup[] = [
           "A vibrant lifestyle hotel combining sport, culture, and hospitality — an energetic hub for travelers seeking a distinctly Rwandan experience.",
         website: "https://zariacourt.com/",
         image: zariaCourt,
+      },
+    ],
+  },
+  {
+    group: "Preferred Hotels and Lodges (Bugesera)",
+    items: [
+      {
+        name: "Bugesera Lodge",
+        category: "Lodge",
+        description:
+          "A serene lodge retreat in Bugesera offering a peaceful escape surrounded by nature, ideal for travelers seeking relaxation and authentic Rwandan scenery.",
       },
     ],
   },
@@ -78,6 +96,17 @@ export const partnerGroups: PartnerGroup[] = [
         description:
           "A welcoming Gisenyi hotel combining warm Rwandan hospitality with easy access to Lake Kivu's beaches, dining, and border crossings.",
           image: musanto,
+      },
+    ],
+  },
+  {
+    group: "Preferred Hotels and Lodges (Uganda)",
+    items: [
+      {
+        name: "Nyamunyonyi Lake Resort",
+        category: "Resort",
+        description:
+          "A tranquil lakeside resort in Uganda offering comfortable accommodation, scenic views, and a relaxing base for cross-border exploration and leisure.",
       },
     ],
   },
@@ -116,16 +145,16 @@ export const partnerGroups: PartnerGroup[] = [
           image: greenEstate,
       },
       {
-        name: "Assumy Realty Rwanda",
-        category: "Real Estate",
-        description:
-          "A Rwanda-based realty partner supporting clients with property search, acquisition, and rental solutions tailored to their needs.",
-      },
-      {
         name: "FunLife Properties Kenya",
         category: "Real Estate",
         description:
           "A regional property partner in Kenya offering cross-border real estate and investment opportunities for East Africa-bound clients.",
+      },
+      {
+        name: "The Oak Residences",
+        category: "Real Estate",
+        description:
+          "A premium real estate partner in Kenya delivering elegant residential and investment properties for clients seeking quality homes in East Africa.",
       },
       {
         name: "PIMAR LTD",
@@ -138,12 +167,6 @@ export const partnerGroups: PartnerGroup[] = [
   {
     group: "Business and Investment Partners",
     items: [
-      {
-        name: "Baho Housing Solutions",
-        category: "Housing Solutions",
-        description:
-          "A strategic partner providing innovative housing and accommodation solutions for individuals, families, and businesses relocating to Rwanda.",
-      },
       {
         name: "Kama Heritage",
         category: "Investment Partner",
