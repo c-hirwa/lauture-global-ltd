@@ -85,7 +85,7 @@ const Footer = () => (
       {/* Contact Info */}
       <div>
         <h3 className="font-heading text-xl font-bold text-primary mb-5">Contact Info</h3>
-        <ul className="space-y-4 text-sm">
+        <ul className="space-y-4 text-sm mb-6">
           <li className="flex gap-3 text-foreground/80">
             <MapPin size={18} className="flex-shrink-0 text-accent mt-0.5" />
             <span className="leading-relaxed">
@@ -112,12 +112,7 @@ const Footer = () => (
             </a>
           </li>
         </ul>
-      </div>
-    </div>
 
-    <div className="border-t border-border">
-      <div className="container py-5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
-        <p className="font-heading text-sm font-bold text-primary">Lauture Global LTD</p>
         <div className="flex items-center gap-4">
           {socialLinks.map((social) => {
             const Icon = social.icon;
@@ -135,6 +130,12 @@ const Footer = () => (
             );
           })}
         </div>
+      </div>
+    </div>
+
+    <div className="border-t border-border">
+      <div className="container py-5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
+        <p className="font-heading text-sm font-bold text-primary">Lauture Global LTD</p>
         <p>© {new Date().getFullYear()} Lauture Global LTD. All rights reserved.</p>
       </div>
     </div>
