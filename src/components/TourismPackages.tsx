@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
 import { Check, ImageOff, ArrowRight, Sparkles } from "lucide-react";
 import tourism from '../assets/1tpackage.jpeg'
-import prestige from '../assets/2tpackage.jpg'
+import prestige from '../assets/2tpackage.jpeg'
 
 type TourPackage = {
   id: string;
