@@ -54,7 +54,7 @@ const tourPackages: TourPackage[] = [
     subtitle: "8-Day Prestige Experience",
     tagline: "Prestige journey",
     featured: true,
-    images: [],
+    images: [prestige],
     intro: [
       "Indulge in the ultimate Rwandan escape with Experience Rwanda: Luxury & Adventure, an exclusive journey crafted by Lauture Global LTD and Galop Trans Express for discerning travelers seeking elegance, comfort, and unforgettable experiences.",
       "This premium package combines Rwanda's breathtaking natural beauty with world-class hospitality, luxury accommodations, fine dining, and personalized concierge services. From exclusive gorilla trekking and private safaris to sunset cruises on Lake Kivu, wellness retreats, cultural immersion, and VIP city experiences, every detail is carefully curated to deliver an exceptional travel experience.",
