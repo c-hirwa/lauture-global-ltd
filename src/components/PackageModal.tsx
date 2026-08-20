@@ -47,6 +47,7 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
   const [step, setStep] = useState<Step>("details");
   const [form, setForm] = useState(initialForm);
   const [submitting, setSubmitting] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "momo" | null>(null);
 
   if (!pkg) return null;
 
@@ -54,6 +55,7 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
     setStep("details");
     setForm(initialForm);
     setSubmitting(false);
+    setPaymentMethod(null);
   };
   const close = (o: boolean) => {
     if (!o) reset();
