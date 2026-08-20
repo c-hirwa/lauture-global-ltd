@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import ScrollToTop from "./components/ScrollToTop";
 import { AuthProvider } from "./hooks/useAuth";
 import { AdminAuthProvider } from "./hooks/useAdminAuth";
+import { Analytics } from "@vercel/analytics/react"
 import Index from "./pages/Index.tsx";
 import About from "./pages/About.tsx";
 import Services from "./pages/Services.tsx";
