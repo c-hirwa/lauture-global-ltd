@@ -69,6 +69,7 @@ const App = () => (
           </AdminAuthProvider>
         </AuthProvider>
       </BrowserRouter>
+      <Analytics />
     </TooltipProvider>
   </QueryClientProvider>
 );
