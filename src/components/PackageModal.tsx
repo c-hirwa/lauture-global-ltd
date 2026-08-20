@@ -85,6 +85,19 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
       });
       if (error) throw error;
 
+      setStep("payment");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      toast.error(message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const payByCard = async () => {
+    if (!pkg) return;
+    setSubmitting(true);
+    try {
       await createCheckoutSession({
         packageType: pkg.id,
         amount: pkg.price * 100,
@@ -92,11 +105,16 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
         customerName: form.fullName,
       });
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      const message = err instanceof Error ? err.message : "Unable to start checkout right now.";
       toast.error(message);
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const payByMobileMoney = () => {
+    setPaymentMethod("momo");
+    setStep("success");
   };
 
   return (
