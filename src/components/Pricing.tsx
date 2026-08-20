@@ -10,8 +10,8 @@ const packages: (PackageData & { tagline: string; popular: boolean; variant: "ou
     title: "Basic Guidance",
     subtitle: "Clarity-focused consultation for a confident and strategic move to Rwanda",
     tagline: "Entry-level strategy package",
-    price: 500,
-    ctaLabel: "Start Your Journey — $500",
+    price: 525,
+    ctaLabel: "Start Your Journey — $525",
     variant: "outline-gold",
     popular: false,
     features: [
@@ -35,8 +35,8 @@ const packages: (PackageData & { tagline: string; popular: boolean; variant: "ou
     title: "Comprehensive Strategy & Assistance",
     subtitle: "Advanced relocation planning with personalized strategy and ongoing advisory",
     tagline: "Most chosen by our clients",
-    price: 1200,
-    ctaLabel: "Get Started — $1,200",
+    price: 1260,
+    ctaLabel: "Get Started — $1,260",
     variant: "gold",
     popular: true,
     features: [
@@ -60,8 +60,8 @@ const packages: (PackageData & { tagline: string; popular: boolean; variant: "ou
     title: "Full Premium Service",
     subtitle: "Coaching & Concierge — end-to-end relocation, execution support, and full integration experience",
     tagline: "Coaching & Concierge",
-    price: 2000,
-    ctaLabel: "Relocate with Full Support — $2,000",
+    price: 2100,
+    ctaLabel: "Relocate with Full Support — $2,100",
     variant: "outline-gold",
     popular: false,
     features: [

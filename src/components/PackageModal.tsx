@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, ArrowRight, ArrowLeft, Sparkles, Loader2, CheckCircle2 } from "lucide-react";
+import { Check, ArrowRight, ArrowLeft, Sparkles, Loader2, CheckCircle2, CreditCard, Smartphone } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { createCheckoutSession } from "@/lib/createCheckout";
@@ -23,7 +23,7 @@ export type PackageData = {
   ctaLabel: string;
 };
 
-type Step = "details" | "form1" | "form2" | "form3" | "success";
+type Step = "details" | "form1" | "form2" | "form3" | "payment" | "success";
 
 interface Props {
   pkg: PackageData | null;
@@ -47,6 +47,7 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
   const [step, setStep] = useState<Step>("details");
   const [form, setForm] = useState(initialForm);
   const [submitting, setSubmitting] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "momo" | null>(null);
 
   if (!pkg) return null;
 
@@ -54,6 +55,7 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
     setStep("details");
     setForm(initialForm);
     setSubmitting(false);
+    setPaymentMethod(null);
   };
   const close = (o: boolean) => {
     if (!o) reset();
@@ -85,6 +87,19 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
       });
       if (error) throw error;
 
+      setStep("payment");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      toast.error(message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const payByCard = async () => {
+    if (!pkg) return;
+    setSubmitting(true);
+    try {
       await createCheckoutSession({
         packageType: pkg.id,
         amount: pkg.price * 100,
@@ -92,11 +107,16 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
         customerName: form.fullName,
       });
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      const message = err instanceof Error ? err.message : "Unable to start checkout right now.";
       toast.error(message);
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const payByMobileMoney = () => {
+    setPaymentMethod("momo");
+    setStep("success");
   };
 
   return (
@@ -156,15 +176,70 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
             </motion.div>
           )}
 
+          {step === "payment" && (
+            <motion.div key="payment" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.4 }} className="p-8 md:p-10">
+              <h2 className="font-heading text-2xl md:text-3xl font-bold mb-1">Choose your payment method</h2>
+              <p className="text-primary-foreground/60 text-sm mb-6">
+                {pkg.title} — ${pkg.price.toLocaleString()}
+              </p>
+
+              <div className="space-y-4">
+                <button
+                  type="button"
+                  onClick={payByCard}
+                  disabled={submitting}
+                  className="w-full text-left flex items-start gap-4 p-5 rounded-xl border border-primary-foreground/15 hover:border-accent bg-primary-foreground/5 hover:bg-accent/10 transition-all disabled:opacity-60"
+                >
+                  <CreditCard className="text-accent mt-0.5" size={22} />
+                  <div>
+                    <div className="font-semibold text-sm">Pay by Card (international)</div>
+                    <div className="text-xs text-primary-foreground/60 leading-relaxed">
+                      Visa, Mastercard and Amex — secure checkout in USD.
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={payByMobileMoney}
+                  disabled={submitting}
+                  className="w-full text-left flex items-start gap-4 p-5 rounded-xl border border-primary-foreground/15 hover:border-accent bg-primary-foreground/5 hover:bg-accent/10 transition-all disabled:opacity-60"
+                >
+                  <Smartphone className="text-accent mt-0.5" size={22} />
+                  <div>
+                    <div className="font-semibold text-sm">Pay via Mobile Money (MTN MoMo / Airtel)</div>
+                    <div className="text-xs text-primary-foreground/60 leading-relaxed">
+                      Our team sends you the payment prompt and confirms your booking.
+                    </div>
+                  </div>
+                </button>
+              </div>
+
+              <div className="flex justify-between items-center pt-6">
+                <Button variant="outline-light" onClick={() => setStep("form3")} disabled={submitting}>
+                  <ArrowLeft size={16} /> Back
+                </Button>
+                {submitting && (
+                  <span className="text-xs text-primary-foreground/60 inline-flex items-center gap-2">
+                    <Loader2 size={14} className="animate-spin" /> Redirecting…
+                  </span>
+                )}
+              </div>
+            </motion.div>
+          )}
+
           {step === "success" && (
             <motion.div key="success" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="p-8 md:p-10 text-center">
               <CheckCircle2 className="mx-auto text-accent mb-4" size={48} />
-              <h2 className="font-heading text-2xl md:text-3xl font-bold mb-2">You're all set!</h2>
+              <h2 className="font-heading text-2xl md:text-3xl font-bold mb-2">Thank you, {form.fullName.split(" ")[0] || "friend"}!</h2>
               <p className="text-primary-foreground/70 text-sm mb-2 max-w-md mx-auto">
-                Your intake for <strong>{pkg.title}</strong> has been saved. Create your client portal account to book your consultation and track your journey.
+                Your request for <strong>{pkg.title}</strong> has been received.
+                {paymentMethod === "momo"
+                  ? " Our team will contact you shortly with the MTN MoMo / Airtel payment instructions and to confirm your booking."
+                  : " Our team will be in touch shortly to confirm your booking."}
               </p>
               <p className="text-primary-foreground/50 text-xs mb-8">
-                Use <strong className="text-primary-foreground/80">{form.email}</strong> when signing up.
+                We'll reach out at <strong className="text-primary-foreground/80">{form.email}</strong>.
               </p>
               <div className="flex flex-col gap-3">
                 <Button variant="gold" size="lg" className="w-full" asChild>
