@@ -23,7 +23,7 @@ export type PackageData = {
   ctaLabel: string;
 };
 
-type Step = "details" | "form1" | "form2" | "form3" | "success";
+type Step = "details" | "form1" | "form2" | "form3" | "payment" | "success";
 
 interface Props {
   pkg: PackageData | null;
