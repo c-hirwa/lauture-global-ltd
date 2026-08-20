@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, ArrowRight, ArrowLeft, Sparkles, Loader2, CheckCircle2 } from "lucide-react";
+import { Check, ArrowRight, ArrowLeft, Sparkles, Loader2, CheckCircle2, CreditCard, Smartphone } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { createCheckoutSession } from "@/lib/createCheckout";
