@@ -6,6 +6,7 @@ import { MapPin, Mail, Phone, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CalBooking from "@/components/CalBooking";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -71,6 +72,27 @@ const Contact = () => {
                 Send Message <Send size={16} />
               </Button>
             </form>
+          </div>
+        </section>
+
+        <section className="py-20 bg-[hsl(var(--muted))]">
+          <div className="container max-w-4xl mx-auto">
+            <div className="text-center mb-10">
+              <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">
+                Book a Free Consultation
+              </p>
+              <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">
+                Start with a Free 30-Minute Discovery Call
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Not sure where to start? Let us walk you through your options — no commitment required.
+              </p>
+            </div>
+            <CalBooking
+              calLink="lauture-global/free-30-minute-discovery-call"
+              eventType="free-30-minute-discovery-call"
+              theme="light"
+            />
           </div>
         </section>
       </main>
