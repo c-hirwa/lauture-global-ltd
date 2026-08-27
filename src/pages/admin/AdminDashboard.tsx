@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Users, CalendarClock, DollarSign, Inbox, Loader2, Activity, FileText } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
-import { formatCurrency, prettyStatus } from "@/lib/constants";
+import { formatCurrency } from "@/lib/constants";
 import StatusBadge from "@/components/StatusBadge";
 
 type Stats = {
