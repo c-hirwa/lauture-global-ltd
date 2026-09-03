@@ -207,7 +207,7 @@ const Index = () => {
         <PartnersSection />
 
         {/* GUIDES PREVIEW */}
-        <GuidesSection />
+        <GuidesSection variant="dark" />
 
         {/* FAQ */}
         <FaqSection />
