@@ -29,7 +29,16 @@ const GuidesSection = ({
   const isDark = variant === "dark";
 
   return (
-    <section className="bg-background py-32 md:py-40 relative overflow-hidden">
+    <section
+      className={cn(
+        "py-32 md:py-40 relative overflow-hidden grain",
+        isDark ? "fade-from-light fade-to-light" : "bg-background"
+      )}
+      style={isDark ? { background: "hsl(var(--navy-dark))" } : undefined}
+    >
+      {isDark && (
+        <div className="absolute inset-0 opacity-40" style={{ background: "var(--gradient-radial)" }} />
+      )}
       <div className="container relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -38,17 +47,19 @@ const GuidesSection = ({
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-3xl mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-accent/15 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
             {eyebrow}
           </span>
-          <h2 className="font-heading text-4xl md:text-5xl font-semibold text-foreground mb-4 leading-tight">
+          <h2 className={cn("font-heading text-4xl md:text-5xl font-semibold mb-4 leading-tight", isDark ? "text-primary-foreground" : "text-foreground")}>
             {heading ?? (
               <>
                 Practical knowledge for your <span className="text-gradient-gold italic">Rwandan journey</span>
               </>
             )}
           </h2>
-          <p className="text-muted-foreground leading-relaxed">{subheading}</p>
+          <p className={cn("leading-relaxed", isDark ? "text-primary-foreground/80" : "text-muted-foreground")}>
+            {subheading}
+          </p>
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
