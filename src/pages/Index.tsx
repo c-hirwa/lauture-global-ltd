@@ -15,6 +15,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GuidesSection from "@/components/GuidesSection";
 import PartnersSection from "@/components/PartnersSection";
+import FaqSection from "@/components/FaqSection";
 
 
 const services = [
@@ -207,6 +208,9 @@ const Index = () => {
 
         {/* GUIDES PREVIEW */}
         <GuidesSection />
+
+        {/* FAQ */}
+        <FaqSection />
 
         {/* CTA BANNER — dark with diagonal */}
         <section className="relative py-24 md:py-32 overflow-hidden grain">
