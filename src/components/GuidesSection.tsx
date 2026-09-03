@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { guides, type Guide } from "@/data/guides";
 import GuideModal from "@/components/GuideModal";
+import { cn } from "@/lib/utils";
 
 interface GuidesSectionProps {
   showAll?: boolean;
@@ -12,6 +13,7 @@ interface GuidesSectionProps {
   eyebrow?: string;
   heading?: React.ReactNode;
   subheading?: string;
+  variant?: "light" | "dark";
 }
 
 const GuidesSection = ({
@@ -20,9 +22,11 @@ const GuidesSection = ({
   eyebrow = "Resources & Guides",
   heading,
   subheading = "Curated guides to help you settle, invest, and thrive in Rwanda — written from years of in-country experience.",
+  variant = "light",
 }: GuidesSectionProps) => {
   const [active, setActive] = useState<Guide | null>(null);
   const items = showAll ? guides : guides.slice(0, 3);
+  const isDark = variant === "dark";
 
   return (
     <section className="bg-background py-32 md:py-40 relative overflow-hidden">
