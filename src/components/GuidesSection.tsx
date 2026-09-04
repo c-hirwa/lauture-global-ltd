@@ -32,7 +32,7 @@ const GuidesSection = ({
     <section
       className={cn(
         "py-32 md:py-40 relative overflow-hidden grain",
-        isDark ? "fade-from-light fade-to-light" : "bg-background"
+        isDark ? "" : "bg-background"
       )}
       style={isDark ? { background: "hsl(var(--navy-dark))" } : undefined}
     >

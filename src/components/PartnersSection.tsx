@@ -47,7 +47,7 @@ const PartnerCard = ({ partner, idx }: { partner: Partner; idx: number }) => (
 
 const PartnersSection = () => {
   return (
-    <section className="relative overflow-hidden bg-background py-28 md:py-32 fade-from-dark">
+    <section className="relative overflow-hidden bg-background py-28 md:py-32">
       <div className="container relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
