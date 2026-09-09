@@ -5,17 +5,17 @@ export interface Partner {
   website?: string;
   image?: string;
 }
-import kigaliMarriott from '../assets/kigali-marriott.jpg'
-import akiraHotel from '../assets/akira-hotel.jpg'
-import zariaCourt from '../assets/zaria-court.jpg'
-import chateauLeMarara from '../assets/chateau-le-marara.jpg'
-import araucaria from '../assets/araucaria-residence.jpg'
-import musanto from '../assets/musanto-hotel.jpg'
+import kigaliMarriott from '../assets/kigali-marriott.webp'
+import akiraHotel from '../assets/akira-hotel.webp'
+import zariaCourt from '../assets/zaria-court.webp'
+import chateauLeMarara from '../assets/chateau-le-marara.webp'
+import araucaria from '../assets/araucaria-residence.webp'
+import musanto from '../assets/musanto-hotel.webp'
 import lovaRwanda from '../assets/LoveRwanda.webp'
 import greenEstate from '../assets/greenEstate.webp'
-import fourPoints from '../assets/sheraton.jpg'
-import oak from '../assets/oak.jpg'
-import nyamunyonyi from '../assets/Nyamunyonyi.jpg'
+import fourPoints from '../assets/sheraton.webp'
+import oak from '../assets/oak.webp'
+import nyamunyonyi from '../assets/Nyamunyonyi.webp'
 
 export interface PartnerGroup {
   group: string;
