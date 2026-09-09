@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -6,28 +7,34 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import ScrollToTop from "./components/ScrollToTop";
 import { AuthProvider } from "./hooks/useAuth";
 import { AdminAuthProvider } from "./hooks/useAdminAuth";
-import { Analytics } from "@vercel/analytics/react"
-import Index from "./pages/Index.tsx";
-import About from "./pages/About.tsx";
-import Services from "./pages/Services.tsx";
-import Resources from "./pages/Resources.tsx";
-import Founders from "./pages/Founders.tsx";
-import Contact from "./pages/Contact.tsx";
-import Partners from "./pages/Partners.tsx";
-import Login from "./pages/Login.tsx";
-import Dashboard from "./pages/Dashboard.tsx";
-import Success from "./pages/Success.tsx";
 import ProtectedRoute from "./components/ProtectedRoute";
-import NotFound from "./pages/NotFound.tsx";
-import AdminLayout from "./pages/admin/AdminLayout.tsx";
-import AdminLogin from "./pages/admin/AdminLogin.tsx";
-import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
-import AdminClients from "./pages/admin/AdminClients.tsx";
-import AdminClientDetail from "./pages/admin/AdminClientDetail.tsx";
-import AdminBookings from "./pages/admin/AdminBookings.tsx";
-import AdminNotifications from "./pages/admin/AdminNotifications.tsx";
+import Index from "./pages/Index.tsx";
+
+const About = lazy(() => import("./pages/About.tsx"));
+const Services = lazy(() => import("./pages/Services.tsx"));
+const Resources = lazy(() => import("./pages/Resources.tsx"));
+const Founders = lazy(() => import("./pages/Founders.tsx"));
+const Contact = lazy(() => import("./pages/Contact.tsx"));
+const Partners = lazy(() => import("./pages/Partners.tsx"));
+const Login = lazy(() => import("./pages/Login.tsx"));
+const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
+const Success = lazy(() => import("./pages/Success.tsx"));
+const NotFound = lazy(() => import("./pages/NotFound.tsx"));
+const AdminLayout = lazy(() => import("./pages/admin/AdminLayout.tsx"));
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin.tsx"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard.tsx"));
+const AdminClients = lazy(() => import("./pages/admin/AdminClients.tsx"));
+const AdminClientDetail = lazy(() => import("./pages/admin/AdminClientDetail.tsx"));
+const AdminBookings = lazy(() => import("./pages/admin/AdminBookings.tsx"));
+const AdminNotifications = lazy(() => import("./pages/admin/AdminNotifications.tsx"));
 
 const queryClient = new QueryClient();
+
+const PageFallback = () => (
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="h-10 w-10 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+  </div>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -38,34 +45,36 @@ const App = () => (
         <AuthProvider>
           <AdminAuthProvider>
             <ScrollToTop />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/resources" element={<Resources />} />
-              <Route path="/partners" element={<Partners />} />
-              <Route path="/founders" element={<Founders />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/success" element={<Success />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<AdminDashboard />} />
-                <Route path="clients" element={<AdminClients />} />
-                <Route path="clients/:id" element={<AdminClientDetail />} />
-                <Route path="bookings" element={<AdminBookings />} />
-                <Route path="notifications" element={<AdminNotifications />} />
-              </Route>
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <Suspense fallback={<PageFallback />}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/resources" element={<Resources />} />
+                <Route path="/partners" element={<Partners />} />
+                <Route path="/founders" element={<Founders />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/success" element={<Success />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin" element={<AdminLayout />}>
+                  <Route index element={<AdminDashboard />} />
+                  <Route path="clients" element={<AdminClients />} />
+                  <Route path="clients/:id" element={<AdminClientDetail />} />
+                  <Route path="bookings" element={<AdminBookings />} />
+                  <Route path="notifications" element={<AdminNotifications />} />
+                </Route>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
           </AdminAuthProvider>
         </AuthProvider>
       </BrowserRouter>
@@ -74,4 +83,3 @@ const App = () => (
 );
 
 export default App;
-
