@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
 import { Check, ImageOff, ArrowRight, Sparkles } from "lucide-react";
-import tourism from '../assets/1tpackage.jpeg'
-import prestige from '../assets/2tpackage.jpeg'
+import tourism from '../assets/1tpackage.webp'
+import prestige from '../assets/2tpackage.webp'
 
 type TourPackage = {
   id: string;

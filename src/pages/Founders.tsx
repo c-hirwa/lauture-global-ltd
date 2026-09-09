@@ -2,9 +2,9 @@ import { Facebook, Linkedin, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import marieImg from "@/assets/founder-marie.jpeg";
+import marieImg from "@/assets/founder-marie.webp";
 import jorisImg from "@/assets/founder-joris.png";
-import vladimirImg from "@/assets/founder-vladimir.jpeg";
+import vladimirImg from "@/assets/founder-vladimir.webp";
 
 const founders: {
   name: string;
