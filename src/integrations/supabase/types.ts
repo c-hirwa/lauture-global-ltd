@@ -227,6 +227,57 @@ export type Database = {
         }
         Relationships: []
       }
+      transactions: {
+        Row: {
+          amount: number
+          confirmation_code: string | null
+          created_at: string
+          currency: string
+          email: string
+          full_name: string
+          id: string
+          merchant_reference: string
+          order_tracking_id: string | null
+          package_type: string
+          payment_method: string | null
+          phone: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          confirmation_code?: string | null
+          created_at?: string
+          currency?: string
+          email: string
+          full_name: string
+          id?: string
+          merchant_reference: string
+          order_tracking_id?: string | null
+          package_type: string
+          payment_method?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          confirmation_code?: string | null
+          created_at?: string
+          currency?: string
+          email?: string
+          full_name?: string
+          id?: string
+          merchant_reference?: string
+          order_tracking_id?: string | null
+          package_type?: string
+          payment_method?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
