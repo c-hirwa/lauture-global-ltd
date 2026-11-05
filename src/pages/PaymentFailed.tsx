@@ -25,8 +25,5 @@ const PaymentFailed = () => (
     </div>
   </div>
 );
-    </div>
-  </div>
-);
 
 export default PaymentFailed;
