@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Mail, Phone, UserCircle } from "lucide-react";
+import { Menu, X, Mail, Phone, UserCircle, MessageCircle } from "lucide-react";
 import logo from "@/assets/logo-lauture.png";
+import { CONTACT } from "@/lib/contact";
 
 const navLinks = [
   { label: "Home", path: "/" },
@@ -64,21 +65,26 @@ const Navbar = () => {
             ))}
           </div>
           <div className="flex items-center gap-3">
+            <Button variant="outline-light" size="sm" asChild className="border-primary-foreground/30">
+              <a href={CONTACT.whatsappHref} target="_blank" rel="noopener noreferrer">
+                <MessageCircle size={16} /> WhatsApp
+              </a>
+            </Button>
             <Button variant="gold" size="sm" asChild>
               <Link to="/login">
                 <UserCircle size={16} /> Client Portal
               </Link>
             </Button>
-            <Button variant="sky" size="sm" asChild>
-              <a href="mailto:info@lautureglobal.com">
-                <Mail size={16} /> Email Us
-              </a>
-            </Button>
           </div>
         </div>
 
         {/* Mobile toggle */}
-        <button className="md:hidden text-primary-foreground" onClick={() => setOpen(!open)}>
+        <button
+          className="md:hidden text-primary-foreground p-2 -mr-2"
+          onClick={() => setOpen(!open)}
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+        >
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -104,16 +110,23 @@ const Navbar = () => {
                 <UserCircle size={16} /> Client Portal
               </Link>
             </Button>
-            <Button variant="sky" size="sm" className="w-full" asChild>
-              <a href="mailto:info@lautureglobal.com" onClick={() => setOpen(false)}>
-                <Mail size={16} /> Email Us
+            <Button variant="outline-light" size="sm" className="w-full border-primary-foreground/30" asChild>
+              <a href={CONTACT.whatsappHref} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
+                <MessageCircle size={16} /> WhatsApp
               </a>
             </Button>
-            <Button variant="outline-light" size="sm" className="w-full" asChild>
-              <a href="tel:+250792866210" onClick={() => setOpen(false)}>
-                <Phone size={16} /> Phone
-              </a>
-            </Button>
+            <div className="grid grid-cols-2 gap-2">
+              <Button variant="outline-light" size="sm" className="w-full border-primary-foreground/30" asChild>
+                <a href={CONTACT.phoneHref} onClick={() => setOpen(false)}>
+                  <Phone size={16} /> Call
+                </a>
+              </Button>
+              <Button variant="outline-light" size="sm" className="w-full border-primary-foreground/30" asChild>
+                <a href={`mailto:${CONTACT.email}`} onClick={() => setOpen(false)}>
+                  <Mail size={16} /> Email
+                </a>
+              </Button>
+            </div>
           </div>
         </div>
       )}

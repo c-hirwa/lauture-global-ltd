@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -6,7 +6,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, ArrowRight, ArrowLeft, Sparkles, Loader2, CheckCircle2, CreditCard, Smartphone } from "lucide-react";
+import {
+  Check,
+  ArrowRight,
+  ArrowLeft,
+  Sparkles,
+  Loader2,
+  CheckCircle2,
+  CreditCard,
+  Smartphone,
+  Lock,
+  Pencil,
+} from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 // Stripe disabled — payments go through Pesapal only.
@@ -24,7 +35,13 @@ export type PackageData = {
   ctaLabel: string;
 };
 
-type Step = "details" | "form1" | "form2" | "form3" | "payment" | "success";
+type Step = "details" | "contact" | "plans" | "review" | "success";
+
+const FORM_STEPS: { key: Step; label: string }[] = [
+  { key: "contact", label: "Your details" },
+  { key: "plans", label: "Your plans" },
+  { key: "review", label: "Review & pay" },
+];
 
 interface Props {
   pkg: PackageData | null;
@@ -44,55 +61,62 @@ const initialForm = {
   timeline: "",
 };
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
   const [step, setStep] = useState<Step>("details");
   const [form, setForm] = useState(initialForm);
-  const [submitting, setSubmitting] = useState(false);
+  const [busy, setBusy] = useState<null | "pay" | "save">(null);
+  // The intake is saved once; retrying payment shouldn't create duplicate client records.
+  const [intakeSaved, setIntakeSaved] = useState(false);
+  // Only complain about the email after the visitor leaves the field, not mid-typing.
+  const [emailTouched, setEmailTouched] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Each step starts at the top; otherwise a short step can open scrolled past its content.
+  useEffect(() => {
+    contentRef.current?.scrollTo({ top: 0 });
+  }, [step]);
 
   if (!pkg) return null;
 
   const reset = () => {
     setStep("details");
     setForm(initialForm);
-    setSubmitting(false);
+    setBusy(null);
+    setIntakeSaved(false);
+    setEmailTouched(false);
   };
   const close = (o: boolean) => {
     if (!o) reset();
     onOpenChange(o);
   };
 
-  const stepNum = step === "form1" ? 1 : step === "form2" ? 2 : step === "form3" ? 3 : 0;
+  const update = (patch: Partial<typeof initialForm>) => setForm((f) => ({ ...f, ...patch }));
+  const stepIndex = FORM_STEPS.findIndex((s) => s.key === step);
+  const emailValid = EMAIL_RE.test(form.email.trim());
+  const contactValid = form.fullName.trim().length > 1 && emailValid && form.phone.trim().length >= 7;
+  const plansValid = Boolean(form.travelers && form.purpose);
 
-  const handleSubmit = async () => {
-    if (!pkg) return;
-    setSubmitting(true);
-    try {
-      const { error } = await supabase.from("clients").insert({
-        full_name: form.fullName,
-        email: form.email,
-        phone: form.phone || null,
-        country_from: form.country || null,
-        travelers: form.travelers || null,
-        children_count:
-          form.travelers === "Family" && form.childrenCount
-            ? parseInt(form.childrenCount, 10) || null
-            : null,
-        purpose: form.purpose || null,
-        lifestyle: form.lifestyle || null,
-        timeline: form.timeline || null,
-        package_id: pkg.id,
-        package_title: pkg.title,
-        package_price: pkg.price,
-      });
-      if (error) throw error;
-
-      setStep("payment");
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
-      toast.error(message);
-    } finally {
-      setSubmitting(false);
-    }
+  const saveIntake = async () => {
+    if (intakeSaved) return;
+    const { error } = await supabase.from("clients").insert({
+      full_name: form.fullName.trim(),
+      email: form.email.trim(),
+      phone: form.phone.trim() || null,
+      country_from: form.country.trim() || null,
+      travelers: form.travelers || null,
+      children_count:
+        form.travelers === "Family" && form.childrenCount ? parseInt(form.childrenCount, 10) || null : null,
+      purpose: form.purpose || null,
+      lifestyle: form.lifestyle || null,
+      timeline: form.timeline || null,
+      package_id: pkg.id,
+      package_title: pkg.title,
+      package_price: pkg.price,
+    });
+    if (error) throw new Error("We couldn't save your details. Please try again.");
+    setIntakeSaved(true);
   };
 
   // Stripe disabled — payments go through Pesapal only.
@@ -115,17 +139,17 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
   // };
 
   const payWithPesapal = async () => {
-    if (!pkg) return;
-    setSubmitting(true);
+    setBusy("pay");
     try {
+      await saveIntake();
       const response = await fetch("/api/pesapal-create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           packageType: pkg.id,
-          fullName: form.fullName,
-          email: form.email,
-          phone: form.phone,
+          fullName: form.fullName.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
         }),
       });
       const data = await response.json().catch(() => ({}));
@@ -134,16 +158,38 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
       }
       window.location.assign(data.redirect_url);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Unable to start Pesapal payment. Please try again.";
-      toast.error(message);
-    } finally {
-      setSubmitting(false);
+      toast.error(err instanceof Error ? err.message : "Unable to start Pesapal payment. Please try again.");
+      setBusy(null);
     }
+  };
+
+  const submitWithoutPaying = async () => {
+    setBusy("save");
+    try {
+      await saveIntake();
+      setStep("success");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const travelersLabel =
+    form.travelers === "Family" && form.childrenCount
+      ? `Family (${form.childrenCount} ${parseInt(form.childrenCount, 10) === 1 ? "child" : "children"})`
+      : form.travelers;
+
+  const stepMotion = {
+    initial: { opacity: 0, y: 12 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -12 },
+    transition: { duration: 0.3 },
   };
 
   return (
     <Dialog open={open} onOpenChange={close}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-0 border-accent/30 bg-[hsl(226_65%_10%)] text-primary-foreground">
+      <DialogContent ref={contentRef} className="max-w-2xl max-h-[90vh] overflow-y-auto p-0 border-accent/30 bg-[hsl(226_65%_10%)] text-primary-foreground">
         <DialogTitle className="sr-only">{pkg.title}</DialogTitle>
 
         {/* Gold top accent */}
@@ -151,7 +197,7 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
 
         <AnimatePresence mode="wait">
           {step === "details" && (
-            <motion.div key="details" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.4 }} className="p-8 md:p-10">
+            <motion.div key="details" {...stepMotion} className="p-6 sm:p-8 md:p-10">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/15 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
                 <Sparkles size={12} /> ${pkg.price.toLocaleString()} / package
               </div>
@@ -192,76 +238,237 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
                 </div>
               </div>
 
-              <Button variant="gold" size="lg" className="w-full" onClick={() => setStep("form1")}>
+              <Button variant="gold" size="lg" className="w-full" onClick={() => setStep("contact")}>
                 {pkg.ctaLabel} <ArrowRight size={18} />
               </Button>
+              <p className="text-center text-xs text-primary-foreground/50 mt-3">
+                Takes about 2 minutes · You'll review everything before paying
+              </p>
             </motion.div>
           )}
 
-          {step === "payment" && (
-            <motion.div key="payment" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.4 }} className="p-8 md:p-10">
-              <h2 className="font-heading text-2xl md:text-3xl font-bold mb-1">Choose your payment method</h2>
+          {stepIndex >= 0 && (
+            <motion.div key={step} {...stepMotion} className="p-6 sm:p-8 md:p-10">
+              {/* Step indicator */}
+              <ol className="flex items-center gap-2 mb-6" aria-label="Checkout progress">
+                {FORM_STEPS.map((s, i) => (
+                  <li key={s.key} className="flex-1 flex items-center gap-2 min-w-0">
+                    <span
+                      className={`flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold shrink-0 transition-all ${
+                        i <= stepIndex ? "bg-accent text-accent-foreground" : "bg-primary-foreground/10 text-primary-foreground/50"
+                      }`}
+                      aria-current={i === stepIndex ? "step" : undefined}
+                    >
+                      {i < stepIndex ? <Check size={14} /> : i + 1}
+                    </span>
+                    <span
+                      className={`text-xs font-medium truncate hidden sm:inline ${
+                        i <= stepIndex ? "text-primary-foreground" : "text-primary-foreground/50"
+                      }`}
+                    >
+                      {s.label}
+                    </span>
+                    {i < FORM_STEPS.length - 1 && (
+                      <span className={`flex-1 h-0.5 min-w-3 ${i < stepIndex ? "bg-accent" : "bg-primary-foreground/10"}`} />
+                    )}
+                  </li>
+                ))}
+              </ol>
+
+              <h2 className="font-heading text-2xl md:text-3xl font-bold mb-1">{FORM_STEPS[stepIndex].label}</h2>
               <p className="text-primary-foreground/60 text-sm mb-6">
-                {pkg.title} — ${pkg.price.toLocaleString()}
+                {pkg.title} · <span className="text-accent font-semibold">${pkg.price.toLocaleString()}</span>
               </p>
 
-              <div className="space-y-4">
-                {/* Stripe disabled — payments go through Pesapal only.
-                <button
-                  type="button"
-                  onClick={payByCard}
-                  disabled={submitting}
-                  className="w-full text-left flex items-start gap-4 p-5 rounded-xl border border-primary-foreground/15 hover:border-accent bg-primary-foreground/5 hover:bg-accent/10 transition-all disabled:opacity-60"
+              {step === "contact" && (
+                <form
+                  className="space-y-4"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (contactValid) setStep("plans");
+                  }}
                 >
-                  <CreditCard className="text-accent mt-0.5" size={22} />
-                  <div>
-                    <div className="font-semibold text-sm">Pay by Card (international)</div>
-                    <div className="text-xs text-primary-foreground/60 leading-relaxed">
-                      Visa, Mastercard and Amex — secure checkout in USD.
-                    </div>
+                  <FieldInput label="Full name" autoComplete="name" value={form.fullName} onChange={(v) => update({ fullName: v })} />
+                  <FieldInput
+                    label="Email address"
+                    type="email"
+                    autoComplete="email"
+                    value={form.email}
+                    onChange={(v) => update({ email: v })}
+                    onBlur={() => setEmailTouched(true)}
+                    error={emailTouched && form.email && !emailValid ? "Please enter a valid email address." : undefined}
+                  />
+                  <FieldInput
+                    label="Phone / WhatsApp number"
+                    type="tel"
+                    autoComplete="tel"
+                    placeholder="+250 7XX XXX XXX"
+                    value={form.phone}
+                    onChange={(v) => update({ phone: v })}
+                    hint="Needed for Mobile Money payments and so our team can reach you."
+                  />
+                  <FieldInput
+                    label="Country you're coming from (optional)"
+                    autoComplete="country-name"
+                    value={form.country}
+                    onChange={(v) => update({ country: v })}
+                  />
+                  <div className="flex justify-between pt-4">
+                    <Button type="button" variant="outline-light" onClick={() => setStep("details")}>
+                      <ArrowLeft size={16} /> Back
+                    </Button>
+                    <Button type="submit" variant="gold" disabled={!contactValid}>
+                      Continue <ArrowRight size={16} />
+                    </Button>
                   </div>
-                </button>
-                */}
+                </form>
+              )}
 
-                <button
-                  type="button"
-                  onClick={payWithPesapal}
-                  disabled={submitting}
-                  className="w-full text-left flex items-start gap-4 p-5 rounded-xl border border-primary-foreground/15 hover:border-accent bg-primary-foreground/5 hover:bg-accent/10 transition-all disabled:opacity-60"
-                >
-                  <span className="flex gap-1.5 mt-0.5 text-accent">
-                    <Smartphone size={22} />
-                    <CreditCard size={22} />
-                  </span>
-                  <div>
-                    <div className="font-semibold text-sm">Pay securely with Pesapal</div>
-                    <div className="text-xs text-primary-foreground/60 leading-relaxed">
-                      Mobile Money (MTN MoMo, Airtel Money) or card (Visa, Mastercard), in USD.
-                    </div>
+              {step === "plans" && (
+                <div className="space-y-5">
+                  <FieldRadio
+                    label="Who's coming?"
+                    value={form.travelers}
+                    onChange={(v) => update({ travelers: v, childrenCount: v === "Family" ? form.childrenCount : "" })}
+                    options={["Solo", "Couple", "Family"]}
+                  />
+                  {form.travelers === "Family" && (
+                    <FieldInput
+                      label="How many children?"
+                      type="number"
+                      value={form.childrenCount}
+                      onChange={(v) => update({ childrenCount: v })}
+                    />
+                  )}
+                  <FieldRadio
+                    label="Main purpose"
+                    value={form.purpose}
+                    onChange={(v) => update({ purpose: v })}
+                    options={["Vacation", "Relocation", "Investment", "Exploring options"]}
+                  />
+                  <FieldRadio
+                    label="Timeline (optional)"
+                    value={form.timeline}
+                    onChange={(v) => update({ timeline: v })}
+                    options={["Within 3 months", "3–6 months", "6–12 months", "Just exploring"]}
+                  />
+                  <FieldRadio
+                    label="Preferred lifestyle (optional)"
+                    value={form.lifestyle}
+                    onChange={(v) => update({ lifestyle: v })}
+                    options={["Urban city life", "Quiet suburban", "Nature and outdoors", "Mixed"]}
+                  />
+                  <div className="flex justify-between pt-4">
+                    <Button variant="outline-light" onClick={() => setStep("contact")}>
+                      <ArrowLeft size={16} /> Back
+                    </Button>
+                    <Button variant="gold" onClick={() => setStep("review")} disabled={!plansValid}>
+                      Review <ArrowRight size={16} />
+                    </Button>
                   </div>
-                </button>
-              </div>
+                </div>
+              )}
 
-              <div className="flex justify-between items-center pt-6">
-                <Button variant="outline-light" onClick={() => setStep("form3")} disabled={submitting}>
-                  <ArrowLeft size={16} /> Back
-                </Button>
-                {submitting && (
-                  <span className="text-xs text-primary-foreground/60 inline-flex items-center gap-2">
-                    <Loader2 size={14} className="animate-spin" /> Redirecting…
-                  </span>
-                )}
-              </div>
+              {step === "review" && (
+                <div>
+                  <div className="bg-primary-foreground/5 border border-accent/20 rounded-xl divide-y divide-primary-foreground/10 mb-5">
+                    <SummarySection title="Package">
+                      <SummaryRow label={pkg.title} value={`$${pkg.price.toLocaleString()} USD`} strong />
+                    </SummarySection>
+                    <SummarySection title="Your details" onEdit={() => setStep("contact")}>
+                      <SummaryRow label="Name" value={form.fullName} />
+                      <SummaryRow label="Email" value={form.email} />
+                      <SummaryRow label="Phone" value={form.phone} />
+                      {form.country && <SummaryRow label="From" value={form.country} />}
+                    </SummarySection>
+                    <SummarySection title="Your plans" onEdit={() => setStep("plans")}>
+                      <SummaryRow label="Travelers" value={travelersLabel} />
+                      <SummaryRow label="Purpose" value={form.purpose} />
+                      {form.timeline && <SummaryRow label="Timeline" value={form.timeline} />}
+                      {form.lifestyle && <SummaryRow label="Lifestyle" value={form.lifestyle} />}
+                    </SummarySection>
+                  </div>
+
+                  {/* Stripe disabled — payments go through Pesapal only.
+                  <button type="button" onClick={payByCard}>Pay by Card (international)</button>
+                  */}
+
+                  <Button
+                    variant="gold"
+                    size="lg"
+                    className="w-full h-14 text-base"
+                    onClick={payWithPesapal}
+                    disabled={busy !== null}
+                  >
+                    {busy === "pay" ? (
+                      <>
+                        <Loader2 size={18} className="animate-spin" /> Redirecting to Pesapal…
+                      </>
+                    ) : (
+                      <>
+                        <Lock size={16} /> Pay ${pkg.price.toLocaleString()} securely
+                      </>
+                    )}
+                  </Button>
+
+                  <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-primary-foreground/60">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Smartphone size={14} className="text-accent" /> MTN MoMo · Airtel Money
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <CreditCard size={14} className="text-accent" /> Visa · Mastercard
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Lock size={13} className="text-accent" /> Secured by Pesapal
+                    </span>
+                  </div>
+
+                  <div className="mt-6 rounded-xl border border-primary-foreground/10 p-4">
+                    <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">What happens next</p>
+                    <ol className="space-y-2 text-sm text-primary-foreground/75">
+                      <li className="flex gap-3">
+                        <span className="text-accent font-semibold">1.</span>
+                        You'll pay on Pesapal's secure page, by Mobile Money or card.
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="text-accent font-semibold">2.</span>
+                        You'll get a confirmation by email once the payment goes through.
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="text-accent font-semibold">3.</span>
+                        Our team contacts you to schedule your first consultation.
+                      </li>
+                    </ol>
+                  </div>
+
+                  <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 pt-6">
+                    <Button variant="outline-light" onClick={() => setStep("plans")} disabled={busy !== null}>
+                      <ArrowLeft size={16} /> Back
+                    </Button>
+                    <button
+                      type="button"
+                      onClick={submitWithoutPaying}
+                      disabled={busy !== null}
+                      className="text-sm text-primary-foreground/60 hover:text-accent underline-offset-4 hover:underline disabled:opacity-50 inline-flex items-center justify-center gap-2"
+                    >
+                      {busy === "save" && <Loader2 size={14} className="animate-spin" />}
+                      Not ready to pay? Send my request without paying
+                    </button>
+                  </div>
+                </div>
+              )}
             </motion.div>
           )}
 
           {step === "success" && (
-            <motion.div key="success" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="p-8 md:p-10 text-center">
+            <motion.div key="success" {...stepMotion} className="p-6 sm:p-8 md:p-10 text-center">
               <CheckCircle2 className="mx-auto text-accent mb-4" size={48} />
-              <h2 className="font-heading text-2xl md:text-3xl font-bold mb-2">Thank you, {form.fullName.split(" ")[0] || "friend"}!</h2>
+              <h2 className="font-heading text-2xl md:text-3xl font-bold mb-2">
+                Thank you, {form.fullName.trim().split(" ")[0] || "friend"}!
+              </h2>
               <p className="text-primary-foreground/70 text-sm mb-2 max-w-md mx-auto">
-                Your request for <strong>{pkg.title}</strong> has been received.
-                {" Our team will be in touch shortly to confirm your booking."}
+                Your request for <strong>{pkg.title}</strong> has been received. Our team will be in touch shortly to
+                confirm your booking and payment.
               </p>
               <p className="text-primary-foreground/50 text-xs mb-8">
                 We'll reach out at <strong className="text-primary-foreground/80">{form.email}</strong>.
@@ -281,138 +488,83 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
               </div>
             </motion.div>
           )}
-
-          {stepNum > 0 && step !== "success" && (
-            <motion.div key="form" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.4 }} className="p-8 md:p-10">
-              {/* Step indicator + gold progress bar */}
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-3">
-                  {[1, 2, 3].map((n) => (
-                    <div key={n} className="flex-1 flex items-center gap-2">
-                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold transition-all ${stepNum >= n ? "bg-accent text-accent-foreground" : "bg-primary-foreground/10 text-primary-foreground/50"}`}>
-                        {stepNum > n ? <Check size={14} /> : n}
-                      </div>
-                      {n < 3 && <div className={`flex-1 h-0.5 ${stepNum > n ? "bg-accent" : "bg-primary-foreground/10"}`} />}
-                    </div>
-                  ))}
-                </div>
-                <div className="h-1.5 w-full rounded-full bg-primary-foreground/10 overflow-hidden">
-                  <motion.div
-                    className="h-full bg-gradient-to-r from-accent/70 via-accent to-accent/70"
-                    initial={false}
-                    animate={{ width: `${(stepNum / 3) * 100}%` }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                  />
-                </div>
-                <p className="text-[11px] uppercase tracking-widest text-primary-foreground/50 mt-2">
-                  Step {stepNum} of 3
-                </p>
-              </div>
-
-              <h2 className="font-heading text-2xl md:text-3xl font-bold mb-1">
-                {step === "form1" && "Personal Details"}
-                {step === "form2" && "Your Journey"}
-                {step === "form3" && "Confirm & Proceed"}
-              </h2>
-              <p className="text-primary-foreground/60 text-sm mb-6">{pkg.title} — ${pkg.price.toLocaleString()}</p>
-
-              {step === "form1" && (
-                <div className="space-y-4">
-                  <FieldInput label="Full Name" value={form.fullName} onChange={(v) => setForm({ ...form, fullName: v })} />
-                  <FieldInput label="Email Address" type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
-                  <FieldInput label="Phone / WhatsApp Number" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
-                  <FieldInput label="Country you are relocating from" value={form.country} onChange={(v) => setForm({ ...form, country: v })} />
-                  <div className="flex justify-between pt-4">
-                    <Button variant="outline-light" onClick={() => setStep("details")}><ArrowLeft size={16} /> Back</Button>
-                    <Button variant="gold" onClick={() => setStep("form2")} disabled={!form.fullName.trim() || !form.email.trim() || !form.phone.trim()}>Continue <ArrowRight size={16} /></Button>
-                  </div>
-                </div>
-              )}
-
-              {step === "form2" && (
-                <div className="space-y-5">
-                  <FieldRadio
-                    label="Number of people relocating"
-                    value={form.travelers}
-                    onChange={(v) => setForm({ ...form, travelers: v, childrenCount: v === "Family" ? form.childrenCount : "" })}
-                    options={["Solo", "Couple", "Family"]}
-                  />
-                  {form.travelers === "Family" && (
-                    <FieldInput
-                      label="How many children?"
-                      type="number"
-                      value={form.childrenCount}
-                      onChange={(v) => setForm({ ...form, childrenCount: v })}
-                    />
-                  )}
-                  <FieldRadio label="Primary purpose" value={form.purpose} onChange={(v) => setForm({ ...form, purpose: v })} options={["Vacation", "Relocation", "Investment", "Exploring options"]} />
-                  <FieldRadio label="Preferred lifestyle" value={form.lifestyle} onChange={(v) => setForm({ ...form, lifestyle: v })} options={["Urban city life", "Quiet suburban", "Nature and outdoors", "Mixed"]} />
-                  <FieldRadio label="Approximate timeline" value={form.timeline} onChange={(v) => setForm({ ...form, timeline: v })} options={["Within 3 months", "3–6 months", "6–12 months", "Just exploring"]} />
-                  <div className="flex justify-between pt-4">
-                    <Button variant="outline-light" onClick={() => setStep("form1")}><ArrowLeft size={16} /> Back</Button>
-                    <Button variant="gold" onClick={() => setStep("form3")} disabled={!form.travelers || !form.purpose}>Continue <ArrowRight size={16} /></Button>
-                  </div>
-                </div>
-              )}
-
-              {step === "form3" && (
-                <div>
-                  <div className="bg-primary-foreground/5 border border-accent/20 rounded-xl p-5 space-y-3 mb-6">
-                    <SummaryRow label="Package" value={`${pkg.title} — $${pkg.price.toLocaleString()}`} />
-                    <SummaryRow label="Name" value={form.fullName} />
-                    <SummaryRow label="Email" value={form.email} />
-                    <SummaryRow label="Phone" value={form.phone} />
-                    <SummaryRow label="From" value={form.country} />
-                    <SummaryRow
-                      label="Travelers"
-                      value={
-                        form.travelers === "Family" && form.childrenCount
-                          ? `Family (${form.childrenCount} ${parseInt(form.childrenCount) === 1 ? "child" : "children"})`
-                          : form.travelers
-                      }
-                    />
-                    <SummaryRow label="Purpose" value={form.purpose} />
-                    <SummaryRow label="Lifestyle" value={form.lifestyle} />
-                    <SummaryRow label="Timeline" value={form.timeline} />
-                  </div>
-                  <div className="flex justify-between">
-                    <Button variant="outline-light" onClick={() => setStep("form2")} disabled={submitting}><ArrowLeft size={16} /> Back</Button>
-                    <Button variant="gold" size="lg" onClick={handleSubmit} disabled={submitting}>
-                      {submitting ? (
-                        <>Saving <Loader2 size={18} className="animate-spin" /></>
-                      ) : (
-                        <>Proceed to Payment <ArrowRight size={18} /></>
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </motion.div>
-          )}
         </AnimatePresence>
       </DialogContent>
     </Dialog>
   );
 };
 
-const FieldInput = ({ label, value, onChange, type = "text" }: { label: string; value: string; onChange: (v: string) => void; type?: string }) => (
-  <div>
-    <Label className="text-primary-foreground/80 text-xs uppercase tracking-widest mb-1.5 block">{label}</Label>
-    <Input
-      type={type}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="bg-primary-foreground/5 border-primary-foreground/15 text-primary-foreground focus-visible:ring-sky-400 focus-visible:border-sky-400"
-    />
-  </div>
-);
+const FieldInput = ({
+  label,
+  value,
+  onChange,
+  onBlur,
+  type = "text",
+  autoComplete,
+  placeholder,
+  hint,
+  error,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  onBlur?: () => void;
+  type?: string;
+  autoComplete?: string;
+  placeholder?: string;
+  hint?: string;
+  error?: string;
+}) => {
+  const id = `field-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+  return (
+    <div>
+      <Label htmlFor={id} className="text-primary-foreground/80 text-xs uppercase tracking-widest mb-1.5 block">
+        {label}
+      </Label>
+      <Input
+        id={id}
+        type={type}
+        value={value}
+        autoComplete={autoComplete}
+        placeholder={placeholder}
+        aria-invalid={Boolean(error)}
+        aria-describedby={error || hint ? `${id}-help` : undefined}
+        onChange={(e) => onChange(e.target.value)}
+        onBlur={onBlur}
+        className="h-11 bg-primary-foreground/5 border-primary-foreground/15 text-primary-foreground placeholder:text-primary-foreground/30 focus-visible:ring-accent focus-visible:border-accent"
+      />
+      {(error || hint) && (
+        <p id={`${id}-help`} className={`text-xs mt-1.5 ${error ? "text-red-300" : "text-primary-foreground/50"}`}>
+          {error || hint}
+        </p>
+      )}
+    </div>
+  );
+};
 
-const FieldRadio = ({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: string[] }) => (
+const FieldRadio = ({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: string[];
+}) => (
   <div>
     <Label className="text-primary-foreground/80 text-xs uppercase tracking-wider mb-2 block">{label}</Label>
     <RadioGroup value={value} onValueChange={onChange} className="grid grid-cols-2 gap-2">
       {options.map((o) => (
-        <label key={o} className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border cursor-pointer transition-all text-sm ${value === o ? "border-accent bg-accent/10 text-primary-foreground" : "border-primary-foreground/15 text-primary-foreground/70 hover:border-accent/40"}`}>
+        <label
+          key={o}
+          className={`flex items-center gap-2 px-3 py-3 rounded-lg border cursor-pointer transition-all text-sm ${
+            value === o
+              ? "border-accent bg-accent/10 text-primary-foreground"
+              : "border-primary-foreground/15 text-primary-foreground/70 hover:border-accent/40"
+          }`}
+        >
           <RadioGroupItem value={o} className="border-primary-foreground/40 text-accent" />
           {o}
         </label>
@@ -421,10 +573,36 @@ const FieldRadio = ({ label, value, onChange, options }: { label: string; value:
   </div>
 );
 
-const SummaryRow = ({ label, value }: { label: string; value: string }) => (
+const SummarySection = ({
+  title,
+  onEdit,
+  children,
+}: {
+  title: string;
+  onEdit?: () => void;
+  children: React.ReactNode;
+}) => (
+  <div className="p-4 sm:p-5">
+    <div className="flex items-center justify-between mb-2">
+      <p className="text-[11px] font-semibold uppercase tracking-widest text-accent">{title}</p>
+      {onEdit && (
+        <button
+          type="button"
+          onClick={onEdit}
+          className="text-xs text-primary-foreground/60 hover:text-accent inline-flex items-center gap-1"
+        >
+          <Pencil size={12} /> Edit
+        </button>
+      )}
+    </div>
+    <div className="space-y-1.5">{children}</div>
+  </div>
+);
+
+const SummaryRow = ({ label, value, strong }: { label: string; value: string; strong?: boolean }) => (
   <div className="flex justify-between text-sm gap-4">
-    <span className="text-primary-foreground/60">{label}</span>
-    <span className="font-medium text-right">{value || "—"}</span>
+    <span className={strong ? "font-semibold" : "text-primary-foreground/60"}>{label}</span>
+    <span className={`text-right break-all ${strong ? "font-bold text-accent" : "font-medium"}`}>{value || "—"}</span>
   </div>
 );
 

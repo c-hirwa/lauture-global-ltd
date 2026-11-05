@@ -1,20 +1,13 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Home, Plane, Globe, Shield, Building, Map, ArrowRight, UserCircle } from "lucide-react";
+import { ArrowRight, UserCircle } from "lucide-react";
+import { SERVICES } from "@/data/services";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Pricing from "@/components/Pricing";
 import TourismPackages from "@/components/TourismPackages";
 
-const services = [
-  { icon: Home, title: "Residential Relocation", desc: "From finding the perfect home to settling in, we handle every detail of your move to Rwanda. Our team scouts properties, negotiates leases, and ensures a smooth transition." },
-  { icon: Plane, title: "Vacation Planning", desc: "Discover Rwanda's gorilla treks, Lake Kivu retreats, and vibrant Kigali nightlife with curated itineraries designed around your interests and budget." },
-  { icon: Globe, title: "Business Consulting", desc: "Starting a business in Rwanda? We guide you through company registration, permits, and local partnerships to get you operational quickly." },
-  { icon: Shield, title: "Visa & Immigration", desc: "Navigate Rwanda's immigration system with confidence. We assist with work permits, residency visas, and all required documentation." },
-  { icon: Building, title: "Corporate Relocation", desc: "Comprehensive packages for companies moving employees to Rwanda — including housing, schooling, and cultural orientation programs." },
-  { icon: Map, title: "Cultural Integration", desc: "Language classes, local networking events, and guided community introductions to help you feel at home in Rwanda." },
-];
 
 const Services = () => (
   <>
@@ -32,13 +25,17 @@ const Services = () => (
 
       <section className="py-20">
         <div className="container grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((s) => (
-            <div key={s.title} className="bg-card rounded-lg p-8 border border-border shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-elevated)] transition-shadow">
-              <div className="w-14 h-14 rounded-lg bg-secondary/15 flex items-center justify-center mb-5">
-                <s.icon className="text-secondary" size={28} />
+          {SERVICES.map((s) => (
+            <div
+              key={s.id}
+              id={s.id}
+              className="scroll-mt-28 bg-card rounded-2xl p-8 border border-border shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-elevated)] hover:border-accent/40 transition-all"
+            >
+              <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-5">
+                <s.icon className="text-accent" size={26} strokeWidth={1.75} />
               </div>
               <h3 className="font-heading font-semibold text-xl mb-3">{s.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">{s.desc}</p>
+              <p className="text-muted-foreground text-sm leading-relaxed">{s.description}</p>
             </div>
           ))}
         </div>

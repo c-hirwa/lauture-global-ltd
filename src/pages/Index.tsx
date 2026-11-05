@@ -1,36 +1,27 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, MapPin, Handshake, Compass, ShieldCheck } from "lucide-react";
 import heroSlide1 from "@/assets/hero-slide-1.webp";
 import aboutExpo from "@/assets/about-expo.webp";
 import ctaKigali from "@/assets/cta-kigali.webp";
-import serviceVacation from "@/assets/service-vacation.webp";
-import serviceMoving from "@/assets/service-moving.webp";
-import serviceIntegration from "@/assets/service-integration.webp";
-import serviceConsultation from "@/assets/service-consultation.webp";
-import serviceExplore from "@/assets/service-explore.webp";
-import serviceInvestment from "@/assets/service-investment.webp";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GuidesSection from "@/components/GuidesSection";
 import PartnersSection from "@/components/PartnersSection";
 import FaqSection from "@/components/FaqSection";
+import { SERVICES } from "@/data/services";
+import { partnerGroups } from "@/data/partners";
 
+const partnerCount = partnerGroups.reduce((n, g) => n + g.items.length, 0);
 
-const services = [
-  { image: serviceVacation, title: "Personalized Vacation Packages and Exploration Plans" },
-  { image: serviceMoving, title: "Moving abroad made easier than ever" },
-  { image: serviceIntegration, title: "Local Integration Support" },
-  { image: serviceConsultation, title: "Tailored Settlement Consultation, Coaching and Assistance" },
-  { image: serviceExplore, title: "Exploring this beautiful country" },
-  { image: serviceInvestment, title: "Investment & Business Opportunities", desc: "Guide clients through Rwanda's growing investment landscape, from real estate to business ventures, with expert local insight." },
+// Only facts that are true today. Add real client numbers/testimonials here when available.
+const trustPoints = [
+  { icon: MapPin, title: "Based in Kigali", desc: "A local team with an office in Remera" },
+  { icon: Handshake, title: `${partnerCount} vetted partners`, desc: "Hotels, lodges, real estate & tour operators" },
+  { icon: Compass, title: "Explore, relocate, invest", desc: "One team from first visit to settling in" },
+  { icon: ShieldCheck, title: "Secure payments", desc: "Mobile Money or card, via Pesapal" },
 ];
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } }),
-};
 
 const slideFromLeft = {
   hidden: { opacity: 0, x: -60 },
@@ -59,46 +50,56 @@ const Index = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
 
           <div className="container relative z-10 py-32">
-            <motion.div initial="hidden" animate="visible" className="max-w-3xl">
-              <motion.div
-                variants={fadeUp}
-                custom={0}
-                className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 mb-6"
-              >
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 mb-6">
                 <Sparkles size={14} className="text-accent" />
                 <span className="text-primary-foreground text-xs font-medium tracking-widest uppercase">
                   Premium Exploration & Relocation Experts
                 </span>
-              </motion.div>
-              <motion.h1
-                variants={fadeUp}
-                custom={1}
-                className="font-heading text-5xl md:text-6xl lg:text-7xl font-semibold text-primary-foreground leading-[1.05] mb-6 tracking-tight"
-              >
+              </div>
+              <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-semibold text-primary-foreground leading-[1.05] mb-6 tracking-tight">
                 Explore the Land of a Thousand Hills or{" "}
                 <span className="text-gradient-gold italic">Make Rwanda Your New Home!</span>
-              </motion.h1>
-              <motion.p
-                variants={fadeUp}
-                custom={2}
-                className="text-primary-foreground/85 text-lg md:text-xl mb-10 leading-relaxed max-w-2xl"
-              >
+              </h1>
+              <p className="text-primary-foreground/85 text-lg md:text-xl mb-10 leading-relaxed max-w-2xl">
                 Expert guidance for your exploration or relocation to Africa's safest, most vibrant destination.
-              </motion.p>
-              <motion.div variants={fadeUp} custom={3}>
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Button variant="gold" size="lg" asChild className="px-8">
-                  <Link to="/services">
-                    Explore Our Services <ArrowRight size={18} />
+                  <Link to="/services#pricing">
+                    See Packages &amp; Pricing <ArrowRight size={18} />
                   </Link>
                 </Button>
-              </motion.div>
-            </motion.div>
+                <Button variant="outline-light" size="lg" asChild className="px-8 bg-black/10 backdrop-blur-sm">
+                  <Link to="/services">Explore Our Services</Link>
+                </Button>
+              </div>
+            </div>
           </div>
 
           {/* Scroll hint */}
           <div className="absolute bottom-10 right-8 z-20 hidden md:flex items-center gap-3 text-primary-foreground/60 text-xs uppercase tracking-widest float">
             <span className="w-12 h-px bg-primary-foreground/40" />
             Scroll
+          </div>
+        </section>
+
+        {/* TRUST STRIP */}
+        <section aria-label="Why Lauture Global" className="relative z-10 bg-background pt-16 md:pt-20 pb-4">
+          <div className="container">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+              {trustPoints.map(({ icon: Icon, title, desc }) => (
+                <li key={title} className="flex items-start gap-4 rounded-2xl bg-card border border-border p-5 premium-shadow">
+                  <span className="w-11 h-11 rounded-xl bg-primary text-accent flex items-center justify-center shrink-0">
+                    <Icon size={20} strokeWidth={1.75} />
+                  </span>
+                  <div>
+                    <p className="font-heading font-semibold text-foreground leading-snug">{title}</p>
+                    <p className="text-sm text-muted-foreground leading-snug mt-1">{desc}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
@@ -168,38 +169,47 @@ const Index = () => {
               </p>
             </motion.div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {services.map((s, idx) => (
+              {SERVICES.map((s, idx) => (
                 <motion.div
-                  key={s.title}
+                  key={s.id}
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.6, delay: idx * 0.12, ease: [0.22, 1, 0.36, 1] }}
                   className="group relative rounded-2xl overflow-hidden glass hover:border-accent/50 transition-all duration-500 hover:-translate-y-2"
                 >
-                  <div className="h-52 overflow-hidden relative">
-                    <img
-                      src={s.image}
-                      alt={s.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      loading="lazy"
-                      width={640}
-                      height={512}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  </div>
-                  <div className="p-6">
-                    <div className="w-12 h-0.5 bg-accent mb-4 group-hover:w-20 transition-all duration-500" />
-                    <h3 className="font-heading font-semibold text-primary-foreground text-xl leading-snug">
-                      {s.title}
-                    </h3>
-                  </div>
+                  <Link
+                    to={`/services#${s.id}`}
+                    className="block h-full rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  >
+                    <div className="h-52 overflow-hidden relative">
+                      <img
+                        src={s.image}
+                        alt=""
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        loading="lazy"
+                        width={640}
+                        height={512}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                    </div>
+                    <div className="p-6">
+                      <div className="w-12 h-0.5 bg-accent mb-4 group-hover:w-20 transition-all duration-500" />
+                      <h3 className="font-heading font-semibold text-primary-foreground text-xl leading-snug mb-2">
+                        {s.title}
+                      </h3>
+                      <p className="text-sm text-primary-foreground/70 leading-relaxed mb-4">{s.summary}</p>
+                      <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent">
+                        Learn more <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                      </span>
+                    </div>
+                  </Link>
                 </motion.div>
               ))}
             </div>
             <div className="text-center mt-16">
               <Button variant="gold" size="lg" asChild className="px-8">
-                <Link to="/services">View Our Packages <ArrowRight size={18} /></Link>
+                <Link to="/services#pricing">View Our Packages <ArrowRight size={18} /></Link>
               </Button>
             </div>
           </div>

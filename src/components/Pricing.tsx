@@ -93,7 +93,7 @@ const Pricing = () => {
   const openPackage = (pkg: PackageData) => { setSelected(pkg); setOpen(true); };
 
   return (
-    <section id="pricing" className="relative py-24 md:py-32 bg-background overflow-hidden">
+    <section id="pricing" className="scroll-mt-16 relative py-24 md:py-32 bg-background overflow-hidden">
       <div className="absolute inset-0 opacity-30 pointer-events-none" style={{ background: "var(--gradient-radial)" }} />
       <div className="container relative z-10">
         <motion.div

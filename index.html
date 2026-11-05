@@ -35,7 +35,14 @@
 <script>
 	window.$zoho = window.$zoho || {};
 	$zoho.salesiq = $zoho.salesiq || {
-		ready: function(){}
+		ready: function(){
+			// On phones the "Hey there!" teaser covers page buttons; keep just the chat icon.
+			try {
+				if (window.matchMedia("(max-width: 767px)").matches) {
+					$zoho.salesiq.floatbutton.coin.hidetooltip();
+				}
+			} catch (e) {}
+		}
 	}
 </script>
 <script id = "zsiqscript" src = "https://salesiq.zoho.com/widget?wc=siq4360dc5157889bb0c90d101bcda0593b3145837f0f9ba67812c7467fd26c43f5" defer >
