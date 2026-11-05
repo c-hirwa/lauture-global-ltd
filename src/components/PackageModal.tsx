@@ -114,9 +114,27 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
     }
   };
 
-  const payByMobileMoney = () => {
-    setPaymentMethod("momo");
-    setStep("success");
+  const payByMobileMoney = async () => {
+    if (!pkg) return;
+    setSubmitting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("pesapal-create-order", {
+        body: {
+          packageType: pkg.id,
+          fullName: form.fullName,
+          email: form.email,
+          phone: form.phone,
+        },
+      });
+      if (error) throw error;
+      if (!data?.redirect_url) throw new Error(data?.error || "Unable to start Mobile Money payment right now.");
+      setPaymentMethod("momo");
+      window.location.assign(data.redirect_url);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unable to start Mobile Money payment right now.";
+      toast.error(message);
+      setSubmitting(false);
+    }
   };
 
   const payWithPesapal = async () => {
@@ -236,7 +254,7 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
                   <div>
                     <div className="font-semibold text-sm">Pay via Mobile Money (MTN MoMo / Airtel)</div>
                     <div className="text-xs text-primary-foreground/60 leading-relaxed">
-                      Our team sends you the payment prompt and confirms your booking.
+                      Secure Pesapal checkout — pay with MTN MoMo or Airtel Money.
                     </div>
                   </div>
                 </button>
