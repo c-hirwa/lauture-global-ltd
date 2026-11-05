@@ -19,6 +19,8 @@ const Partners = lazy(() => import("./pages/Partners.tsx"));
 const Login = lazy(() => import("./pages/Login.tsx"));
 const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
 const Success = lazy(() => import("./pages/Success.tsx"));
+const PaymentSuccess = lazy(() => import("./pages/PaymentSuccess.tsx"));
+const PaymentFailed = lazy(() => import("./pages/PaymentFailed.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout.tsx"));
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin.tsx"));
@@ -72,6 +74,8 @@ const App = () => (
                   <Route path="bookings" element={<AdminBookings />} />
                   <Route path="notifications" element={<AdminNotifications />} />
                 </Route>
+                <Route path="/payment-success" element={<PaymentSuccess />} />
+                <Route path="/payment-failed" element={<PaymentFailed />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

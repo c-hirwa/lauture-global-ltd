@@ -47,7 +47,7 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
   const [step, setStep] = useState<Step>("details");
   const [form, setForm] = useState(initialForm);
   const [submitting, setSubmitting] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "momo" | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "momo" | "pesapal" | null>(null);
 
   if (!pkg) return null;
 
@@ -117,6 +117,33 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
   const payByMobileMoney = () => {
     setPaymentMethod("momo");
     setStep("success");
+  };
+
+  const payWithPesapal = async () => {
+    if (!pkg) return;
+    setSubmitting(true);
+    try {
+      const response = await fetch("/api/pesapal-create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          packageType: pkg.id,
+          fullName: form.fullName,
+          email: form.email,
+          phone: form.phone,
+        }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.redirect_url) {
+        throw new Error(data.error || "Unable to start Pesapal payment. Please try again.");
+      }
+      window.location.assign(data.redirect_url);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unable to start Pesapal payment. Please try again.";
+      toast.error(message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -210,6 +237,21 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
                     <div className="font-semibold text-sm">Pay via Mobile Money (MTN MoMo / Airtel)</div>
                     <div className="text-xs text-primary-foreground/60 leading-relaxed">
                       Our team sends you the payment prompt and confirms your booking.
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={payWithPesapal}
+                  disabled={submitting}
+                  className="w-full text-left flex items-start gap-4 p-5 rounded-xl border border-primary-foreground/15 hover:border-accent bg-primary-foreground/5 hover:bg-accent/10 transition-all disabled:opacity-60"
+                >
+                  <CreditCard className="text-accent mt-0.5" size={22} />
+                  <div>
+                    <div className="font-semibold text-sm">Pay securely with Pesapal</div>
+                    <div className="text-xs text-primary-foreground/60 leading-relaxed">
+                      Pay with card or Mobile Money through Pesapal.
                     </div>
                   </div>
                 </button>
@@ -372,7 +414,7 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
 
 const FieldInput = ({ label, value, onChange, type = "text" }: { label: string; value: string; onChange: (v: string) => void; type?: string }) => (
   <div>
-    <Label className="text-primary-foreground/80 text-xs uppercase tracking-wider mb-1.5 block">{label}</Label>
+    <Label className="text-primary-foreground/80 text-xs uppercase tracking-widest mb-1.5 block">{label}</Label>
     <Input
       type={type}
       value={value}
