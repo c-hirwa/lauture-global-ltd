@@ -322,7 +322,7 @@ const Dashboard = () => {
 
 const upcomingSessions = (bs: BookingRecord[]) =>
   bs
-    .filter((b) => b.start_time && new Date(b.start_time).getTime() > Date.now() && b.status !== "cancelled")
+    .filter((b) => b.start_time && new Date(b.start_time).getTime() > Date.now() && b.status?.toLowerCase() !== "cancelled")
     .sort((a, b) => new Date(a.start_time!).getTime() - new Date(b.start_time!).getTime());
 
 const PAYABLE_PACKAGES = new Set(["basic", "comprehensive", "premium"]);
@@ -506,7 +506,7 @@ const BookingCard = ({ booking: b }: { booking: BookingRecord }) => {
 const StatCard = ({ label, value }: { label: string; value: string }) => (
   <div className="bg-card rounded-xl border border-border p-5 shadow-sm">
     <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">{label}</div>
-    <div className="font-heading text-lg font-bold text-foreground truncate">{value}</div>
+    <div className="font-heading text-lg font-bold text-foreground leading-snug line-clamp-2">{value}</div>
   </div>
 );
 

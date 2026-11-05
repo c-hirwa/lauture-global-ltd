@@ -98,7 +98,7 @@ const AdminDashboard = () => {
           supabase.from("clients").select("id", { count: "exact", head: true }),
           supabase.from("clients").select("id", { count: "exact", head: true }).gte("created_at", weekAgo),
           supabase.from("bookings").select("id", { count: "exact", head: true }),
-          supabase.from("bookings").select("id", { count: "exact", head: true }).eq("status", "pending"),
+          supabase.from("bookings").select("id", { count: "exact", head: true }).ilike("status", "pending"),
           supabase.from("clients").select("id", { count: "exact", head: true }).eq("payment_status", "pending"),
           // Revenue = money actually collected through Pesapal, not manually set statuses.
           supabase.from("transactions").select("amount, created_at").eq("status", "completed"),
@@ -108,7 +108,7 @@ const AdminDashboard = () => {
             .select("id, attendee_name, attendee_email, package_title, event_type, start_time")
             .gte("start_time", now.toISOString())
             .lte("start_time", weekAhead)
-            .neq("status", "cancelled")
+            .not("status", "ilike", "cancelled")
             .order("start_time", { ascending: true })
             .limit(6),
           supabase
@@ -242,15 +242,27 @@ const AdminDashboard = () => {
     },
   ];
 
+  const plural = (n: number, one: string, many: string) => (n === 1 ? one : many);
+  const review = attention?.paymentsToReview ?? 0;
+  const pending = attention?.pendingBookings ?? 0;
+  const unpaid = attention?.unpaidEnquiries ?? 0;
   const attentionItems = [
     {
-      count: attention?.paymentsToReview ?? 0,
-      label: "payment(s) need review (amount mismatch)",
+      count: review,
+      label: plural(review, "payment needs review (amount mismatch)", "payments need review (amount mismatch)"),
       to: "/admin/payments",
       urgent: true,
     },
-    { count: attention?.pendingBookings ?? 0, label: "booking(s) waiting for confirmation", to: "/admin/bookings" },
-    { count: attention?.unpaidEnquiries ?? 0, label: "client(s) haven't paid yet", to: "/admin/clients" },
+    {
+      count: pending,
+      label: plural(pending, "booking is waiting for confirmation", "bookings are waiting for confirmation"),
+      to: "/admin/bookings",
+    },
+    {
+      count: unpaid,
+      label: plural(unpaid, "client hasn't paid yet", "clients haven't paid yet"),
+      to: "/admin/clients",
+    },
   ].filter((i) => i.count > 0);
 
   const iconFor = { client: Users, booking: CalendarClock, document: FileText, payment: CreditCard } as const;

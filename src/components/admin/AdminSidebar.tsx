@@ -76,14 +76,20 @@ const AdminSidebar = () => {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2.5 rounded-lg bg-[hsl(var(--navy-dark))] text-white shadow-md"
-        aria-label="Open menu"
-      >
-        <Menu size={22} />
-      </button>
+      {/* Small screens: a slim top bar instead of a floating button that covers content on scroll. */}
+      <header className="lg:hidden fixed top-0 inset-x-0 z-30 h-14 bg-[hsl(var(--navy-dark))] text-white flex items-center gap-3 px-4 shadow-md">
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="p-2 -ml-2 rounded-lg hover:bg-white/10"
+          aria-label="Open menu"
+          aria-expanded={open}
+        >
+          <Menu size={22} />
+        </button>
+        <img src={logo} alt="Lauture Global" className="h-7 w-auto" />
+        <span className="ml-auto text-[10px] uppercase tracking-widest text-white/50">Admin</span>
+      </header>
 
       {open && (
         <div className="lg:hidden fixed inset-0 z-40 bg-black/50" onClick={() => setOpen(false)} />

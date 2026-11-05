@@ -36,6 +36,10 @@ const StatusBadge = ({
 }) => {
   if (!status) return <span className="text-slate-400">—</span>;
 
+  // Cal.com reports bookings as e.g. "ACCEPTED"; normalise case and treat accepted as confirmed.
+  status = status.toLowerCase();
+  if (kind === "booking" && status === "accepted") status = "confirmed";
+
   const map =
     kind === "payment"
       ? PAYMENT_STYLES
