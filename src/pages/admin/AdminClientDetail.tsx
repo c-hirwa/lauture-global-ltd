@@ -190,16 +190,9 @@ const AdminClientDetail = () => {
       });
       if (insertError) throw insertError;
 
-      await supabase.from("notifications").insert({
-        recipient_email: client.email,
-        subject: `New document: ${docTitle.trim()}`,
-        body: "A new document has been shared with you in your client dashboard.",
-        channel: "email",
-        status: "sent",
-        related_client_id: client.id,
-      });
-
-      toast.success("Document uploaded");
+      // The client email (and its entry in Notifications) is sent server-side by /api/notify
+      // via a Supabase webhook on documents INSERT, so nothing to log here.
+      toast.success("Document uploaded — the client will be emailed");
       setDocTitle("");
       setDocDescription("");
       setDocCategory("");

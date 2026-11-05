@@ -1,11 +1,12 @@
 // Pesapal API 3.0 (JSON) helpers shared by the Vercel functions in /api.
 // Docs: https://developer.pesapal.com/how-to-integrate/e-commerce/api-30-json/api-reference
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { Resend } from "resend";
+import { paymentConfirmedClient, paymentConfirmedTeam, sendEmail, teamInbox } from "./email.js";
 
 // Minimal request/response shapes for Vercel Node functions.
 export type ApiRequest = {
   method?: string;
+  headers?: Record<string, string | string[] | undefined>;
   body?: Record<string, unknown> | null;
   query?: Record<string, string | string[] | undefined>;
 };
@@ -47,9 +48,6 @@ export const firstParam = (value: unknown): string | undefined => {
   const v = Array.isArray(value) ? value[0] : value;
   return typeof v === "string" && v.trim() ? v.trim() : undefined;
 };
-
-const escapeHtml = (value: unknown) =>
-  String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
 // Tokens last ~5 minutes; fetch a fresh one per request.
 async function getToken(): Promise<string> {
@@ -204,9 +202,6 @@ async function syncClientPaymentStatus(supabase: SupabaseClient, row: Transactio
 }
 
 async function sendConfirmationEmailOnce(supabase: SupabaseClient, row: TransactionRow, confirmationCode?: string) {
-  const resendKey = process.env.RESEND_API_KEY;
-  if (!resendKey) return;
-
   // Claim the email atomically so the IPN and the success page can't both send it.
   const { data: claimed, error } = await supabase
     .from("transactions")
@@ -217,25 +212,31 @@ async function sendConfirmationEmailOnce(supabase: SupabaseClient, row: Transact
   if (error) throw error;
   if (!claimed?.length) return;
 
-  const resend = new Resend(resendKey);
-  const { error: sendError } = await resend.emails.send({
-    from: process.env.RESEND_FROM || "Lauture Global LTD <onboarding@resend.dev>",
-    to: [row.email],
-    subject: "Payment confirmed - Lauture Global LTD",
-    html: `
-      <div style="font-family: sans-serif; color: #0A1128;">
-        <h2 style="color: #0D1B5E;">Thank you, ${escapeHtml(row.full_name || "there")}!</h2>
-        <p>Your payment of <strong>${escapeHtml(row.currency)} ${escapeHtml(row.amount)}</strong> for the
-        <strong>${escapeHtml(PACKAGE_NAMES[row.package_type] || row.package_type)}</strong> package has been confirmed.</p>
-        <p>Transaction reference: <strong>${escapeHtml(row.merchant_reference)}</strong></p>
-        ${confirmationCode ? `<p>Confirmation code: <strong>${escapeHtml(confirmationCode)}</strong></p>` : ""}
-        <p>Our team will be in touch shortly to begin your journey.</p>
-        <p style="color: #D4AF37;">— Lauture Global LTD</p>
-      </div>`,
-  });
-  if (sendError) {
-    // Release the claim so a later sync can retry.
+  const { data: client } = await supabase
+    .from("clients")
+    .select("id")
+    .ilike("email", row.email)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle<{ id: string }>();
+
+  const info = {
+    full_name: row.full_name,
+    email: row.email,
+    amount: row.amount,
+    currency: row.currency,
+    packageName: PACKAGE_NAMES[row.package_type] || row.package_type,
+    merchant_reference: row.merchant_reference,
+    confirmation_code: confirmationCode ?? null,
+  };
+
+  const [toClient] = await Promise.all([
+    sendEmail(supabase, { to: row.email, content: paymentConfirmedClient(info), relatedClientId: client?.id }),
+    sendEmail(supabase, { to: teamInbox(), content: paymentConfirmedTeam(info), relatedClientId: client?.id }),
+  ]);
+
+  if (toClient === "failed") {
+    // Release the claim so a later status check can retry the client email.
     await supabase.from("transactions").update({ confirmation_email_sent_at: null }).eq("id", row.id);
-    throw sendError;
   }
 }
