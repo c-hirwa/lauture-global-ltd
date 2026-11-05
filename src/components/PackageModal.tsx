@@ -9,7 +9,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, ArrowRight, ArrowLeft, Sparkles, Loader2, CheckCircle2, CreditCard, Smartphone } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
-import { createCheckoutSession } from "@/lib/createCheckout";
+// Stripe disabled — payments go through Pesapal only.
+// import { createCheckoutSession } from "@/lib/createCheckout";
 
 export type PackageData = {
   id: string;
@@ -96,23 +97,24 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
     }
   };
 
-  const payByCard = async () => {
-    if (!pkg) return;
-    setSubmitting(true);
-    try {
-      await createCheckoutSession({
-        packageType: pkg.id,
-        amount: pkg.price * 100,
-        customerEmail: form.email,
-        customerName: form.fullName,
-      });
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Unable to start checkout right now.";
-      toast.error(message);
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  // Stripe disabled — payments go through Pesapal only.
+  // const payByCard = async () => {
+  //   if (!pkg) return;
+  //   setSubmitting(true);
+  //   try {
+  //     await createCheckoutSession({
+  //       packageType: pkg.id,
+  //       amount: pkg.price * 100,
+  //       customerEmail: form.email,
+  //       customerName: form.fullName,
+  //     });
+  //   } catch (err: unknown) {
+  //     const message = err instanceof Error ? err.message : "Unable to start checkout right now.";
+  //     toast.error(message);
+  //   } finally {
+  //     setSubmitting(false);
+  //   }
+  // };
 
   const payByMobileMoney = async () => {
     if (!pkg) return;
@@ -229,6 +231,7 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
               </p>
 
               <div className="space-y-4">
+                {/* Stripe disabled — payments go through Pesapal only.
                 <button
                   type="button"
                   onClick={payByCard}
@@ -243,6 +246,7 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
                     </div>
                   </div>
                 </button>
+                */}
 
                 <button
                   type="button"

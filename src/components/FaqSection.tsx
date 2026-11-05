@@ -30,7 +30,7 @@ const faqs = [
   {
     question: "What payment methods do you accept?",
     answer:
-      "We accept international card payments (Visa, Mastercard) via our secure Stripe checkout, as well as Mobile Money (MTN MoMo and Airtel Money) for clients in the region. You choose your preferred method right in the booking flow.",
+      "All payments go through our secure Pesapal checkout, which accepts Mobile Money (MTN MoMo and Airtel Money) as well as card payments (Visa, Mastercard). You choose your preferred method right in the booking flow.",
   },
   {
     question: "How do I get started?",

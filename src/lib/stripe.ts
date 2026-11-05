@@ -1,7 +1,10 @@
-import { loadStripe } from "@stripe/stripe-js";
+// Stripe disabled — payments go through Pesapal only. Uncomment to restore.
+// import { loadStripe } from "@stripe/stripe-js";
+//
+// const publishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY as string | undefined;
+//
+// export const stripePromise = publishableKey
+//   ? loadStripe(publishableKey)
+//   : Promise.resolve(null);
 
-const publishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY as string | undefined;
-
-export const stripePromise = publishableKey
-  ? loadStripe(publishableKey)
-  : Promise.resolve(null);
+export {};

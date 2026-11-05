@@ -18,7 +18,8 @@ const Contact = lazy(() => import("./pages/Contact.tsx"));
 const Partners = lazy(() => import("./pages/Partners.tsx"));
 const Login = lazy(() => import("./pages/Login.tsx"));
 const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
-const Success = lazy(() => import("./pages/Success.tsx"));
+// Stripe disabled: /success was the Stripe checkout return page.
+// const Success = lazy(() => import("./pages/Success.tsx"));
 const PaymentSuccess = lazy(() => import("./pages/PaymentSuccess.tsx"));
 const PaymentFailed = lazy(() => import("./pages/PaymentFailed.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
@@ -57,7 +58,7 @@ const App = () => (
                 <Route path="/founders" element={<Founders />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/success" element={<Success />} />
+                {/* Stripe disabled: <Route path="/success" element={<Success />} /> */}
                 <Route path="/payment-success" element={<PaymentSuccess />} />
                 <Route path="/payment-failed" element={<PaymentFailed />} />
                 <Route
