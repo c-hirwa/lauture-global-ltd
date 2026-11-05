@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Public pages only. Keep in sync with PAGES in src/components/RouteMeta.tsx. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.lautureglobal.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://www.lautureglobal.com/services</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.lautureglobal.com/about</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.lautureglobal.com/partners</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.lautureglobal.com/resources</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.lautureglobal.com/founders</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.lautureglobal.com/contact</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
+</urlset>

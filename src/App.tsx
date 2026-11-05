@@ -4,7 +4,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Analytics } from "@vercel/analytics/react";
 import ScrollToTop from "./components/ScrollToTop";
+import RouteMeta from "./components/RouteMeta";
 import Index from "./pages/Index.tsx";
 
 // Auth (and with it the Supabase client) is only loaded for portal/admin routes.
@@ -48,6 +50,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
+        <RouteMeta />
+        {/* Vercel Web Analytics: page views per route (enable Analytics in the Vercel project too). */}
+        <Analytics />
         <Suspense fallback={<PageFallback />}>
           <Routes>
             <Route path="/" element={<Index />} />

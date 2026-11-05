@@ -4,21 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Lauture Global LTD — Explore Rwanda with Confidence</title>
-    <meta name="title" content="Lauture Global LTD — Your Gateway to Rwanda" />
-    <meta name="description" content="Premium relocation, tourism, investment and business advisory services in Rwanda. Expert guidance for individuals, families and entrepreneurs." />
-    <meta name="keywords" content="relocate to Rwanda, invest in Rwanda, Rwanda tourism, Rwanda relocation services, Kigali consulting" />
+    <!-- Defaults for the homepage. Each route updates title/description/canonical at runtime
+         (src/components/RouteMeta.tsx); social crawlers that don't run JS see these. -->
+    <title>Lauture Global LTD — Explore, Relocate & Invest in Rwanda</title>
+    <meta name="description" content="Kigali-based experts in relocation, tourism, investment and business advisory in Rwanda. Personalised guidance for individuals, families and entrepreneurs." />
     <meta name="robots" content="index, follow" />
-    <meta name="language" content="English" />
     <meta name="author" content="Lauture Global LTD" />
-
-    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0D1B5E" />
+    <link rel="canonical" href="https://www.lautureglobal.com/" />
+    <link rel="icon" href="/favicon.ico" />
     <meta name="google-site-verification" content="5nyMSQp0sXy-D0Rchp05uHN55zyL_5T86Xx1mdohe2c" />
-    <meta property="og:title" content="Lauture Global LTD — Explore Rwanda with Confidence">
-    <meta property="og:description" content="Discover Rwanda with expert guidance. Travel planning, relocation support, and investment insights to help you explore and thrive with confidence.">
+
+    <!-- Link previews (WhatsApp, Facebook, LinkedIn, X) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Lauture Global LTD" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://www.lautureglobal.com/" />
+    <meta property="og:title" content="Lauture Global LTD — Explore, Relocate & Invest in Rwanda" />
+    <meta property="og:description" content="Kigali-based experts in relocation, tourism, investment and business advisory in Rwanda. Personalised guidance for individuals, families and entrepreneurs." />
+    <meta property="og:image" content="https://www.lautureglobal.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Lauture Global — Explore, relocate and invest in Rwanda" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Lauture Global LTD — Explore Rwanda with Confidence">
-    <meta name="twitter:description" content="Discover Rwanda with expert guidance. Travel planning, relocation support, and investment insights to help you explore and thrive with confidence.">
+    <meta name="twitter:title" content="Lauture Global LTD — Explore, Relocate & Invest in Rwanda" />
+    <meta name="twitter:description" content="Kigali-based experts in relocation, tourism, investment and business advisory in Rwanda. Personalised guidance for individuals, families and entrepreneurs." />
+    <meta name="twitter:image" content="https://www.lautureglobal.com/og-image.jpg" />
 
     <!-- Fonts: connect early and load directly (not via a CSS @import, which delays them). -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -58,12 +69,13 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": "ProfessionalService",
+  "@id": "https://www.lautureglobal.com/#business",
   "name": "Lauture Global LTD",
   "description": "Premium relocation, tourism, investment and business advisory consulting services in Rwanda.",
-  "url": "https://lautureglobal.com",
-  "logo": "https://lautureglobal.com/logo-lauture.png",
-  "image": "https://lautureglobal.com/hero-kigali.webp",
+  "url": "https://www.lautureglobal.com/",
+  "logo": "https://www.lautureglobal.com/logo.webp",
+  "image": "https://www.lautureglobal.com/og-image.jpg",
   "telephone": "+250792866210",
   "email": "info@lautureglobal.com",
   "foundingDate": "2024",
@@ -82,14 +94,20 @@
   "sameAs": [
     "https://www.linkedin.com/company/lauture-global",
     "https://www.facebook.com/lautureglobal",
-    "https://www.instagram.com/lautureglobal"
+    "https://www.instagram.com/lautureglobal",
+    "https://www.tiktok.com/@lauture.global"
   ],
   "priceRange": "$$$",
   "openingHours": "Mo-Fr 08:00-18:00",
-  "servesCuisine": null,
-  "serviceArea": {
-    "@type": "Place",
-    "name": "Rwanda"
+  "areaServed": { "@type": "Country", "name": "Rwanda" },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Relocation packages",
+    "itemListElement": [
+      { "@type": "Offer", "price": "525", "priceCurrency": "USD", "itemOffered": { "@type": "Service", "name": "Basic Relocation Guidance" } },
+      { "@type": "Offer", "price": "1260", "priceCurrency": "USD", "itemOffered": { "@type": "Service", "name": "Comprehensive Strategy & Assistance" } },
+      { "@type": "Offer", "price": "2100", "priceCurrency": "USD", "itemOffered": { "@type": "Service", "name": "Full Premium Service" } }
+    ]
   }
 }
 </script>
