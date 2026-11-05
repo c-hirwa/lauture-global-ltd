@@ -2,9 +2,26 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowRight, CheckCircle2, Clock3, Loader2, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/lib/supabase";
 
 type Status = "loading" | "completed" | "failed" | "pending" | "error";
+
+const POLL_EVERY_MS = 5_000;
+const POLL_FOR_MS = 90_000;
+
+// Maps the API's status (pending | completed | failed | reversed | amount_mismatch) to what we show.
+const toStatus = (value: unknown): Status => {
+  switch (String(value ?? "").toLowerCase()) {
+    case "completed":
+      return "completed";
+    case "failed":
+    case "reversed":
+      return "failed";
+    case "amount_mismatch":
+      return "error";
+    default:
+      return "pending";
+  }
+};
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -18,63 +35,30 @@ const PaymentSuccess = () => {
     }
 
     let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const startedAt = Date.now();
 
     const check = async () => {
+      let next: Status = "pending";
       try {
-        const { data, error } = await supabase.functions.invoke(
-          `pesapal-status?orderTrackingId=${encodeURIComponent(orderTrackingId)}`,
-        );
-
-        if (cancelled) return;
-
-        if (error || !data?.status) {
-          try {
-            const response = await fetch(`/api/pesapal-status?orderTrackingId=${encodeURIComponent(orderTrackingId)}`);
-            const payload = await response.json().catch(() => ({}));
-            if (!response.ok) throw new Error(payload.error || "Unable to verify this payment.");
-            const normalized = String(payload.status || "pending").toLowerCase();
-            setStatus(normalized === "completed" ? "completed" : normalized === "failed" ? "failed" : "pending");
-            return;
-          } catch {
-            setStatus("pending");
-            return;
-          }
-        }
-
-        const normalized = String(data.status || "pending").toLowerCase();
-        setStatus(normalized === "completed" ? "completed" : normalized === "failed" ? "failed" : "pending");
+        const response = await fetch(`/api/pesapal-status?orderTrackingId=${encodeURIComponent(orderTrackingId)}`);
+        const payload = await response.json().catch(() => ({}));
+        if (response.ok) next = toStatus(payload.status);
       } catch {
-        if (!cancelled) {
-          try {
-            const response = await fetch(`/api/pesapal-status?orderTrackingId=${encodeURIComponent(orderTrackingId)}`);
-            const payload = await response.json().catch(() => ({}));
-            if (!response.ok) throw new Error(payload.error || "Unable to verify this payment.");
-            const normalized = String(payload.status || "pending").toLowerCase();
-            setStatus(normalized === "completed" ? "completed" : normalized === "failed" ? "failed" : "pending");
-          } catch {
-            setStatus("error");
-          }
-        }
+        // Network hiccup: keep polling.
+      }
+      if (cancelled) return;
+      setStatus(next);
+      if (next === "pending" && Date.now() - startedAt < POLL_FOR_MS) {
+        timer = setTimeout(check, POLL_EVERY_MS);
       }
     };
 
-    check();
-
-    const interval = setInterval(() => {
-      setStatus((current) => {
-        if (current === "pending" || current === "loading") {
-          void check();
-        }
-        return current;
-      });
-    }, 5000);
-
-    const stop = setTimeout(() => clearInterval(interval), 60000);
+    void check();
 
     return () => {
       cancelled = true;
-      clearInterval(interval);
-      clearTimeout(stop);
+      if (timer) clearTimeout(timer);
     };
   }, [orderTrackingId]);
 

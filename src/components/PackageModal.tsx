@@ -48,7 +48,6 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
   const [step, setStep] = useState<Step>("details");
   const [form, setForm] = useState(initialForm);
   const [submitting, setSubmitting] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "momo" | "pesapal" | null>(null);
 
   if (!pkg) return null;
 
@@ -56,7 +55,6 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
     setStep("details");
     setForm(initialForm);
     setSubmitting(false);
-    setPaymentMethod(null);
   };
   const close = (o: boolean) => {
     if (!o) reset();
@@ -115,29 +113,6 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
   //     setSubmitting(false);
   //   }
   // };
-
-  const payByMobileMoney = async () => {
-    if (!pkg) return;
-    setSubmitting(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("pesapal-create-order", {
-        body: {
-          packageType: pkg.id,
-          fullName: form.fullName,
-          email: form.email,
-          phone: form.phone,
-        },
-      });
-      if (error) throw error;
-      if (!data?.redirect_url) throw new Error(data?.error || "Unable to start Mobile Money payment right now.");
-      setPaymentMethod("momo");
-      window.location.assign(data.redirect_url);
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Unable to start Mobile Money payment right now.";
-      toast.error(message);
-      setSubmitting(false);
-    }
-  };
 
   const payWithPesapal = async () => {
     if (!pkg) return;
@@ -250,30 +225,18 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
 
                 <button
                   type="button"
-                  onClick={payByMobileMoney}
-                  disabled={submitting}
-                  className="w-full text-left flex items-start gap-4 p-5 rounded-xl border border-primary-foreground/15 hover:border-accent bg-primary-foreground/5 hover:bg-accent/10 transition-all disabled:opacity-60"
-                >
-                  <Smartphone className="text-accent mt-0.5" size={22} />
-                  <div>
-                    <div className="font-semibold text-sm">Pay via Mobile Money (MTN MoMo / Airtel)</div>
-                    <div className="text-xs text-primary-foreground/60 leading-relaxed">
-                      Secure Pesapal checkout — pay with MTN MoMo or Airtel Money.
-                    </div>
-                  </div>
-                </button>
-
-                <button
-                  type="button"
                   onClick={payWithPesapal}
                   disabled={submitting}
                   className="w-full text-left flex items-start gap-4 p-5 rounded-xl border border-primary-foreground/15 hover:border-accent bg-primary-foreground/5 hover:bg-accent/10 transition-all disabled:opacity-60"
                 >
-                  <CreditCard className="text-accent mt-0.5" size={22} />
+                  <span className="flex gap-1.5 mt-0.5 text-accent">
+                    <Smartphone size={22} />
+                    <CreditCard size={22} />
+                  </span>
                   <div>
                     <div className="font-semibold text-sm">Pay securely with Pesapal</div>
                     <div className="text-xs text-primary-foreground/60 leading-relaxed">
-                      Pay with card or Mobile Money through Pesapal.
+                      Mobile Money (MTN MoMo, Airtel Money) or card (Visa, Mastercard), in USD.
                     </div>
                   </div>
                 </button>
@@ -298,9 +261,7 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
               <h2 className="font-heading text-2xl md:text-3xl font-bold mb-2">Thank you, {form.fullName.split(" ")[0] || "friend"}!</h2>
               <p className="text-primary-foreground/70 text-sm mb-2 max-w-md mx-auto">
                 Your request for <strong>{pkg.title}</strong> has been received.
-                {paymentMethod === "momo"
-                  ? " Our team will contact you shortly with the MTN MoMo / Airtel payment instructions and to confirm your booking."
-                  : " Our team will be in touch shortly to confirm your booking."}
+                {" Our team will be in touch shortly to confirm your booking."}
               </p>
               <p className="text-primary-foreground/50 text-xs mb-8">
                 We'll reach out at <strong className="text-primary-foreground/80">{form.email}</strong>.
@@ -363,7 +324,7 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
                   <FieldInput label="Country you are relocating from" value={form.country} onChange={(v) => setForm({ ...form, country: v })} />
                   <div className="flex justify-between pt-4">
                     <Button variant="outline-light" onClick={() => setStep("details")}><ArrowLeft size={16} /> Back</Button>
-                    <Button variant="gold" onClick={() => setStep("form2")} disabled={!form.fullName || !form.email}>Continue <ArrowRight size={16} /></Button>
+                    <Button variant="gold" onClick={() => setStep("form2")} disabled={!form.fullName.trim() || !form.email.trim() || !form.phone.trim()}>Continue <ArrowRight size={16} /></Button>
                   </div>
                 </div>
               )}

@@ -1,23 +1,21 @@
-import { syncTransaction } from "../server/pesapal.js";
+import { firstParam, syncTransaction, type ApiRequest, type ApiResponse } from "../server/pesapal.js";
 
-export default async function handler(req: any, res: any) {
+// Pesapal Instant Payment Notification (register this URL's IPN ID as PESAPAL_IPN_ID).
+// Accepts GET or POST. The notification itself isn't trusted; we re-check the status with Pesapal.
+export default async function handler(req: ApiRequest, res: ApiResponse) {
+  const query = req.query ?? {};
+  const body = req.body ?? {};
+  const orderTrackingId = firstParam(query.OrderTrackingId) ?? firstParam(body.OrderTrackingId);
+  const orderMerchantReference = firstParam(query.OrderMerchantReference) ?? firstParam(body.OrderMerchantReference) ?? null;
+
+  if (!orderTrackingId) return res.status(400).json({ error: "OrderTrackingId is required." });
+
   try {
-    const body = req.body ?? {};
-    const query = req.query ?? {};
-    const orderTrackingId = query.OrderTrackingId || query.orderTrackingId || body.OrderTrackingId || body.orderTrackingId;
-    const orderMerchantReference = query.OrderMerchantReference || query.orderMerchantReference || body.OrderMerchantReference || body.orderMerchantReference;
-
-    if (!orderTrackingId) return res.status(400).json({ error: "OrderTrackingId is required." });
     await syncTransaction(orderTrackingId);
-
-    return res.status(200).json({
-      orderNotificationType: "IPNCHANGE",
-      orderTrackingId,
-      orderMerchantReference: orderMerchantReference || null,
-      status: 200,
-    });
-  } catch (error: unknown) {
-    console.error("Pesapal IPN verification failed", error);
-    return res.status(500).json({ error: "Payment verification failed." });
+    return res.status(200).json({ orderNotificationType: "IPNCHANGE", orderTrackingId, orderMerchantReference, status: 200 });
+  } catch (error) {
+    console.error("Pesapal IPN sync failed", error);
+    // A 500 tells Pesapal to retry the notification later.
+    return res.status(500).json({ orderNotificationType: "IPNCHANGE", orderTrackingId, orderMerchantReference, status: 500 });
   }
 }

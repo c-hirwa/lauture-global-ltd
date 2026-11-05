@@ -1,6 +1,8 @@
 // Stripe disabled — payments go through Pesapal only. Uncomment to restore.
 // The endpoint stays deployed but returns 410 so old clients get a clear error.
-export default function handler(_req: any, res: any) {
+import type { ApiRequest, ApiResponse } from "../server/pesapal.js";
+
+export default function handler(_req: ApiRequest, res: ApiResponse) {
   return res.status(410).json({ error: "Card payments via Stripe are no longer available. Please use Pesapal." });
 }
 

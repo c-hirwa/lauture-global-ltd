@@ -35,6 +35,19 @@ npm run dev            # http://localhost:8080
 | `VITE_CAL_ORIGIN` | No | Cal.com origin (default: `https://cal.com`) |
 | `VITE_CAL_EMBED_JS_URL` | No | Embed script URL |
 
+### Payments (Pesapal) — server-only, set in Vercel
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `PESAPAL_ENV` | Yes | `sandbox` or `live` |
+| `PESAPAL_CONSUMER_KEY` / `PESAPAL_CONSUMER_SECRET` | Yes | Pesapal API 3.0 credentials |
+| `PESAPAL_IPN_ID` | Yes | IPN ID registered with Pesapal for `https://<your-site>/api/pesapal-ipn` |
+| `SITE_URL` | Yes | Public site URL, used for Pesapal callback/cancel URLs |
+| `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` | Yes | Used by `/api` to record transactions (never expose to the browser) |
+| `RESEND_API_KEY` / `RESEND_FROM` | No | Payment confirmation emails |
+
+Payment flow: `/api/pesapal-create-order` records a pending transaction and redirects to Pesapal; Pesapal calls `/api/pesapal-ipn`, and `/payment-success` polls `/api/pesapal-status`. Both re-check the status with Pesapal before updating `public.transactions`.
+
 ## Supabase Setup
 
 Run all migrations in `supabase/migrations/` against your Supabase project. New sign-ups are always created as `client`; promote staff to admin by hand (and again after applying `20261105120000_fix_admin_escalation_and_transactions_rls.sql`, which demotes all existing admins):
