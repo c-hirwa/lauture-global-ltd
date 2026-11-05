@@ -37,7 +37,7 @@ npm run dev            # http://localhost:8080
 
 ## Supabase Setup
 
-Run all migrations in `supabase/migrations/` against your Supabase project, then promote an admin user:
+Run all migrations in `supabase/migrations/` against your Supabase project. New sign-ups are always created as `client`; promote staff to admin by hand (and again after applying `20261105120000_fix_admin_escalation_and_transactions_rls.sql`, which demotes all existing admins):
 
 ```sql
 UPDATE public.profiles SET role = 'admin' WHERE email = 'your@email.com';
