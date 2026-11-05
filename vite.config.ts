@@ -15,11 +15,10 @@ export default defineConfig({
     cssCodeSplit: true,
     rollupOptions: {
       output: {
+        // Only React is pinned to its own chunk. Supabase and recharts are left to Rollup so
+        // they load with the pages that use them (login/dashboards/checkout), not on every page.
         manualChunks: {
           react: ["react", "react-dom", "react-router-dom"],
-          motion: ["framer-motion"],
-          supabase: ["@supabase/supabase-js"],
-          charts: ["recharts"],
         },
       },
     },

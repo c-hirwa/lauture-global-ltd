@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, MapPin, Handshake, Compass, ShieldCheck } from "lucide-react";
 import heroSlide1 from "@/assets/hero-slide-1.webp";
 import aboutExpo from "@/assets/about-expo.webp";
@@ -23,23 +22,18 @@ const trustPoints = [
   { icon: ShieldCheck, title: "Secure payments", desc: "Mobile Money or card, via Pesapal" },
 ];
 
-const slideFromLeft = {
-  hidden: { opacity: 0, x: -60 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
-};
-
 const Index = () => {
   return (
     <>
       <Navbar />
       <main>
         {/* HERO */}
-        <section className="relative min-h-screen flex items-center overflow-hidden grain clip-pentagon-bottom">
+        <section className="relative min-h-screen flex items-center overflow-hidden clip-pentagon-bottom">
           <div className="absolute inset-0">
             <img
               src={heroSlide1}
               alt="Land of a Thousand Hills"
-              className="w-full h-full object-cover ken-burns"
+              className="w-full h-full object-cover"
               width={1920}
               height={1080}
               fetchPriority="high"
@@ -76,12 +70,6 @@ const Index = () => {
               </div>
             </div>
           </div>
-
-          {/* Scroll hint */}
-          <div className="absolute bottom-10 right-8 z-20 hidden md:flex items-center gap-3 text-primary-foreground/60 text-xs uppercase tracking-widest float">
-            <span className="w-12 h-px bg-primary-foreground/40" />
-            Scroll
-          </div>
         </section>
 
         {/* TRUST STRIP */}
@@ -106,11 +94,7 @@ const Index = () => {
         {/* ABOUT */}
         <section className="bg-background py-24 md:py-32 relative overflow-hidden">
           <div className="container grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            <div
               className="relative"
             >
               <img
@@ -121,12 +105,8 @@ const Index = () => {
                 width={800}
                 height={600}
               />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            </div>
+            <div
             >
               <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
                 About Us
@@ -143,19 +123,15 @@ const Index = () => {
               <Button variant="default" size="lg" asChild>
                 <Link to="/about">Discover Our Story <ArrowRight size={18} /></Link>
               </Button>
-            </motion.div>
+            </div>
           </div>
         </section>
 
         {/* SERVICES — dark, diagonal opposite */}
-        <section className="relative py-24 md:py-32 overflow-hidden grain" style={{ background: "hsl(var(--navy-dark))" }}>
+        <section className="relative py-24 md:py-32 overflow-hidden" style={{ background: "hsl(var(--navy-dark))" }}>
           <div className="absolute inset-0 opacity-40" style={{ background: "var(--gradient-radial)" }} />
           <div className="container relative z-10">
-            <motion.div
-              variants={slideFromLeft}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
+            <div
               className="max-w-3xl mb-16"
             >
               <span className="inline-block px-4 py-1.5 rounded-full bg-accent/15 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
@@ -167,15 +143,11 @@ const Index = () => {
               <p className="text-secondary leading-relaxed">
                 Experience exceptional opportunities with Lauture Global LTD — your trusted partner for discovering its dynamic landscape or relocating to Rwanda.
               </p>
-            </motion.div>
+            </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {SERVICES.map((s, idx) => (
-                <motion.div
+                <div
                   key={s.id}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.6, delay: idx * 0.12, ease: [0.22, 1, 0.36, 1] }}
                   className="group relative rounded-2xl overflow-hidden glass hover:border-accent/50 transition-all duration-500 hover:-translate-y-2"
                 >
                   <Link
@@ -204,7 +176,7 @@ const Index = () => {
                       </span>
                     </div>
                   </Link>
-                </motion.div>
+                </div>
               ))}
             </div>
             <div className="text-center mt-16">
@@ -225,21 +197,17 @@ const Index = () => {
         <FaqSection />
 
         {/* CTA BANNER — dark with diagonal */}
-        <section className="relative py-24 md:py-32 overflow-hidden grain">
+        <section className="relative py-24 md:py-32 overflow-hidden">
           <img
             src={ctaKigali}
             alt="Kigali skyline at night"
-            className="absolute inset-0 w-full h-full object-cover ken-burns"
+            className="absolute inset-0 w-full h-full object-cover"
             loading="lazy"
             width={1920}
             height={800}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/35 to-black/25" />
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          <div
             className="container relative z-10 text-center max-w-3xl mx-auto"
           >
             <h2 className="font-heading text-4xl md:text-6xl font-semibold text-primary-foreground mb-6 leading-tight">
@@ -251,7 +219,7 @@ const Index = () => {
             <Button variant="gold" size="lg" asChild className="px-8">
               <Link to="/contact">Start Your Journey <ArrowRight size={18} /></Link>
             </Button>
-          </motion.div>
+          </div>
         </section>
       </main>
       <Footer />

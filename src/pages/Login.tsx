@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { CheckCircle2, Loader2 } from "lucide-react";
-import logo from "@/assets/logo-lauture.png";
+import logo from "@/assets/logo-lauture.webp";
 
 const Login = () => {
   const { signIn, signUp, resetPassword, user, loading } = useAuth();

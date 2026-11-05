@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Target, Eye, Heart } from "lucide-react";
 import aboutImg from "@/assets/about-team.webp";
 import Navbar from "@/components/Navbar";
@@ -37,11 +36,7 @@ const About = () => (
       {/* Story */}
       <section className="py-20">
         <div className="container grid md:grid-cols-2 gap-12 items-start max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+          <div
             className="md:sticky md:top-24"
           >
             <img
@@ -52,7 +47,7 @@ const About = () => (
               width={1200}
               height={800}
             />
-          </motion.div>
+          </div>
           <div>
             <h2 className="font-heading text-3xl md:text-4xl font-bold mb-6">Our Story</h2>
             <div className="space-y-5 text-muted-foreground leading-relaxed">

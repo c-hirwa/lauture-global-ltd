@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   Check,
   ArrowRight,
@@ -19,7 +18,6 @@ import {
   Pencil,
 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/lib/supabase";
 // Stripe disabled — payments go through Pesapal only.
 // import { createCheckoutSession } from "@/lib/createCheckout";
 
@@ -100,6 +98,8 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
 
   const saveIntake = async () => {
     if (intakeSaved) return;
+    // Loaded on demand so the Services page doesn't download the Supabase client up front.
+    const { supabase } = await import("@/lib/supabase");
     const { error } = await supabase.from("clients").insert({
       full_name: form.fullName.trim(),
       email: form.email.trim(),
@@ -180,12 +180,8 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
       ? `Family (${form.childrenCount} ${parseInt(form.childrenCount, 10) === 1 ? "child" : "children"})`
       : form.travelers;
 
-  const stepMotion = {
-    initial: { opacity: 0, y: 12 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -12 },
-    transition: { duration: 0.3 },
-  };
+  // Cheap CSS fade between steps (tailwindcss-animate), no animation library needed.
+  const stepFade = "animate-in fade-in-0 duration-200";
 
   return (
     <Dialog open={open} onOpenChange={close}>
@@ -195,9 +191,8 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
         {/* Gold top accent */}
         <div className="h-1 w-full bg-gradient-to-r from-transparent via-accent to-transparent" />
 
-        <AnimatePresence mode="wait">
           {step === "details" && (
-            <motion.div key="details" {...stepMotion} className="p-6 sm:p-8 md:p-10">
+            <div key="details" className={`${stepFade} p-6 sm:p-8 md:p-10`}>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/15 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
                 <Sparkles size={12} /> ${pkg.price.toLocaleString()} / package
               </div>
@@ -244,11 +239,11 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
               <p className="text-center text-xs text-primary-foreground/50 mt-3">
                 Takes about 2 minutes · You'll review everything before paying
               </p>
-            </motion.div>
+            </div>
           )}
 
           {stepIndex >= 0 && (
-            <motion.div key={step} {...stepMotion} className="p-6 sm:p-8 md:p-10">
+            <div key={step} className={`${stepFade} p-6 sm:p-8 md:p-10`}>
               {/* Step indicator */}
               <ol className="flex items-center gap-2 mb-6" aria-label="Checkout progress">
                 {FORM_STEPS.map((s, i) => (
@@ -457,11 +452,11 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
                   </div>
                 </div>
               )}
-            </motion.div>
+            </div>
           )}
 
           {step === "success" && (
-            <motion.div key="success" {...stepMotion} className="p-6 sm:p-8 md:p-10 text-center">
+            <div key="success" className={`${stepFade} p-6 sm:p-8 md:p-10 text-center`}>
               <CheckCircle2 className="mx-auto text-accent mb-4" size={48} />
               <h2 className="font-heading text-2xl md:text-3xl font-bold mb-2">
                 Thank you, {form.fullName.trim().split(" ")[0] || "friend"}!
@@ -486,9 +481,8 @@ const PackageModal = ({ pkg, open, onOpenChange }: Props) => {
                   I'll do this later
                 </Button>
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
       </DialogContent>
     </Dialog>
   );

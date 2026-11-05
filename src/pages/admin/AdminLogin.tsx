@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { Loader2 } from "lucide-react";
-import logo from "@/assets/logo-lauture.png";
+import logo from "@/assets/logo-lauture.webp";
 
 const AdminLogin = () => {
   const { signIn, user, loading: authLoading } = useAuth();

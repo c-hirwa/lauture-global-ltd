@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import {
   Accordion,
   AccordionContent,
@@ -43,11 +42,7 @@ const FaqSection = () => {
   return (
     <section className="relative bg-background py-24 md:py-32 overflow-hidden">
       <div className="container relative z-10 max-w-3xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        <div
           className="text-center mb-12"
         >
           <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
@@ -59,13 +54,9 @@ const FaqSection = () => {
           <p className="text-muted-foreground leading-relaxed">
             Everything you need to know about exploring or relocating to Rwanda with Lauture Global LTD.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.15 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        <div
         >
           <Accordion type="single" collapsible className="space-y-4">
             {faqs.map((faq, idx) => (
@@ -83,7 +74,7 @@ const FaqSection = () => {
               </AccordionItem>
             ))}
           </Accordion>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

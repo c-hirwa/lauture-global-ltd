@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GuidesSection from "@/components/GuidesSection";
@@ -9,13 +8,10 @@ const Resources = () => {
     <>
       <Navbar />
       <main>
-        <section className="relative pt-40 pb-20 md:pt-48 md:pb-28 bg-primary overflow-hidden grain">
+        <section className="relative pt-40 pb-20 md:pt-48 md:pb-28 bg-primary overflow-hidden">
           <div className="absolute inset-0 opacity-30" style={{ background: "var(--gradient-radial)" }} />
           <div className="container relative z-10 max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            <div
             >
               <span className="inline-block px-4 py-1.5 rounded-full bg-accent/15 text-accent text-xs font-semibold tracking-widest uppercase mb-5">
                 Resources
@@ -26,7 +22,7 @@ const Resources = () => {
               <p className="text-primary-foreground/80 text-lg leading-relaxed">
                 Practical, in-country knowledge to help you explore, invest, and settle with confidence — plus our premium Rwanda 2027 digital magazine.
               </p>
-            </motion.div>
+            </div>
           </div>
         </section>
 

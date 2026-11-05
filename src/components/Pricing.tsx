@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
 import { Check, Sparkles } from "lucide-react";
 import PackageModal, { PackageData } from "./PackageModal";
 
@@ -96,11 +95,7 @@ const Pricing = () => {
     <section id="pricing" className="scroll-mt-16 relative py-24 md:py-32 bg-background overflow-hidden">
       <div className="absolute inset-0 opacity-30 pointer-events-none" style={{ background: "var(--gradient-radial)" }} />
       <div className="container relative z-10">
-        <motion.div
-          initial={{ opacity: 0, x: -60 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        <div
           className="text-center max-w-2xl mx-auto mb-16"
         >
           <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
@@ -112,16 +107,12 @@ const Pricing = () => {
           <p className="text-muted-foreground leading-relaxed">
             Tailored support for every stage of your Rwanda story — from first visit to full integration.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-3 gap-8 items-stretch">
           {packages.map((pkg, idx) => (
-            <motion.div
+            <div
               key={pkg.id}
-              initial={{ opacity: 0, scale: 0.95, y: 30 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.7, delay: idx * 0.15, ease: [0.22, 1, 0.36, 1] }}
               className={`relative rounded-2xl p-8 flex flex-col transition-all duration-500 hover:-translate-y-2 ${
                 pkg.popular
                   ? "bg-primary text-primary-foreground premium-shadow scale-105 border-2 border-accent"
@@ -162,7 +153,7 @@ const Pricing = () => {
               <Button variant={pkg.variant} size="lg" className="w-full" onClick={() => openPackage(pkg)}>
                 {pkg.id === "basic" ? "Start your Journey" : pkg.id === "comprehensive" ? "Get Started" : "Relocate with Full Support"}
               </Button>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

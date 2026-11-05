@@ -5,17 +5,19 @@ import {
   Users,
   CalendarDays,
   Bell,
+  CreditCard,
   LogOut,
   Menu,
   X,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import logo from "@/assets/logo-lauture.png";
+import logo from "@/assets/logo-lauture.webp";
 
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/admin/clients", label: "Clients", icon: Users },
   { to: "/admin/bookings", label: "Bookings", icon: CalendarDays },
+  { to: "/admin/payments", label: "Payments", icon: CreditCard },
   { to: "/admin/notifications", label: "Notifications", icon: Bell },
 ];
 

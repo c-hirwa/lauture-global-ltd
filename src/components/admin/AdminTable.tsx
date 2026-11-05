@@ -50,9 +50,21 @@ export const AdminTableRow = ({
 }) => (
   <tr
     onClick={onClick}
+    // Clickable rows are also reachable and openable from the keyboard.
+    tabIndex={onClick ? 0 : undefined}
+    onKeyDown={
+      onClick
+        ? (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onClick();
+            }
+          }
+        : undefined
+    }
     className={`border-b border-border/60 last:border-0 ${
       index % 2 === 0 ? "bg-card" : "bg-muted/40"
-    } ${onClick ? "cursor-pointer hover:bg-accent/5 transition-colors" : ""}`}
+    } ${onClick ? "cursor-pointer hover:bg-accent/5 focus-visible:outline-none focus-visible:bg-accent/10 transition-colors" : ""}`}
   >
     {children}
   </tr>

@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { ArrowRight, ExternalLink, Building2, Hotel, Compass, Home, Briefcase, Users, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -37,7 +36,7 @@ const Partners = () => {
       <Navbar />
       <main className="pt-16">
         {/* HERO */}
-        <section className="relative bg-primary text-primary-foreground py-24 md:py-32 overflow-hidden grain">
+        <section className="relative bg-primary text-primary-foreground py-24 md:py-32 overflow-hidden">
           <div className="absolute inset-0 opacity-30" style={{ background: "var(--gradient-radial)" }} />
           <div className="container relative z-10 max-w-3xl">
             <span className="inline-block px-4 py-1.5 rounded-full bg-accent/15 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
@@ -58,12 +57,8 @@ const Partners = () => {
             {partnerGroups.map((group, groupIdx) => {
               const Icon = groupIcons[group.group] ?? Building2;
               return (
-                <motion.div
+                <div
                   key={group.group}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <h2 className="font-heading text-2xl md:text-3xl font-semibold text-accent mb-8 flex items-center gap-3">
                     <Icon size={26} className="text-accent" />
@@ -71,12 +66,8 @@ const Partners = () => {
                   </h2>
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {group.items.map((partner, idx) => (
-                      <motion.article
+                      <article
                         key={partner.name}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, amount: 0.2 }}
-                        transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.22, 1, 0.36, 1] }}
                         className="group flex flex-col rounded-2xl overflow-hidden bg-card border border-border hover:border-accent/60 transition-all duration-500 hover:-translate-y-2 premium-shadow"
                       >
                         <div className="relative h-48 bg-muted overflow-hidden flex items-center justify-center">
@@ -125,10 +116,10 @@ const Partners = () => {
                             <span className="text-xs text-muted-foreground">Website not listed</span>
                           )}
                         </div>
-                      </motion.article>
+                      </article>
                     ))}
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>

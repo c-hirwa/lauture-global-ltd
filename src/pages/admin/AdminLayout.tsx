@@ -22,7 +22,8 @@ const AdminLayout = () => {
     <div className="min-h-screen bg-background flex">
       <AdminSidebar />
       <div className="flex-1 flex flex-col min-w-0 lg:ml-64">
-        <main className="flex-1 p-4 sm:p-6 md:p-8">
+        {/* Extra top padding on small screens so the floating menu button doesn't cover page headings. */}
+        <main className="flex-1 p-4 pt-20 sm:p-6 sm:pt-20 md:p-8 md:pt-20 lg:pt-8">
           <Outlet />
         </main>
       </div>

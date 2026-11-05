@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { motion } from "framer-motion";
 import { Check, ImageOff, ArrowRight, Sparkles } from "lucide-react";
 import tourism from '../assets/1tpackage.webp'
 import prestige from '../assets/2tpackage.webp'
@@ -89,14 +88,10 @@ const TourismPackages = () => {
   const [selected, setSelected] = useState<TourPackage | null>(null);
 
   return (
-    <section id="tourism-packages" className="relative py-24 md:py-32 overflow-hidden grain" style={{ background: "hsl(var(--navy-dark))" }}>
+    <section id="tourism-packages" className="relative py-24 md:py-32 overflow-hidden" style={{ background: "hsl(var(--navy-dark))" }}>
       <div className="absolute inset-0 opacity-40 pointer-events-none" style={{ background: "var(--gradient-radial)" }} />
       <div className="container relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        <div
           className="text-center max-w-2xl mx-auto mb-16"
         >
           <span className="inline-block px-4 py-1.5 rounded-full bg-accent/15 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
@@ -108,19 +103,13 @@ const TourismPackages = () => {
           <p className="text-secondary leading-relaxed">
             Two curated 8-day journeys through the Land of a Thousand Hills — from authentic adventure to full-scale luxury.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-8 items-stretch">
           {tourPackages.map((pkg, idx) => (
-            <motion.article
+            <article
               key={pkg.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.7, delay: idx * 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className={`relative rounded-2xl overflow-hidden flex flex-col transition-all duration-500 hover:-translate-y-2 glass ${
-                pkg.featured ? "border-2 border-accent premium-shadow" : "hover:border-accent/50"
-              }`}
+              className={`relative rounded-2xl overflow-hidden flex flex-col transition-all duration-500 hover:-translate-y-2 glass ${ pkg.featured ? "border-2 border-accent premium-shadow" : "hover:border-accent/50" }`}
             >
               {pkg.featured && (
                 <div className="absolute top-4 right-4 z-10 bg-accent text-accent-foreground px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5 gold-glow">
@@ -160,7 +149,7 @@ const TourismPackages = () => {
                   View Full Itinerary <ArrowRight size={18} />
                 </Button>
               </div>
-            </motion.article>
+            </article>
           ))}
         </div>
       </div>

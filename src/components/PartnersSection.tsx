@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import {
   ArrowRight,
   BedDouble,
@@ -65,11 +64,7 @@ const PartnersSection = () => {
   return (
     <section className="relative overflow-hidden bg-background py-28 md:py-32">
       <div className="container relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        <div
           className="max-w-3xl mb-14 text-center mx-auto"
         >
           <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
@@ -81,7 +76,7 @@ const PartnersSection = () => {
           <p className="text-muted-foreground leading-relaxed">
             A trusted network of hospitality, tourism, real estate, business, and community partners across Rwanda — carefully selected to deliver reliable, high-quality experiences for our clients.
           </p>
-        </motion.div>
+        </div>
       </div>
 
       {/* Infinite marquee — right to left */}
@@ -98,11 +93,7 @@ const PartnersSection = () => {
       </div>
 
       <div className="container relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        <div
           className="text-center mt-14"
         >
           <Button variant="gold" size="lg" asChild className="px-8">
@@ -110,7 +101,7 @@ const PartnersSection = () => {
               View All Partners <ArrowRight size={18} />
             </Link>
           </Button>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

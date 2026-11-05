@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useClientData } from "@/hooks/useClientData";
 import { Button } from "@/components/ui/button";
@@ -19,12 +19,18 @@ import {
   Loader2,
   ExternalLink,
   ArrowRight,
+  CreditCard,
+  Lock,
+  Clock3,
+  CheckCircle2,
 } from "lucide-react";
-import logo from "@/assets/logo-lauture.png";
-import { JOURNEY_STAGES as STAGES, prettyStatus } from "@/lib/constants";
+import { toast } from "sonner";
+import logo from "@/assets/logo-lauture.webp";
+import { JOURNEY_STAGES as STAGES, prettyStatus, formatCurrency, formatDate } from "@/lib/constants";
+import { CONTACT } from "@/lib/contact";
 import BookSession from "@/components/dashboard/BookSession";
 import NoIntakeState from "@/components/dashboard/NoIntakeState";
-import type { BookingRecord } from "@/hooks/useClientData";
+import type { BookingRecord, ClientRecord, PaymentRecord } from "@/hooks/useClientData";
 
 const NAV = [
   { key: "overview", label: "Overview", icon: LayoutDashboard },
@@ -40,17 +46,24 @@ type Section = (typeof NAV)[number]["key"];
 const Dashboard = () => {
   const { user, signOut } = useAuth();
   const { data, isLoading, isError, refetch } = useClientData(user?.email);
-  const [section, setSection] = useState<Section>("overview");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  const section: Section = NAV.some((n) => n.key === tabParam) ? (tabParam as Section) : "overview";
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const client = data?.client ?? null;
   const bookings = data?.bookings ?? [];
   const documents = data?.documents ?? [];
+  const payments = data?.payments ?? [];
   const firstName = client?.full_name?.split(" ")[0] ?? user?.email?.split("@")[0] ?? "there";
+  const isPaid = client?.payment_status === "paid" || payments.some((p) => p.status === "completed");
+  const paymentStatus = isPaid ? "paid" : (client?.payment_status ?? "pending");
+  const nextSession = upcomingSessions(bookings)[0];
 
   const goTo = (key: Section) => {
-    setSection(key);
+    setSearchParams(key === "overview" ? {} : { tab: key });
     setSidebarOpen(false);
+    window.scrollTo({ top: 0 });
   };
 
   return (
@@ -149,13 +162,24 @@ const Dashboard = () => {
                     </p>
                   </div>
 
-                  <JourneyTracker stage={client.stage} />
+                  <NextStep
+                    client={client}
+                    isPaid={isPaid}
+                    nextSession={nextSession}
+                    hasBookings={bookings.length > 0}
+                    onBook={() => goTo("bookings")}
+                  />
 
                   <div className="grid sm:grid-cols-3 gap-4">
                     <StatCard label="Package" value={client.package_title ?? "—"} />
-                    <StatCard label="Payment" value={prettyStatus(client.payment_status)} />
-                    <StatCard label="Upcoming sessions" value={String(upcomingCount(bookings))} />
+                    <StatCard label="Payment" value={prettyStatus(paymentStatus)} />
+                    <StatCard
+                      label="Next session"
+                      value={nextSession?.start_time ? formatDate(nextSession.start_time) : "None booked"}
+                    />
                   </div>
+
+                  <JourneyTracker stage={client.stage} />
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <QuickAction
@@ -189,13 +213,19 @@ const Dashboard = () => {
                       ${Number(client.package_price).toLocaleString()}
                     </p>
                   )}
-                  <div className="flex items-center gap-3 mb-8">
+                  <div className="flex items-center gap-3 mb-6">
                     <span className="text-xs uppercase tracking-widest text-muted-foreground">Payment</span>
-                    <StatusBadge status={client.payment_status} kind="payment" />
+                    <StatusBadge status={paymentStatus} kind="payment" />
                   </div>
-                  <Button variant="gold" onClick={() => goTo("bookings")}>
-                    Book a consultation <ArrowRight size={16} />
-                  </Button>
+                  <div className="flex flex-wrap gap-3 mb-8">
+                    {!isPaid && <PayNowButton client={client} />}
+                    <Button variant={isPaid ? "gold" : "outline"} onClick={() => goTo("bookings")}>
+                      Book a consultation <ArrowRight size={16} />
+                    </Button>
+                  </div>
+
+                  <h4 className="font-heading text-lg font-bold text-foreground mb-3">Payment history</h4>
+                  <PaymentHistory payments={payments} />
                 </div>
               )}
 
@@ -265,17 +295,17 @@ const Dashboard = () => {
               {section === "support" && (
                 <div className="grid md:grid-cols-2 gap-4">
                   <SupportCard
-                    href="mailto:info@lautureglobal.com"
+                    href={`mailto:${CONTACT.email}`}
                     icon={Mail}
                     title="Email support"
-                    detail="info@lautureglobal.com"
+                    detail={CONTACT.email}
                     cta="Send email"
                   />
                   <SupportCard
-                    href="https://wa.me/250792866210"
+                    href={CONTACT.whatsappHref}
                     icon={MessageCircle}
                     title="WhatsApp"
-                    detail="+250 792 866 210"
+                    detail={CONTACT.phoneDisplay}
                     cta="Message us"
                     external
                     iconClass="bg-emerald-100 text-emerald-600"
@@ -290,8 +320,160 @@ const Dashboard = () => {
   );
 };
 
-const upcomingCount = (bs: BookingRecord[]) =>
-  bs.filter((b) => b.start_time && new Date(b.start_time).getTime() > Date.now()).length;
+const upcomingSessions = (bs: BookingRecord[]) =>
+  bs
+    .filter((b) => b.start_time && new Date(b.start_time).getTime() > Date.now() && b.status !== "cancelled")
+    .sort((a, b) => new Date(a.start_time!).getTime() - new Date(b.start_time!).getTime());
+
+const PAYABLE_PACKAGES = new Set(["basic", "comprehensive", "premium"]);
+
+// Starts a Pesapal payment for the client's chosen package (same API as the website checkout).
+const PayNowButton = ({ client }: { client: ClientRecord }) => {
+  const [busy, setBusy] = useState(false);
+  const canPay = Boolean(client.package_id && PAYABLE_PACKAGES.has(client.package_id) && client.phone);
+
+  if (!canPay) {
+    return (
+      <Button variant="gold" asChild>
+        <a href={CONTACT.whatsappHref} target="_blank" rel="noreferrer">
+          <MessageCircle size={16} /> Arrange payment with us
+        </a>
+      </Button>
+    );
+  }
+
+  const pay = async () => {
+    setBusy(true);
+    try {
+      const response = await fetch("/api/pesapal-create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          packageType: client.package_id,
+          fullName: client.full_name,
+          email: client.email,
+          phone: client.phone,
+        }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.redirect_url) throw new Error(data.error || "Unable to start payment.");
+      window.location.assign(data.redirect_url);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Unable to start payment.");
+      setBusy(false);
+    }
+  };
+
+  const amount = client.package_price != null ? formatCurrency(Number(client.package_price)) : "now";
+  return (
+    <Button variant="gold" onClick={pay} disabled={busy}>
+      {busy ? <Loader2 size={16} className="animate-spin" /> : <Lock size={16} />}
+      {busy ? "Redirecting…" : `Pay ${amount}`}
+    </Button>
+  );
+};
+
+const PAYMENT_LABELS: Record<string, { label: string; className: string }> = {
+  completed: { label: "Paid", className: "bg-emerald-100 text-emerald-800" },
+  pending: { label: "Pending", className: "bg-amber-100 text-amber-800" },
+  failed: { label: "Failed", className: "bg-red-100 text-red-800" },
+  reversed: { label: "Reversed", className: "bg-slate-100 text-slate-700" },
+  amount_mismatch: { label: "Under review", className: "bg-amber-100 text-amber-800" },
+};
+
+const PaymentHistory = ({ payments }: { payments: PaymentRecord[] }) => {
+  if (payments.length === 0) {
+    return <p className="text-sm text-muted-foreground">No payments yet.</p>;
+  }
+  return (
+    <ul className="divide-y divide-border border border-border rounded-xl">
+      {payments.map((p) => {
+        const meta = PAYMENT_LABELS[p.status] ?? { label: prettyStatus(p.status), className: "bg-slate-100 text-slate-700" };
+        return (
+          <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm">
+            <div className="min-w-0">
+              <p className="font-medium text-foreground">
+                {p.currency} {Number(p.amount).toLocaleString()}
+                <span className="text-muted-foreground font-normal"> · {p.payment_method || "Pesapal"}</span>
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {formatDate(p.created_at)} · Ref {p.merchant_reference}
+              </p>
+            </div>
+            <span className={`status-badge ${meta.className}`}>{meta.label}</span>
+          </li>
+        );
+      })}
+    </ul>
+  );
+};
+
+// One clear "what should I do now" card at the top of the overview.
+const NextStep = ({
+  client,
+  isPaid,
+  nextSession,
+  hasBookings,
+  onBook,
+}: {
+  client: ClientRecord;
+  isPaid: boolean;
+  nextSession?: BookingRecord;
+  hasBookings: boolean;
+  onBook: () => void;
+}) => {
+  let icon = CheckCircle2;
+  let title = "Our team is working on your plan";
+  let desc = "We'll be in touch with your next steps. Questions? Message us any time.";
+  let action: React.ReactNode = (
+    <Button variant="outline-light" asChild>
+      <a href={CONTACT.whatsappHref} target="_blank" rel="noreferrer">
+        <MessageCircle size={16} /> Message us
+      </a>
+    </Button>
+  );
+
+  if (!isPaid) {
+    icon = CreditCard;
+    title = "Complete your payment";
+    desc = `Secure your ${client.package_title ?? "package"} with Mobile Money or card via Pesapal.`;
+    action = <PayNowButton client={client} />;
+  } else if (nextSession?.start_time) {
+    const start = new Date(nextSession.start_time);
+    icon = Clock3;
+    title = "Your next session";
+    desc = `${start.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })} at ${start.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })}`;
+    action = (
+      <Button variant="outline-light" onClick={onBook}>
+        View sessions <ArrowRight size={16} />
+      </Button>
+    );
+  } else if (!hasBookings) {
+    icon = CalendarDays;
+    title = "Book your first consultation";
+    desc = "Pick a time that suits you and meet your Lauture Global advisor.";
+    action = (
+      <Button variant="gold" onClick={onBook}>
+        Book now <ArrowRight size={16} />
+      </Button>
+    );
+  }
+
+  const Icon = icon;
+  return (
+    <div className="rounded-2xl bg-primary text-primary-foreground p-6 md:p-7 flex flex-col sm:flex-row sm:items-center gap-5">
+      <span className="w-12 h-12 rounded-xl bg-accent/15 text-accent flex items-center justify-center shrink-0">
+        <Icon size={22} />
+      </span>
+      <div className="flex-1 min-w-0">
+        <p className="text-[11px] uppercase tracking-widest text-accent font-semibold mb-1">Next step</p>
+        <h3 className="font-heading text-xl font-bold">{title}</h3>
+        <p className="text-sm text-primary-foreground/70 mt-1">{desc}</p>
+      </div>
+      <div className="shrink-0">{action}</div>
+    </div>
+  );
+};
 
 const BookingCard = ({ booking: b }: { booking: BookingRecord }) => {
   const start = b.start_time ? new Date(b.start_time) : null;

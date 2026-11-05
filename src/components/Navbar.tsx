@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Mail, Phone, UserCircle, MessageCircle } from "lucide-react";
-import logo from "@/assets/logo-lauture.png";
+import logo from "@/assets/logo-lauture.webp";
 import { CONTACT } from "@/lib/contact";
 
 const navLinks = [
@@ -44,8 +44,8 @@ const Navbar = () => {
             src={logo}
             alt="Lauture Global"
             className="h-8 md:h-10 w-auto object-contain drop-shadow-sm"
-            width={1584}
-            height={672}
+            width={480}
+            height={164}
           />
         </Link>
 

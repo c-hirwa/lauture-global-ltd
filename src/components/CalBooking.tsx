@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Cal, { getCalApi } from "@calcom/embed-react";
 import { CheckCircle2, Loader2 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 
 /** Cal.com public origin (booking pages). Override with VITE_CAL_ORIGIN for EU etc. */
@@ -77,6 +76,8 @@ const CalBooking = ({ calLink, packageId, packageTitle, eventType, theme = "dark
             const end = booking.endTime as string | undefined;
 
             try {
+              // Loaded only after a booking is made, so pages with the widget stay light.
+              const { supabase } = await import("@/lib/supabase");
               const { error } = await supabase.from("bookings").insert({
                 booking_uid: (booking.uid as string) || null,
                 event_type: eventType || eventTypeObj?.slug || normalizedLink,

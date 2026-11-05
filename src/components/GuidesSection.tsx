@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { ArrowRight, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -31,7 +30,7 @@ const GuidesSection = ({
   return (
     <section
       className={cn(
-        "py-32 md:py-40 relative overflow-hidden grain",
+        "py-32 md:py-40 relative overflow-hidden",
         isDark ? "" : "bg-background"
       )}
       style={isDark ? { background: "hsl(var(--navy-dark))" } : undefined}
@@ -40,11 +39,7 @@ const GuidesSection = ({
         <div className="absolute inset-0 opacity-40" style={{ background: "var(--gradient-radial)" }} />
       )}
       <div className="container relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        <div
           className="max-w-3xl mb-16"
         >
           <span className="inline-block px-4 py-1.5 rounded-full bg-accent/15 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
@@ -60,19 +55,15 @@ const GuidesSection = ({
           <p className={cn("leading-relaxed", isDark ? "text-primary-foreground/80" : "text-muted-foreground")}>
             {subheading}
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((g, idx) => {
             const Icon = g.icon;
             return (
-              <motion.button
+              <button
                 key={g.slug}
                 onClick={() => setActive(g)}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
                 className={cn(
                   "group text-left rounded-2xl p-8 border transition-all duration-500 hover:-translate-y-2 premium-shadow",
                   isDark
@@ -93,7 +84,7 @@ const GuidesSection = ({
                 <span className="inline-flex items-center gap-2 text-accent text-sm font-medium">
                   Read guide <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </span>
-              </motion.button>
+              </button>
             );
           })}
         </div>

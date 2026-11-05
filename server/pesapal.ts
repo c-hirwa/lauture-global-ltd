@@ -170,6 +170,14 @@ export async function syncTransaction(orderTrackingId: string): Promise<{ status
 
   const finalStatus = (canUpdate ? status : row.status) as PaymentStatus;
 
+  // Keep the client record in step with real payments, so the portal and admin
+  // dashboard don't depend on someone updating payment_status by hand.
+  if (canUpdate && row.status !== status && (status === "completed" || status === "reversed")) {
+    await syncClientPaymentStatus(supabase, row, status === "completed" ? "paid" : "refunded").catch((e) =>
+      console.error("Client payment status sync failed", e),
+    );
+  }
+
   if (finalStatus === "completed") {
     await sendConfirmationEmailOnce(supabase, row, result.confirmation_code).catch((e) =>
       console.error("Confirmation email failed", e),
@@ -177,6 +185,22 @@ export async function syncTransaction(orderTrackingId: string): Promise<{ status
   }
 
   return { status: finalStatus, merchant_reference: row.merchant_reference };
+}
+
+// Marks the client's most recent intake for this package as paid/refunded.
+async function syncClientPaymentStatus(supabase: SupabaseClient, row: TransactionRow, paymentStatus: "paid" | "refunded") {
+  const { data: client, error } = await supabase
+    .from("clients")
+    .select("id")
+    .ilike("email", row.email)
+    .eq("package_id", row.package_type)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle<{ id: string }>();
+  if (error) throw error;
+  if (!client) return;
+  const { error: updateError } = await supabase.from("clients").update({ payment_status: paymentStatus }).eq("id", client.id);
+  if (updateError) throw updateError;
 }
 
 async function sendConfirmationEmailOnce(supabase: SupabaseClient, row: TransactionRow, confirmationCode?: string) {

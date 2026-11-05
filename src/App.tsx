@@ -5,10 +5,11 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ScrollToTop from "./components/ScrollToTop";
-import { AuthProvider } from "./hooks/useAuth";
-import { AdminAuthProvider } from "./hooks/useAdminAuth";
-import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index.tsx";
+
+// Auth (and with it the Supabase client) is only loaded for portal/admin routes.
+const AuthShell = lazy(() => import("./components/AuthShell.tsx"));
+const ProtectedRoute = lazy(() => import("./components/ProtectedRoute.tsx"));
 
 const About = lazy(() => import("./pages/About.tsx"));
 const Services = lazy(() => import("./pages/Services.tsx"));
@@ -30,6 +31,7 @@ const AdminClients = lazy(() => import("./pages/admin/AdminClients.tsx"));
 const AdminClientDetail = lazy(() => import("./pages/admin/AdminClientDetail.tsx"));
 const AdminBookings = lazy(() => import("./pages/admin/AdminBookings.tsx"));
 const AdminNotifications = lazy(() => import("./pages/admin/AdminNotifications.tsx"));
+const AdminPayments = lazy(() => import("./pages/admin/AdminPayments.tsx"));
 
 const queryClient = new QueryClient();
 
@@ -45,45 +47,44 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AuthProvider>
-          <AdminAuthProvider>
-            <ScrollToTop />
-            <Suspense fallback={<PageFallback />}>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/resources" element={<Resources />} />
-                <Route path="/partners" element={<Partners />} />
-                <Route path="/founders" element={<Founders />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/login" element={<Login />} />
-                {/* Stripe disabled: <Route path="/success" element={<Success />} /> */}
-                <Route path="/payment-success" element={<PaymentSuccess />} />
-                <Route path="/payment-failed" element={<PaymentFailed />} />
-                <Route
-                  path="/dashboard"
-                  element={
-                    <ProtectedRoute>
-                      <Dashboard />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route path="/admin" element={<AdminLayout />}>
-                  <Route index element={<AdminDashboard />} />
-                  <Route path="clients" element={<AdminClients />} />
-                  <Route path="clients/:id" element={<AdminClientDetail />} />
-                  <Route path="bookings" element={<AdminBookings />} />
-                  <Route path="notifications" element={<AdminNotifications />} />
-                </Route>
-                <Route path="/payment-success" element={<PaymentSuccess />} />
-                <Route path="/payment-failed" element={<PaymentFailed />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </AdminAuthProvider>
-        </AuthProvider>
+        <ScrollToTop />
+        <Suspense fallback={<PageFallback />}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/partners" element={<Partners />} />
+            <Route path="/founders" element={<Founders />} />
+            <Route path="/contact" element={<Contact />} />
+            {/* Stripe disabled: <Route path="/success" element={<Success />} /> */}
+            <Route path="/payment-success" element={<PaymentSuccess />} />
+            <Route path="/payment-failed" element={<PaymentFailed />} />
+
+            <Route element={<AuthShell />}>
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="clients" element={<AdminClients />} />
+                <Route path="clients/:id" element={<AdminClientDetail />} />
+                <Route path="bookings" element={<AdminBookings />} />
+                <Route path="payments" element={<AdminPayments />} />
+                <Route path="notifications" element={<AdminNotifications />} />
+              </Route>
+            </Route>
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

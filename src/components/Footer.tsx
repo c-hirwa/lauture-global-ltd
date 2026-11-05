@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Facebook, Instagram, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logo from "@/assets/logo-lauture.png";
+import logo from "@/assets/logo-lauture.webp";
 import { CONTACT } from "@/lib/contact";
 
 const services = [
@@ -41,7 +41,7 @@ const Footer = () => (
       {/* Brand */}
       <div className="sm:col-span-2 lg:col-span-1">
         <Link to="/" aria-label="Lauture Global — home" className="inline-block mb-5">
-          <img src={logo} alt="Lauture Global" className="h-11 w-auto" width={1584} height={672} loading="lazy" />
+          <img src={logo} alt="Lauture Global" className="h-11 w-auto" width={480} height={164} loading="lazy" />
         </Link>
         <p className="text-sm text-primary-foreground/70 leading-relaxed max-w-sm mb-6">
           Kigali-based experts helping you explore, relocate to and invest in Rwanda — with one team guiding you

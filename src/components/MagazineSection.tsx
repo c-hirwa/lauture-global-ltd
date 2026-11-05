@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Download, BookOpen, Crown, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -49,11 +48,7 @@ const resources = [
 const DocumentCard = ({ resource }: { resource: (typeof resources)[0] }) => {
   const MetaIcon = resource.metaIcon;
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+    <div
       className="rounded-3xl bg-card border border-border overflow-hidden premium-shadow group flex flex-col"
     >
       <div className="relative h-64 bg-primary overflow-hidden">
@@ -91,7 +86,7 @@ const DocumentCard = ({ resource }: { resource: (typeof resources)[0] }) => {
           </Button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -107,11 +102,7 @@ const MagazineSection = () => {
   return (
     <section className="bg-background py-24 md:py-32 relative overflow-hidden">
       <div className="container relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        <div
           className="max-w-3xl mb-12"
         >
           <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent text-xs font-semibold tracking-widest uppercase mb-4">
@@ -123,14 +114,10 @@ const MagazineSection = () => {
           <p className="text-muted-foreground leading-relaxed">
             Curated brochures, magazines, and guides to help you explore, invest, and plan your journey in Rwanda.
           </p>
-        </motion.div>
+        </div>
 
         {/* Featured magazine */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        <div
           className="rounded-3xl bg-card border border-border overflow-hidden premium-shadow mb-12"
         >
           <div className="grid lg:grid-cols-2 gap-0">
@@ -171,7 +158,7 @@ const MagazineSection = () => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Additional downloads */}
         <div className="grid md:grid-cols-2 gap-8">

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Loader2, Save, Upload } from "lucide-react";
+import { ArrowLeft, Loader2, Save, Upload, CreditCard, CalendarClock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +14,7 @@ import {
   prettyStatus,
   formatCurrency,
   formatDate,
+  formatDateTime,
 } from "@/lib/constants";
 import {
   Select,
@@ -41,6 +42,32 @@ type Client = {
   created_at: string;
 };
 
+type Payment = {
+  id: string;
+  amount: number;
+  currency: string;
+  status: string;
+  payment_method: string | null;
+  merchant_reference: string;
+  created_at: string;
+};
+
+type Session = {
+  id: string;
+  start_time: string | null;
+  status: string | null;
+  event_type: string | null;
+  package_title: string | null;
+};
+
+const PAYMENT_STATUS_STYLES: Record<string, string> = {
+  completed: "bg-emerald-100 text-emerald-800",
+  pending: "bg-amber-100 text-amber-800",
+  failed: "bg-red-100 text-red-800",
+  reversed: "bg-slate-200 text-slate-700",
+  amount_mismatch: "bg-orange-100 text-orange-800",
+};
+
 type Doc = {
   id: string;
   title: string;
@@ -54,6 +81,8 @@ const AdminClientDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [client, setClient] = useState<Client | null>(null);
   const [documents, setDocuments] = useState<Doc[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -71,15 +100,31 @@ const AdminClientDetail = () => {
       const clientData = cRes.data as Client | null;
       setClient(clientData);
       if (clientData) {
-        const docs = await supabase
-          .from("documents")
-          .select("*")
-          .ilike("client_email", clientData.email)
-          .order("created_at", { ascending: false });
+        const [docs, pays, books] = await Promise.all([
+          supabase
+            .from("documents")
+            .select("*")
+            .ilike("client_email", clientData.email)
+            .order("created_at", { ascending: false }),
+          supabase
+            .from("transactions")
+            .select("id, amount, currency, status, payment_method, merchant_reference, created_at")
+            .ilike("email", clientData.email)
+            .order("created_at", { ascending: false }),
+          supabase
+            .from("bookings")
+            .select("id, start_time, status, event_type, package_title")
+            .ilike("attendee_email", clientData.email)
+            .order("start_time", { ascending: false }),
+        ]);
         if (docs.error) throw docs.error;
         setDocuments((docs.data as Doc[]) ?? []);
+        setPayments(pays.error ? [] : ((pays.data as Payment[]) ?? []));
+        setSessions(books.error ? [] : ((books.data as Session[]) ?? []));
       } else {
         setDocuments([]);
+        setPayments([]);
+        setSessions([]);
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to load client");
@@ -239,6 +284,9 @@ const AdminClientDetail = () => {
                   ))}
                 </SelectContent>
               </Select>
+              <p className="text-[11px] text-muted-foreground mt-1.5">
+                Set automatically when a Pesapal payment completes. Change it only for offline payments.
+              </p>
             </div>
             <div>
               <Label className="text-xs uppercase tracking-wider text-muted-foreground mb-1.5 block">
@@ -264,6 +312,55 @@ const AdminClientDetail = () => {
         </div>
 
         <div className="space-y-6">
+          <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+            <h2 className="font-heading font-bold text-lg text-foreground mb-4 flex items-center gap-2">
+              <CreditCard size={18} className="text-accent" /> Payments
+            </h2>
+            {payments.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No Pesapal payments from this client yet.</p>
+            ) : (
+              <ul className="space-y-3">
+                {payments.map((p) => (
+                  <li key={p.id} className="flex items-center justify-between gap-3 text-sm border-b border-border pb-3 last:border-0 last:pb-0">
+                    <div className="min-w-0">
+                      <p className="font-medium text-foreground">
+                        {p.currency} {Number(p.amount).toLocaleString()}
+                        <span className="text-muted-foreground font-normal"> · {p.payment_method ?? "Pesapal"}</span>
+                      </p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {formatDateTime(p.created_at)} · {p.merchant_reference}
+                      </p>
+                    </div>
+                    <span className={`status-badge ${PAYMENT_STATUS_STYLES[p.status] ?? "bg-slate-100 text-slate-700"}`}>
+                      {prettyStatus(p.status)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+            <h2 className="font-heading font-bold text-lg text-foreground mb-4 flex items-center gap-2">
+              <CalendarClock size={18} className="text-accent" /> Sessions
+            </h2>
+            {sessions.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No sessions booked yet.</p>
+            ) : (
+              <ul className="space-y-3">
+                {sessions.map((b) => (
+                  <li key={b.id} className="flex items-center justify-between gap-3 text-sm border-b border-border pb-3 last:border-0 last:pb-0">
+                    <div className="min-w-0">
+                      <p className="font-medium text-foreground truncate">{b.package_title || b.event_type || "Consultation"}</p>
+                      <p className="text-xs text-muted-foreground">{b.start_time ? formatDateTime(b.start_time) : "Date TBD"}</p>
+                    </div>
+                    <StatusBadge status={b.status} kind="booking" />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
           <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
             <h2 className="font-heading font-bold text-lg text-foreground mb-1">Upload Document</h2>
             <p className="text-sm text-muted-foreground mb-4">Visible in the client's dashboard.</p>

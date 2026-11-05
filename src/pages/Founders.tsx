@@ -1,5 +1,4 @@
 import { Facebook, Linkedin, Mail } from "lucide-react";
-import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import marieImg from "@/assets/founder-marie.webp";
@@ -50,42 +49,29 @@ const Founders = () => (
     <main className="pt-16">
       <section className="bg-primary py-28 relative">
         <div className="container text-center relative z-10">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+          <p
             className="text-accent font-semibold text-sm tracking-[0.3em] uppercase mb-4"
           >
             Leadership
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
+          </p>
+          <h1
             className="font-heading text-4xl md:text-6xl font-bold text-primary-foreground mb-5"
           >
             Meet Our Founders
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+          </h1>
+          <p
             className="text-primary-foreground/70 max-w-2xl mx-auto text-lg"
           >
             The visionaries behind Lauture Global LTD — dedicated to making Rwanda accessible to the world.
-          </motion.p>
+          </p>
         </div>
       </section>
 
       <section className="py-28 bg-background">
         <div className="container grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
           {founders.map((f, i) => (
-            <motion.div
+            <div
               key={f.name}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.7, delay: i * 0.15 }}
               className="group bg-card rounded-lg overflow-hidden border border-border shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-elegant)] transition-all duration-500"
             >
               <div className="relative overflow-hidden aspect-[4/5]">
@@ -136,7 +122,7 @@ const Founders = () => (
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
